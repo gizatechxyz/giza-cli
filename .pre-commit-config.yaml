@@ -1,0 +1,42 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+    - id: check-yaml
+    - id: end-of-file-fixer
+    - id: trailing-whitespace
+    - id: check-added-large-files
+    - id: check-merge-conflict
+    - id: no-commit-to-branch
+      args: [-b main]
+  - repo: https://github.com/asottile/pyupgrade
+    rev: v3.4.0
+    hooks:
+    - id: pyupgrade
+      files: "py$"
+  - repo: https://github.com/asottile/add-trailing-comma
+    rev: v2.4.0
+    hooks:
+    - id: add-trailing-comma
+  - repo: local
+    hooks:
+      - id: black
+        name: black
+        entry: black
+        language: system
+        files: "py$"
+      - id: isort
+        name: isort
+        entry: isort
+        language: system
+        files: "py$"
+      - id: flake8
+        name: flake8
+        entry: flake8
+        language: system
+        files: "py$"
+      - id: mypy
+        name: mypy
+        entry: mypy
+        language: system
+        files: "py$"
