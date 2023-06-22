@@ -183,11 +183,12 @@ class TranspileClient(ApiClient):
     def transpile(self, f: BinaryIO):
         headers = copy.deepcopy(self.default_headers)
         headers.update(
-            {"Authorization": f"Bearer {self.token}", "Content-Type": "text/json"},
+            {"Authorization": f"Bearer {self.token}"},
         )
 
         response = self.session.post(
             f"{self.url}/{self.TRANSPILE_ENDPOINT}",
-            files={"": f},
+            files={"file_": f},
+            headers=headers,
         )
         return response.content
