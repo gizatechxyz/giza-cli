@@ -14,5 +14,12 @@ class UserCreate(UserBase):
     password: str
 
 
-class User(UserBase):
-    pass
+class UserLogin(BaseModel):
+    username: str
+    password: str
+
+
+class UserResponse(UserBase):
+    username: str
+    email: str
+    is_active: bool
