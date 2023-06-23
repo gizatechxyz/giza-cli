@@ -6,6 +6,9 @@ authors = ["Gonzalo Mellizo-Soto <gonzalo@gizatech.xyz>"]
 readme = "README.md"
 packages = [{include = "giza"}]
 
+[tool.poetry.scripts]
+giza = "giza.cli:entrypoint"
+
 [tool.poetry.dependencies]
 python = "^3.11"
 requests = ">=2.30.1,<3.0.0"

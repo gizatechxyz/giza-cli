@@ -100,7 +100,6 @@ class ApiClient:
             )
             return False
         except ExpiredSignatureError:
-            print("Signature has expired. Renew it with default login.")
             return True
 
     def retrieve_token(
@@ -131,11 +130,15 @@ class ApiClient:
         if token is not None and not self._is_expired(token) and not renew:
             self.token = token
 
-        if token is None and user is not None and password is not None:
+        if (
+            getattr(self, "token", None) is None
+            and user is not None
+            and password is not None
+        ):
             self._get_oauth(user, password)
             self._write_credentials(user=user)
 
-        if self.token is None:
+        if getattr(self, "token", None) is None:
             raise Exception(
                 "Token is expired or could not retrieve it. "
                 "Please get a new one using `user` and `password`.",

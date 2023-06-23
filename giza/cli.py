@@ -21,7 +21,7 @@ app.callback(
 
 
 @app.command()
-def transpile(model_path: str, output_path: str = "cairo_model.zip"):
+def transpile(model_path: str, output_path: str = "cairo_model"):
     transpile_entrypoint(model_path, output_path)
 
 
