@@ -12,7 +12,7 @@ from rich import print, print_json
 
 from giza.schemas import users
 from giza.schemas.token import TokenResponse
-from giza.utils import echo, echo_debug
+from giza.utils import echo
 from giza.utils.decorators import auth
 
 DEFAULT_API_VERSION = "v1"
@@ -60,7 +60,7 @@ class ApiClient:
         """
 
         if self.debug:
-            print_json(message) if json else echo_debug(message)
+            print_json(message) if json else echo.debug(message)
 
     def _load_credentials_file(self):
         if (self.giza_dir / ".credentials.json").exists():
@@ -227,4 +227,6 @@ class TranspileClient(ApiClient):
             headers=headers,
         )
         self._echo_debug(str(response))
-        return response.content
+
+        response.raise_for_status()
+        return response

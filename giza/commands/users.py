@@ -10,7 +10,7 @@ from giza import API_HOST
 from giza.client import UsersClient
 from giza.options import DEBUG_OPTION
 from giza.schemas import users
-from giza.utils import echo, echo_error, get_response_info
+from giza.utils import echo, get_response_info
 
 app = typer.Typer()
 
@@ -41,10 +41,10 @@ def login(
         client.retrieve_token(user, password, renew=renew)
     except HTTPError as e:
         info = get_response_info(e.response)
-        echo_error("⛔️Could not authorize the user⛔️")
-        echo_error(f"⛔️Detail -> {info.get('detail')}⛔️")
-        echo_error(f"⛔️Status code -> {info.get('status_code')}⛔️")
-        echo_error(f"⛔️Error message -> {info.get('content')}⛔️")
+        echo.error("⛔️Could not authorize the user⛔️")
+        echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
+        echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
+        echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
         if debug:
             raise e
         sys.exit(1)
