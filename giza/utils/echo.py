@@ -24,9 +24,9 @@ class Echo:
     def format_error(self, message: Any) -> str:
         return self.format_message(rf"[red]{message}[/red]", "ERROR", "red")
 
-    def echo(self, message: Any, formated: str):
+    def echo(self, message: Any, formatted: str):
         try:
-            rich_print(formated)
+            rich_print(formatted)
         except (UnicodeDecodeError, UnicodeEncodeError, UnicodeError):
             # fallback to the standard print behaviour
             formatted_time = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
