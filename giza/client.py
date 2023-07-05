@@ -8,10 +8,11 @@ from urllib.parse import urlparse
 from jose import jwt
 from jose.exceptions import ExpiredSignatureError
 from requests import Session
-from rich import print
+from rich import print, print_json
 
 from giza.schemas import users
 from giza.schemas.token import TokenResponse
+from giza.utils import echo, echo_debug
 from giza.utils.decorators import auth
 
 DEFAULT_API_VERSION = "v1"
@@ -29,6 +30,7 @@ class ApiClient:
         token: Optional[str] = None,
         api_version: str = DEFAULT_API_VERSION,
         verify: bool = True,
+        debug: Optional[bool] = False,
     ) -> None:
         self.session = Session()
         if host[-1] == "/":
@@ -42,18 +44,35 @@ class ApiClient:
         else:
             headers = {}
 
+        self.debug = debug
         self.default_headers = {}
         self.default_headers.update(headers)
         self.verify = verify
         self.giza_dir = Path.home() / ".giza"
         self._default_credentials = self._load_credentials_file()
 
+    def _echo_debug(self, message: str, json: bool = False):
+        """
+        Utility to log debug messages when debug is on
+
+        Args:
+            message (str): MEssage to print when debugging
+        """
+
+        if self.debug:
+            print_json(message) if json else echo_debug(message)
+
     def _load_credentials_file(self):
         if (self.giza_dir / ".credentials.json").exists():
             with open(self.giza_dir / ".credentials.json") as f:
                 credentials = json.load(f)
+                self._echo_debug(
+                    f"Credentials loaded from: {self.giza_dir / '.credentials.json'}",
+                )
         else:
             credentials = {}
+            self._echo_debug("Credentials not found in default directory")
+
         return credentials
 
     def _get_oauth(self, user: str, password: str):
@@ -81,14 +100,18 @@ class ApiClient:
             print(f"Status Code -> {response.status_code}")
 
         self.token = token.access_token
+        self._echo_debug(response.json(), json=True)
+        self._echo_debug(f"Token: {self.token}")
 
     def _write_credentials(self, **kwargs):
         if self.token is not None:
             if not self.giza_dir.exists():
+                echo("Creating default giza dir")
                 self.giza_dir.mkdir()
             kwargs.update({"token": self.token})
             with open(self.giza_dir / ".credentials.json", "w") as f:
                 json.dump(kwargs, f, indent=4)
+            echo(f"Credentials written to: {self.giza_dir / '.credentials.json'}")
 
     def _is_expired(self, token: str):
         try:
@@ -100,6 +123,7 @@ class ApiClient:
             )
             return False
         except ExpiredSignatureError:
+            self._echo_debug("Token is expired")
             return True
 
     def retrieve_token(
@@ -117,7 +141,10 @@ class ApiClient:
         """
 
         token = os.environ.get(GIZA_TOKEN_VARIABLE)
-
+        if token is None:
+            self._echo_debug(
+                f"No token found in environment variable {GIZA_TOKEN_VARIABLE}",
+            )
         if token is None and len(self._default_credentials) != 0 and not renew:
             # Try with the home folder
             if "token" in self._default_credentials:
@@ -126,9 +153,14 @@ class ApiClient:
 
                 # Different users but credentials file exists make sure we ask for the new JWT
                 if user is not None and user != user_cred:
+                    self._echo_debug(
+                        "Logging as a different user, need to retrieve a new token",
+                    )
                     token = None
+
         if token is not None and not self._is_expired(token) and not renew:
             self.token = token
+            echo("Token it still valid, re-using it from ~/.giza")
 
         if (
             getattr(self, "token", None) is None
@@ -159,7 +191,7 @@ class UsersClient(ApiClient):
         )
 
         body = response.json()
-        print(body)
+        self._echo_debug(body, json=True)
         return users.UserResponse(**body)
 
     @auth
@@ -172,6 +204,7 @@ class UsersClient(ApiClient):
             f"{self.url}/{self.USERS_ENDPOINT}/me",
             headers=headers,
         )
+        self._echo_debug(response.json(), json=True)
         return users.UserResponse(**response.json())
 
 
@@ -188,10 +221,10 @@ class TranspileClient(ApiClient):
         headers.update(
             {"Authorization": f"Bearer {self.token}"},
         )
-
         response = self.session.post(
             f"{self.url}/{self.TRANSPILE_ENDPOINT}",
-            files={"file_": f},
+            files={"file": f},
             headers=headers,
         )
+        self._echo_debug(str(response))
         return response.content

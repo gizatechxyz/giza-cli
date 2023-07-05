@@ -1,3 +1,5 @@
+from http import client
+
 import typer
 
 from giza import __version__
@@ -11,3 +13,11 @@ def version_callback(value: bool):
             f"version ~> [green]{__version__}[/green]",
         )
         raise typer.Exit()
+
+
+def debug_callback(_, value: bool):
+    if value:
+        echo(":bug: Debugging mode is [red]on[/red]")
+        client.HTTPConnection.debuglevel = 1
+
+    return value
