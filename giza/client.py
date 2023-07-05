@@ -2,7 +2,7 @@ import copy
 import json
 import os
 from pathlib import Path
-from typing import BinaryIO
+from typing import BinaryIO, Optional
 from urllib.parse import urlparse
 
 from jose import jwt
@@ -26,7 +26,7 @@ class ApiClient:
     def __init__(
         self,
         host: str,
-        token: str = None,
+        token: Optional[str] = None,
         api_version: str = DEFAULT_API_VERSION,
         verify: bool = True,
     ) -> None:
@@ -35,7 +35,7 @@ class ApiClient:
             host = host[:-1]
         parsed_url = urlparse(host)
 
-        self.url = f"{parsed_url.scheme}://{parsed_url.hostname}/api/{api_version}"
+        self.url = f"{parsed_url.scheme}://{parsed_url.netloc}/api/{api_version}"
 
         if token is not None:
             headers = {"Authorization": "Bearer {token}", "Content-Type": "text/json"}
@@ -104,8 +104,8 @@ class ApiClient:
 
     def retrieve_token(
         self,
-        user: str = None,
-        password: str = None,
+        user: Optional[str] = None,
+        password: Optional[str] = None,
         renew: bool = False,
     ):
         """

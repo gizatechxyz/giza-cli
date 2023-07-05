@@ -22,4 +22,4 @@ def transpile(model_path, output_path):
         raise e
 
     zip_file.extractall(output_path)
-    echo(f"Trasnpilation saved at: {output_path}")
+    echo(f"Transpilation saved at: {output_path}")

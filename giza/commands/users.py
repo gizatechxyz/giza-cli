@@ -37,7 +37,7 @@ def login(
     except HTTPError as e:
         echo("⛔️[red]Could not authorize the user[/red]⛔️")
         echo(f"⛔️[red]Status code ->[/red] {e.response.status_code}⛔️")
-        echo(f"⛔️[red]Error message ->[/red] {e.response.json()}⛔️")
+        echo(f"⛔️[red]Error message ->[/red] {e.response.text}⛔️")
         raise e
     echo("Successfully logged into Giza Platform ✅ ")
 
