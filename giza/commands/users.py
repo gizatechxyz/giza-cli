@@ -2,6 +2,7 @@ import sys
 from typing import Optional
 
 import typer
+from pydantic import EmailStr, SecretStr, ValidationError
 from requests import HTTPError
 from rich import print_json
 from rich.prompt import Prompt
@@ -21,9 +22,27 @@ def create(debug: Optional[bool] = DEBUG_OPTION):
     password = Prompt.ask("Enter your password 🥷 ", password=True)
     email = Prompt.ask("Enter your email 📧")
     echo("Creating user in Giza Platform ✅ ")
-    user_create = users.UserCreate(username=user, password=password, email=email)
-    client = UsersClient(API_HOST)
-    client.create(user_create)
+    try:
+        user_create = users.UserCreate(
+            username=user, password=SecretStr(password), email=EmailStr(email)
+        )
+        client = UsersClient(API_HOST)
+        client.create(user_create)
+    except ValidationError as e:
+        echo.error("Review the provided information")
+        if debug:
+            raise e
+        echo.error(e)
+        sys.exit(1)
+    except HTTPError as e:
+        info = get_response_info(e.response)
+        echo.error("⛔️Could not create the user⛔️")
+        echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
+        echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
+        echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
+        if debug:
+            raise e
+        sys.exit(1)
     echo("User created ✅. Check for a verification email 📧")
 
 
