@@ -7,6 +7,7 @@ from urllib.parse import urlparse
 
 from jose import jwt
 from jose.exceptions import ExpiredSignatureError
+from pydantic import SecretStr
 from requests import Session
 from rich import print, print_json
 
@@ -41,6 +42,7 @@ class ApiClient:
 
         if token is not None:
             headers = {"Authorization": "Bearer {token}", "Content-Type": "text/json"}
+            self.token = token
         else:
             headers = {}
 
@@ -87,7 +89,7 @@ class ApiClient:
         if user is None or password is None:
             raise ValueError("Missing credentials")
 
-        user_login = users.UserLogin(username=user, password=password)
+        user_login = users.UserLogin(username=user, password=SecretStr(password))
         response = self.session.post(
             f"{self.url}/login/access-token",
             data=user_login.dict(),
@@ -95,9 +97,11 @@ class ApiClient:
         response.raise_for_status()
         try:
             token = TokenResponse(**response.json())
-        except json.JSONDecodeError:
+        except json.JSONDecodeError as e:
+            # TODO: if response is succesfull (2XX) do we need this?
             print(response.text)
             print(f"Status Code -> {response.status_code}")
+            raise e
 
         self.token = token.access_token
         self._echo_debug(response.json(), json=True)
