@@ -2,13 +2,13 @@ import copy
 import json
 import os
 from pathlib import Path
-from typing import BinaryIO, Optional
+from typing import Any, BinaryIO, Dict, Optional
 from urllib.parse import urlparse
 
 from jose import jwt
 from jose.exceptions import ExpiredSignatureError
 from pydantic import SecretStr
-from requests import Session
+from requests import Response, Session
 from rich import print, print_json
 
 from giza.schemas import users
@@ -53,18 +53,26 @@ class ApiClient:
         self.giza_dir = Path.home() / ".giza"
         self._default_credentials = self._load_credentials_file()
 
-    def _echo_debug(self, message: str, json: bool = False):
+    def _echo_debug(self, message: str, json: bool = False) -> None:
         """
         Utility to log debug messages when debug is on
 
         Args:
-            message (str): MEssage to print when debugging
+            message (str): Message to print when debugging
+            json (bool): indicates if the message is a json to treat it as such
         """
 
         if self.debug:
             print_json(message) if json else echo.debug(message)
 
-    def _load_credentials_file(self):
+    def _load_credentials_file(self) -> Dict:
+        """
+        Checks if the `~/.giza/.credentials.json` exists to retrieve existing credentials.
+        Useful to reuse credentials that are still valid.
+
+        Returns:
+            Dict: if the file exists return the credentials from the file if not return an empty dict.
+        """
         if (self.giza_dir / ".credentials.json").exists():
             with open(self.giza_dir / ".credentials.json") as f:
                 credentials = json.load(f)
@@ -77,17 +85,17 @@ class ApiClient:
 
         return credentials
 
-    def _get_oauth(self, user: str, password: str):
+    def _get_oauth(self, user: str, password: str) -> None:
         """
-        Retrieve JWT token
+        Retrieve JWT token.
 
         Args:
-            user (str): _description_
-            password (str): _description_
-        """
+            user (str): username used to retrieve the token
+            password (str): password to authenticate agains the login endpoint
 
-        if user is None or password is None:
-            raise ValueError("Missing credentials")
+        Raises:
+            json.JSONDecodeError: when the response does not have the expected body
+        """
 
         user_login = users.UserLogin(username=user, password=SecretStr(password))
         response = self.session.post(
@@ -97,17 +105,23 @@ class ApiClient:
         response.raise_for_status()
         try:
             token = TokenResponse(**response.json())
-        except json.JSONDecodeError as e:
+        except json.JSONDecodeError:
             # TODO: if response is succesfull (2XX) do we need this?
             print(response.text)
             print(f"Status Code -> {response.status_code}")
-            raise e
+            raise
 
         self.token = token.access_token
         self._echo_debug(response.json(), json=True)
         self._echo_debug(f"Token: {self.token}")
 
-    def _write_credentials(self, **kwargs):
+    def _write_credentials(self, **kwargs: Any) -> None:
+        """
+        Write credentials to the giza credentials file for later retrieval
+
+        Args:
+            kwargs(dict): extra keyword arguments to save with the credentials, usually `user`.
+        """
         if self.token is not None:
             if not self.giza_dir.exists():
                 echo("Creating default giza dir")
@@ -117,7 +131,16 @@ class ApiClient:
                 json.dump(kwargs, f, indent=4)
             echo(f"Credentials written to: {self.giza_dir / '.credentials.json'}")
 
-    def _is_expired(self, token: str):
+    def _is_expired(self, token: str) -> bool:
+        """
+        Check if the token is expired.
+
+        Args:
+            token (str): token to check expiry
+
+        Returns:
+            bool: if the token has expired
+        """
         try:
             jwt.decode(
                 token,
@@ -135,13 +158,22 @@ class ApiClient:
         user: Optional[str] = None,
         password: Optional[str] = None,
         renew: bool = False,
-    ):
+    ) -> None:
         """
         Get the JWT token.
 
         First,  it will try to get it from GIZA_TOKEN.
         Second, from ~/.giza/.credentials.json.
         And finally it will try to retrieve it from the API login the user in.
+
+        Args:
+            user: if provided it will be used to check against current credentials
+                  and if provided with `password` used to retrieve a new token.
+            password: if provided with `user` it will be used to retrieve a new token.
+            renew: for renewal of the JWT token by user login.
+
+        Raises:
+            Exception: if token could not be retrieved in any way
         """
 
         token = os.environ.get(GIZA_TOKEN_VARIABLE)
@@ -188,18 +220,35 @@ class UsersClient(ApiClient):
 
     USERS_ENDPOINT = "users"
 
-    def create(self, user: users.UserCreate):
+    def create(self, user: users.UserCreate) -> users.UserResponse:
+        """
+        Call the API to create a new user
+
+        Args:
+            user (users.UserCreate): information used to create a new user
+
+        Returns:
+            users.UserResponse: the created user information
+        """
         response = self.session.post(
             f"{self.url}/{self.USERS_ENDPOINT}/",
             json=user.dict(exclude_unset=True),
         )
 
+        response.raise_for_status()
         body = response.json()
         self._echo_debug(body, json=True)
         return users.UserResponse(**body)
 
     @auth
-    def me(self):
+    def me(self) -> users.UserResponse:
+        """
+        Retrieve information about the current user.
+        Must have a valid token to perform the operation, enforced by `@auth`
+
+        Returns:
+            users.UserResponse: User information from the server
+        """
         headers = copy.deepcopy(self.default_headers)
         headers.update(
             {"Authorization": f"Bearer {self.token}", "Content-Type": "text/json"},
@@ -220,7 +269,16 @@ class TranspileClient(ApiClient):
     TRANSPILE_ENDPOINT = "transpile"
 
     @auth
-    def transpile(self, f: BinaryIO):
+    def transpile(self, f: BinaryIO) -> Response:
+        """
+        Make a call to the API transpile endpoint with the model as a file.
+
+        Args:
+            f (BinaryIO): model to send for transpilation
+
+        Returns:
+            Response: raw response from the server
+        """
         headers = copy.deepcopy(self.default_headers)
         headers.update(
             {"Authorization": f"Bearer {self.token}"},

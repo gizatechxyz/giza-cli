@@ -17,7 +17,18 @@ app = typer.Typer()
 
 
 @app.command()
-def create(debug: Optional[bool] = DEBUG_OPTION):
+def create(debug: Optional[bool] = DEBUG_OPTION) -> None:
+    """
+    Command to create a user. Asks for the new users information and validates the input,
+    then sends the information to the API
+
+    Args:
+        debug (Optional[bool], optional): Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False).
+
+    Raises:
+        ValidationError: input fields are validated, if these are not suitable the exception is raised
+        HTTPError: request error to the API, 4XX or 5XX
+    """
     user = Prompt.ask("Enter your username :sunglasses:")
     password = Prompt.ask("Enter your password 🥷 ", password=True)
     email = Prompt.ask("Enter your email 📧")
@@ -32,7 +43,7 @@ def create(debug: Optional[bool] = DEBUG_OPTION):
         echo.error("Review the provided information")
         if debug:
             raise e
-        echo.error(e)
+        echo.error(str(e))
         sys.exit(1)
     except HTTPError as e:
         info = get_response_info(e.response)
@@ -50,7 +61,18 @@ def create(debug: Optional[bool] = DEBUG_OPTION):
 def login(
     renew: bool = typer.Option(False, help="Force the renewal of the JWT token"),
     debug: Optional[bool] = DEBUG_OPTION,
-):
+) -> None:
+    """
+    Logs the current user to Giza Platform. Under the hood this will retrieve the token for the next requests.
+    This token will be saved at `home` directory for further usage.
+
+    Args:
+        renew (bool): Force the retrieval of the token to create a new one. Defaults to False.
+        debug (Optional[bool]): Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False)
+
+    Raises:
+        HTTPError: request error to the API, 4XX or 5XX
+    """
     user = Prompt.ask("Enter your username :sunglasses:")
     password = Prompt.ask("Enter your password 🥷 ", password=True)
 
@@ -71,7 +93,13 @@ def login(
 
 
 @app.command()
-def me(debug: Optional[bool] = DEBUG_OPTION):
+def me(debug: Optional[bool] = DEBUG_OPTION) -> None:
+    """
+    Retrieve information about the current user and print it as json to stdout.
+
+    Args:
+        debug (Optional[bool], optional): Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False)
+    """
     echo("Retrieving information about me!")
     client = UsersClient(API_HOST, debug=debug)
     user = client.me()

@@ -15,12 +15,22 @@ app.add_typer(users_app, name="users")
 app.callback(
     name="giza",
     help="""
-    🚀 Giza-CLI to manage the resources at Giza Platform 🚀.
+    🔶 Giza-CLI to manage the resources at Giza Platform 🔶.
 """,
 )(version_entrypoint)
 
 
-app.command(name="transpile")(transpile)
+app.command(
+    name="transpile",
+    short_help="🔧 Sends the specified model for transpilation.",
+    help="""🔧 Sends the specified model for transpilation.
+
+    We take the specified ONNX model and send it for transpilation at Giza Platform 🔶
+
+    This command can be used multiple times with different models to transpile.
+    For transpiling new versions of a model make sure to change the name as of now model names must be unique per user.
+    """,
+)(transpile)
 
 
 def entrypoint():
