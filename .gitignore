@@ -130,3 +130,5 @@ dmypy.json
 
 smart_contracts/
 .DS_Store
+
+.ruff_cache/

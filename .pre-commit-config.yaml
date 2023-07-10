@@ -14,10 +14,6 @@ repos:
     hooks:
     - id: pyupgrade
       files: "py$"
-  - repo: https://github.com/asottile/add-trailing-comma
-    rev: v2.4.0
-    hooks:
-    - id: add-trailing-comma
   - repo: local
     hooks:
       - id: black
@@ -30,9 +26,9 @@ repos:
         entry: isort
         language: system
         files: "py$"
-      - id: flake8
-        name: flake8
-        entry: flake8
+      - id: ruff
+        name: ruff
+        entry: ruff
         language: system
         files: "py$"
       - id: mypy

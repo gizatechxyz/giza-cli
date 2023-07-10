@@ -1,51 +1,79 @@
+import sys
+from typing import Optional
+
 import typer
+from pydantic import EmailStr, SecretStr, ValidationError
 from requests import HTTPError
 from rich import print_json
 from rich.prompt import Prompt
 
 from giza import API_HOST
 from giza.client import UsersClient
+from giza.options import DEBUG_OPTION
 from giza.schemas import users
-from giza.utils import echo
+from giza.utils import echo, get_response_info
 
 app = typer.Typer()
 
 
 @app.command()
-def create():
+def create(debug: Optional[bool] = DEBUG_OPTION):
     user = Prompt.ask("Enter your username :sunglasses:")
     password = Prompt.ask("Enter your password 🥷 ", password=True)
     email = Prompt.ask("Enter your email 📧")
     echo("Creating user in Giza Platform ✅ ")
-    user = users.UserCreate(username=user, password=password, email=email)
-    client = UsersClient(API_HOST)
-    client.create(user)
+    try:
+        user_create = users.UserCreate(
+            username=user, password=SecretStr(password), email=EmailStr(email)
+        )
+        client = UsersClient(API_HOST)
+        client.create(user_create)
+    except ValidationError as e:
+        echo.error("Review the provided information")
+        if debug:
+            raise e
+        echo.error(e)
+        sys.exit(1)
+    except HTTPError as e:
+        info = get_response_info(e.response)
+        echo.error("⛔️Could not create the user⛔️")
+        echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
+        echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
+        echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
+        if debug:
+            raise e
+        sys.exit(1)
     echo("User created ✅. Check for a verification email 📧")
 
 
 @app.command()
 def login(
     renew: bool = typer.Option(False, help="Force the renewal of the JWT token"),
+    debug: Optional[bool] = DEBUG_OPTION,
 ):
     user = Prompt.ask("Enter your username :sunglasses:")
     password = Prompt.ask("Enter your password 🥷 ", password=True)
 
     echo("Log into Giza Platform")
-    client = UsersClient(API_HOST)
+    client = UsersClient(API_HOST, debug=debug)
     try:
         client.retrieve_token(user, password, renew=renew)
     except HTTPError as e:
-        echo("⛔️[red]Could not authorize the user[/red]⛔️")
-        echo(f"⛔️[red]Status code ->[/red] {e.response.status_code}⛔️")
-        echo(f"⛔️[red]Error message ->[/red] {e.response.json()}⛔️")
-        raise e
+        info = get_response_info(e.response)
+        echo.error("⛔️Could not authorize the user⛔️")
+        echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
+        echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
+        echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
+        if debug:
+            raise e
+        sys.exit(1)
     echo("Successfully logged into Giza Platform ✅ ")
 
 
 @app.command()
-def me():
+def me(debug: Optional[bool] = DEBUG_OPTION):
     echo("Retrieving information about me!")
-    client = UsersClient(API_HOST)
+    client = UsersClient(API_HOST, debug=debug)
     user = client.me()
 
     print_json(user.json())

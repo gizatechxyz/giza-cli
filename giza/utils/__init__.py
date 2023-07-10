@@ -1,25 +1,17 @@
-import datetime as dt
-from typing import Any
+import json
 
-import typer
-from rich import print as rich_print
-from rich import reconfigure
+from requests import Response
 
-reconfigure(soft_wrap=True)
+from giza.utils.echo import Echo
 
-
-def format_message(message: Any) -> str:
-    formatted_time = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
-    formatted_message = rf"[orange3]\[giza][/orange3][{formatted_time}] {message}"
-    return formatted_message
+echo = Echo()
 
 
-def echo(message: Any):
-    formatted_message = format_message(message)
+def get_response_info(response: Response):
     try:
-        rich_print(formatted_message)
-    except (UnicodeDecodeError, UnicodeEncodeError, UnicodeError):
-        # fallback to the standard print behaviour
-        formatted_time = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
-        formatted_message = f"[giza][{formatted_time}] {message}"
-        typer.echo(formatted_message)
+        content = response.json()
+        detail = content.get("detail")
+    except json.JSONDecodeError:
+        content = response.text if len(response.text) < 255 else response.text[:255]
+
+    return {"content": content, "detail": detail, "status_code": response.status_code}
