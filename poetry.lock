@@ -514,6 +514,23 @@ plugins = ["setuptools"]
 requirements-deprecated-finder = ["pip-api", "pipreqs"]
 
 [[package]]
+name = "lazydocs"
+version = "0.4.8"
+description = "Generate markdown API documentation for Google-style Python docstring."
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "lazydocs-0.4.8-py3-none-any.whl", hash = "sha256:cebdce88c8e01ae19c63da77fc25a16abd6f7a7055930001644703643e608fed"},
+    {file = "lazydocs-0.4.8.tar.gz", hash = "sha256:8ac1fda05f03e0c5ae1d30b81eaeb785476efa161194a5e8bfa8630e14af9562"},
+]
+
+[package.dependencies]
+typer = "*"
+
+[package.extras]
+dev = ["black", "flake8", "isort", "mypy", "pydocstyle", "pytest", "pytest-cov", "pytest-mock", "setuptools", "twine", "wheel"]
+
+[[package]]
 name = "mypy"
 version = "1.4.0"
 description = "Optional static typing for Python"
@@ -1055,4 +1072,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "1070e8eac44abad66451344d8990e0e2bdb17ebb07a0c2fafef226abf62097f5"
+content-hash = "4b16ffa2dc83504659429948ab0272ba7c7a5ef718f25d34a0c6226e91819455"
