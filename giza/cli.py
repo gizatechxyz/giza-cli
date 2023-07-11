@@ -10,7 +10,12 @@ from giza.commands.version import version_entrypoint
 install(suppress=[click])
 
 app = typer.Typer(rich_markup_mode="markdown", pretty_exceptions_show_locals=False)
-app.add_typer(users_app, name="users")
+app.add_typer(
+    users_app,
+    name="users",
+    short_help="💻 Utilities for managing users",
+    help="""💻 Utilities for managing users""",
+)
 
 app.callback(
     name="giza",

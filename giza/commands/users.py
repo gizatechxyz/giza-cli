@@ -16,7 +16,18 @@ from giza.utils import echo, get_response_info
 app = typer.Typer()
 
 
-@app.command()
+@app.command(
+    short_help="🔥 Creates a new user in Giza Platform.",
+    help="""🔥 Creates a new user in Giza Platform.
+
+    This commands ask for a username, password and a valid email address,
+    then a confirmation email will be sent to the provided one.
+
+    Until the verification is complete the user won't be able to log in nor user other CLI capabilities.
+
+    If a username or email is already registered and error will be raised.
+    """,
+)
 def create(debug: Optional[bool] = DEBUG_OPTION) -> None:
     """
     Command to create a user. Asks for the new users information and validates the input,
@@ -40,6 +51,7 @@ def create(debug: Optional[bool] = DEBUG_OPTION) -> None:
         client = UsersClient(API_HOST)
         client.create(user_create)
     except ValidationError as e:
+        echo.error("⛔️Could not create the user⛔️")
         echo.error("Review the provided information")
         if debug:
             raise e
@@ -57,7 +69,18 @@ def create(debug: Optional[bool] = DEBUG_OPTION) -> None:
     echo("User created ✅. Check for a verification email 📧")
 
 
-@app.command()
+@app.command(
+    short_help="🔶 Log into Giza Platform.",
+    help="""🔶 Log into Giza Platform.
+
+    Log into Giza Platform using the provided credentials. This will retrieve a JWT
+    that will be used to authenticate the user.
+
+    This will be saved at `~/.giza/.credentials.json` for later re-use until the token expires.
+
+    Verification is needed to log in.
+    """,
+)
 def login(
     renew: bool = typer.Option(False, help="Force the renewal of the JWT token"),
     debug: Optional[bool] = DEBUG_OPTION,
@@ -92,7 +115,15 @@ def login(
     echo("Successfully logged into Giza Platform ✅ ")
 
 
-@app.command()
+@app.command(
+    short_help="💻 Retrieve information about the current user",
+    help="""💻 Retrieve information about the current user.
+
+    Makes an API call to retrieev user current information from Giza Platform.
+
+    Verification and an active token is needed.
+    """,
+)
 def me(debug: Optional[bool] = DEBUG_OPTION) -> None:
     """
     Retrieve information about the current user and print it as json to stdout.

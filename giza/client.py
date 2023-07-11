@@ -100,7 +100,10 @@ class ApiClient:
         user_login = users.UserLogin(username=user, password=SecretStr(password))
         response = self.session.post(
             f"{self.url}/login/access-token",
-            data=user_login.dict(),
+            data={
+                "username": user_login.username,
+                "password": user_login.password.get_secret_value(),
+            },
         )
         response.raise_for_status()
         try:
@@ -277,7 +280,7 @@ class TranspileClient(ApiClient):
             f (BinaryIO): model to send for transpilation
 
         Returns:
-            Response: raw response from the server
+            Response: raw response from the server with the transpiled model as a zip
         """
         headers = copy.deepcopy(self.default_headers)
         headers.update(
