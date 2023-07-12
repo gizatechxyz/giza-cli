@@ -82,7 +82,7 @@ You can check our official docs [here](https://giza-cli.gizatech.xyz/main).
 
 ## 🌟 What's new
 
-For a detailed list of changes, please refer to the [CHANGELOG](./docs/CHANGELOG.md) file.
+For a detailed list of changes, please refer to the [CHANGELOG](CHANGELOG.md) file.
 
 ## 🤝 Join the community!
 
