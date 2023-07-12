@@ -1,9 +1,9 @@
-# 🚀 Installation
+# Installation
 
-- [🚀 Installation](#-installation)
-  - [Recomended installation with pipx](#recomended-installation-with-pipx)
-  - [Install from PyPi](#install-from-pypi)
-  - [Installing from source](#installing-from-source)
+* [🚀 Installation](Installation.md#-installation)
+  * [Recomended installation with pipx](Installation.md#recomended-installation-with-pipx)
+  * [Install from PyPi](Installation.md#install-from-pypi)
+  * [Installing from source](Installation.md#installing-from-source)
 
 ## Recomended installation with pipx
 
