@@ -1,4 +1,4 @@
-name: Python package
+name: Giza CI
 
 on:
     pull_request:

@@ -1,6 +1,10 @@
 # Giza Command Line Interface
 
 ![Logo](https://framerusercontent.com/images/dGhFEb4pIwUJ5SArbs7udVlSs.png)
+[![GitHub Workflow Status](https://github.com/gizatechxyz/giza-cli/actions/workflows/onpush.yml/badge.svg)](https://github.com/gizatechxyz/giza-cli/actions/workflows/onpush.yml)
+[![Project license](https://img.shields.io/github/license/gizatechxyz/orion.svg?style=flat-square)](LICENSE)
+[![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/gizatechxyz/orion/issues?q=is%3Aissue+is%3Aopen)
+[![Join the community](https://dcbadge.vercel.app/api/server/FR3Cd88x6r?style=flat-square)](https://discord.gg/FR3Cd88x6r)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
@@ -22,14 +26,35 @@ This CLI provides the utilities to interact with Giza Platform using the termina
 **Discalimer**: this is still in an experimental stage so the functionality is subject to change.
 
 - [Giza Command Line Interface](#giza-command-line-interface)
-  - [Installation](#installation)
-  - [Usage/Examples](#usageexamples)
-  - [Contributing](#contributing)
-  - [Contributors](#contributors)
+  - [🚀 Installation](#-installation)
+    - [Recomended installation with pipx](#recomended-installation-with-pipx)
+    - [Install from PyPi](#install-from-pypi)
+    - [Installing from source](#installing-from-source)
+  - [📚 Documentation](#-documentation)
+  - [🌟 What's new](#-whats-new)
+  - [🤝 Join the community!](#-join-the-community)
   - [Contributors ✨](#contributors-)
   - [License](#license)
 
-## Installation
+## 🚀 Installation
+
+### Recomended installation with pipx
+
+[pipx](https://pypa.github.io/pipx/) allows to install the dependency in an isolated environment. With ths we can make sure that it does not conflict with any of our installed dependencies.
+
+```bash
+pipx install giza-cli
+```
+
+### Install from PyPi
+
+For the latest release:
+
+```bash
+pip install giza-cli
+```
+
+### Installing from source
 
 Clone the repository and install it with `pip`:
 
@@ -45,27 +70,23 @@ Or install it directly from the repo:
   pip install git+ssh://git@github.com/gizatechxyz/giza-cli.git
 ```
 
-## Usage/Examples
+## 📚 Documentation
 
-Find usage examples at the documentation
+You can check our official docs [here](https://giza-cli.gizatech.xyz/main).
 
-## Contributing
+- **Examples** includes examples on how to use the CLI functionalities.
 
-Pull requests are welcome. For major changes, please open an issue first
-to discuss what you would like to change.
+- **Resources** brings the documentation of the different resources and actions that can be done with the CLI.
 
-Please make sure to update tests as appropriate.
+- 🧠 **Reference** for the API reference and internals of the CLI.
 
-## Contributors
+## 🌟 What's new
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
+For a detailed list of changes, please refer to the [CHANGELOG](./docs/CHANGELOG.md) file.
 
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
+## 🤝 Join the community!
 
-<!-- ALL-CONTRIBUTORS-LIST:END -->
+Join the community and help build a safer and transparent AI in our [Discord](https://discord.gg/Kt24CsMb5k)!
 
 ## Contributors ✨
 
