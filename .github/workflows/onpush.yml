@@ -4,11 +4,10 @@ on:
     pull_request:
       types: [ opened, synchronize ]
     push:
-      branches: [ main, develop ]
+      branches: [main]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
