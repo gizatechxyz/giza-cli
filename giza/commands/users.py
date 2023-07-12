@@ -119,7 +119,7 @@ def login(
     short_help="💻 Retrieve information about the current user",
     help="""💻 Retrieve information about the current user.
 
-    Makes an API call to retrieev user current information from Giza Platform.
+    Makes an API call to retrieve user current information from Giza Platform.
 
     Verification and an active token is needed.
     """,

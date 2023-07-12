@@ -199,7 +199,7 @@ class ApiClient:
 
         if token is not None and not self._is_expired(token) and not renew:
             self.token = token
-            echo("Token it still valid, re-using it from ~/.giza")
+            echo("Token is still valid, re-using it from ~/.giza")
 
         if (
             getattr(self, "token", None) is None
