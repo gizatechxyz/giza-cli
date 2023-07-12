@@ -10,5 +10,11 @@ def version_entrypoint(
         callback=version_callback,
         is_eager=True,
     ),  # noqa
-):
+) -> None:
+    """
+    Prints the current CLI version.
+
+    Args:
+        version (bool): Tper callback to retrieve the version.
+    """
     pass

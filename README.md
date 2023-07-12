@@ -1,10 +1,14 @@
+# Giza Command Line Interface
+
 ![Logo](https://framerusercontent.com/images/dGhFEb4pIwUJ5SArbs7udVlSs.png)
+[![GitHub Workflow Status](https://github.com/gizatechxyz/giza-cli/actions/workflows/onpush.yml/badge.svg)](https://github.com/gizatechxyz/giza-cli/actions/workflows/onpush.yml)
+[![Project license](https://img.shields.io/github/license/gizatechxyz/orion.svg?style=flat-square)](LICENSE)
+[![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/gizatechxyz/orion/issues?q=is%3Aissue+is%3Aopen)
+[![Join the community](https://dcbadge.vercel.app/api/server/FR3Cd88x6r?style=flat-square)](https://discord.gg/FR3Cd88x6r)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-
-# Giza Command Line Interface
 ```text
   _______  __   ________      ___           ______  __       __
  /  _____||  | |       /     /   \         /      ||  |     |  |
@@ -19,8 +23,38 @@ Welcome to Giza`s Platform CLI!
 
 This CLI provides the utilities to interact with Giza Platform using the terminal.
 
+**Discalimer**: this is still in an experimental stage so the functionality is subject to change.
 
-## Installation
+- [Giza Command Line Interface](#giza-command-line-interface)
+  - [🚀 Installation](#-installation)
+    - [Recomended installation with pipx](#recomended-installation-with-pipx)
+    - [Install from PyPi](#install-from-pypi)
+    - [Installing from source](#installing-from-source)
+  - [📚 Documentation](#-documentation)
+  - [🌟 What's new](#-whats-new)
+  - [🤝 Join the community!](#-join-the-community)
+  - [Contributors ✨](#contributors-)
+  - [License](#license)
+
+## 🚀 Installation
+
+### Recomended installation with pipx
+
+[pipx](https://pypa.github.io/pipx/) allows to install the dependency in an isolated environment. With ths we can make sure that it does not conflict with any of our installed dependencies.
+
+```bash
+pipx install giza-cli
+```
+
+### Install from PyPi
+
+For the latest release:
+
+```bash
+pip install giza-cli
+```
+
+### Installing from source
 
 Clone the repository and install it with `pip`:
 
@@ -31,106 +65,28 @@ Clone the repository and install it with `pip`:
 ```
 
 Or install it directly from the repo:
+
 ```bash
   pip install git+ssh://git@github.com/gizatechxyz/giza-cli.git
 ```
 
+## 📚 Documentation
 
-## Usage/Examples
+You can check our official docs [here](https://giza-cli.gizatech.xyz/main).
 
-### Create User
+- **Examples** includes examples on how to use the CLI functionalities.
 
-This is the first step! We create the user and then we need to verify the account by checking the email.
+- **Resources** brings the documentation of the different resources and actions that can be done with the CLI.
 
-```console
-> giza users create
+- 🧠 **Reference** for the API reference and internals of the CLI.
 
-Enter your username 😎: my-username
-Enter your password 🥷 : (this is a secret)
-Enter your email 📧: gonzalo@gizatech.xyz
-[giza][2023-06-23 12:29:40.543] Creating user in Giza Platform ✅
-{'email': 'gonzalo@gizatech.xyz', 'username': 'my-username', 'is_active': False}
-[giza][2023-06-23 12:29:41.417] User created ✅. Check for a verification email 📧
-```
+## 🌟 What's new
 
-### Login
+For a detailed list of changes, please refer to the [CHANGELOG](./docs/CHANGELOG.md) file.
 
-If it is not verified login will be disabled!
+## 🤝 Join the community!
 
-```console
-> giza users login
-
-Enter your username 😎: my-username
-Enter your password 🥷 :
-[giza][2023-06-23 12:32:17.917] Log into Giza Platform
-[giza][2023-06-23 12:32:18.716] ⛔️Could not authorize the user⛔️
-[giza][2023-06-23 12:32:18.718] ⛔️Status code -> 400⛔️
-[giza][2023-06-23 12:32:18.719] ⛔️Error message -> {'detail': 'Inactive user'}⛔️
-```
-
-But once we verify the account we will be able to authenticate with the platform.
-
-```console
-> giza users login
-
-Enter your username 😎: my-username
-Enter your password 🥷 :
-[giza][2023-06-23 12:34:33.576] Log into Giza Platform
-[giza][2023-06-23 12:34:34.400] Successfully logged into Giza Platform ✅
-```
-
-### Retrieve user information
-
-Now that we are authenticated we can connect with the platform!
-
-```console
-> giza users me
-
-[giza][2023-06-23 12:35:33.287] Retrieving information about me!
-{
-  "username": "my-username",
-  "email": "gonzalo@gizatech.xyz",
-  "is_active": true
-}
-```
-
-### Transpile a model!
-
-We have our `onnx` model and we want to transpile it, `giza` makes it easy by providing the command for it!
-
-```console
-> giza transpile MNIST_quant.onnx --output-path my_awesome_model
-
-[giza][2023-06-23 12:39:01.587] Reading model from path: MNIST_quant.onnx
-[giza][2023-06-23 12:39:01.588] Sending model for transpilation
-[giza][2023-06-23 12:39:04.657] Transpilation recieved!✅
-[giza][2023-06-23 12:39:04.670] Trasnpilation saved at: my_awesome_model
-```
-
-Let's check the result:
-
-```console
-> tree my_awesome_model
-
-my_awesome_model
-├── cairo_project.cairo
-├── scarb.toml
-└── src
-    ├── conv1
-    │   └── Conv_quant.cairo
-    ├── conv1.cairo
-    ├── conv2
-    │   └── Conv_quant.cairo
-    ├── conv2.cairo
-    ├── fc1
-    │   └── Gemm_MatMul_quant.cairo
-    ├── fc1.cairo
-    ├── fc2
-    │   └── Gemm_MatMul_quant.cairo
-    ├── fc2.cairo
-    ├── graph.cairo
-    └── lib.cairo
-```
+Join the community and help build a safer and transparent AI in our [Discord](https://discord.gg/Kt24CsMb5k)!
 
 ## Contributors ✨
 
@@ -153,3 +109,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)

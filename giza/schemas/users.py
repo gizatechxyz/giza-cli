@@ -15,6 +15,18 @@ class UserCreate(UserBase):
 
     @validator("username", "email", "password")
     def str_not_emtpy(cls, s: str):
+        """
+        Validate that none of the provided information is an empty string
+
+        Args:
+            s (str): value to check if `""`
+
+        Raises:
+            ValueError: If the value is an empty string
+
+        Returns:
+            str: return the provided value if not empty
+        """
         if s == "":
             raise ValueError
         return s

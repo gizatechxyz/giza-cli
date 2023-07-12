@@ -17,7 +17,9 @@ def test_transpilation_successful(tmpdir):
 
     with patch.object(
         TranspileClient, "transpile", return_value=StubResponse()
-    ) as mock_transpile, patch("builtins.open") as mock_open:
+    ) as mock_transpile, patch("builtins.open") as mock_open, patch.object(
+        TranspileClient, "_load_credentials_file"
+    ):
         result = invoke_cli_runner(["transpile", "model", "--output-path", tmpdir])
 
     mock_transpile.assert_called_once()
@@ -31,7 +33,11 @@ def test_transpilation_successful(tmpdir):
 def test_transpilation_http_error(tmpdir):
     with patch.object(TranspileClient, "transpile", side_effect=HTTPError), patch(
         "builtins.open"
-    ) as mock_open, patch("giza.commands.transpile.get_response_info", return_value={}):
+    ) as mock_open, patch(
+        "giza.commands.transpile.get_response_info", return_value={}
+    ), patch.object(
+        TranspileClient, "_load_credentials_file"
+    ):
         result = invoke_cli_runner(
             ["transpile", "model", "--output-path", tmpdir], expected_error=True
         )
@@ -47,7 +53,9 @@ def test_transpilation_bad_zip(tmpdir):
 
     with patch.object(
         TranspileClient, "transpile", return_value=StubResponse()
-    ) as mock_transpile, patch("builtins.open") as mock_open:
+    ) as mock_transpile, patch("builtins.open") as mock_open, patch.object(
+        TranspileClient, "_load_credentials_file"
+    ):
         result = invoke_cli_runner(
             ["transpile", "model", "--output-path", tmpdir], expected_error=True
         )
