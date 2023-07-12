@@ -1,4 +1,7 @@
 ![Logo](https://framerusercontent.com/images/dGhFEb4pIwUJ5SArbs7udVlSs.png)
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 
 # Giza Command Line Interface
@@ -128,3 +131,25 @@ my_awesome_model
     ├── graph.cairo
     └── lib.cairo
 ```
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://es.linkedin.com/in/gonzalo-mellizo-soto-diaz-590260108"><img src="https://avatars.githubusercontent.com/u/18899187?v=4?s=100" width="100px;" alt="Gonzalo Mellizo"/><br /><sub><b>Gonzalo Mellizo</b></sub></a><br /><a href="https://github.com/gizatechxyz/giza-cli/commits?author=Gonmeso" title="Code">💻</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
