@@ -2,6 +2,12 @@
 
 Giza CLI provides the capabilities to manage users for the platform.
 
+- [Users](#users)
+  - [Available commands](#available-commands)
+    - [Create](#create)
+    - [Login](#login)
+    - [Me](#me)
+
 ## Available commands
 
 ### Create
