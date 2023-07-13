@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "giza-cli"
-version = "0.0.1"
+version = "0.0.2"
 description = "CLI for interacting with Giza Platform"
 authors = ["Gonzalo Mellizo-Soto <gonzalo@gizatech.xyz>"]
 readme = "README.md"

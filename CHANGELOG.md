@@ -18,6 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [0.0.2] - 2023-07-13
+
+### Fixes
+
+- User creation bug when using `secretStr`.
+
 ## [0.0.1]
 
 ### Added
