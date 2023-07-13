@@ -235,7 +235,11 @@ class UsersClient(ApiClient):
         """
         response = self.session.post(
             f"{self.url}/{self.USERS_ENDPOINT}/",
-            json=user.dict(exclude_unset=True),
+            json={
+                "username": user.username,
+                "password": user.password.get_secret_value(),
+                "email": user.email,
+            },
         )
 
         response.raise_for_status()
