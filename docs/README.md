@@ -4,9 +4,9 @@ description: Giza CLI 0.0.2
 
 # Giza CLI
 
-Welcome to Giza Platform CLI!
+Welcome to Giza CLI!
 
-This CLI provides the utilities to interact with Giza Platform using the terminal.
+This CLI provides the utilities to interact with Giza using the terminal.
 
 ## 🤔 What capabilities does the CLI offer?
 
@@ -17,7 +17,7 @@ For now it provides two capabilities:
 * User related utilities, like `create` or `login`
 * Model transpilation with `transpile`
 
-In the feaure each new resource added to Giza Platform will have its corresponding capabaility in the CLI.
+In the future each new resource added to Giza will have its corresponding capabaility in the CLI.
 
 ## ✨ What's new?
 

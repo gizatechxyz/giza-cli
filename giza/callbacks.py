@@ -18,7 +18,7 @@ def version_callback(value: bool) -> None:
     """
     if value:
         echo(
-            f"🚀 [orange3]Giza[/orange3] Platform CLI, "
+            f"🚀 [orange3]Giza[/orange3] CLI, "
             f"version ~> [green]{__version__}[/green]",
         )
         raise typer.Exit()

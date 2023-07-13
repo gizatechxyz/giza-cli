@@ -12,7 +12,7 @@ This is the first step! We create the user and then we need to verify the accoun
 Enter your username 😎: my-username
 Enter your password 🥷 : (this is a secret)
 Enter your email 📧: gonzalo@gizatech.xyz
-[giza][2023-06-23 12:29:40.543] Creating user in Giza Platform ✅
+[giza][2023-06-23 12:29:40.543] Creating user in Giza ✅
 [giza][2023-06-23 12:29:41.417] User created ✅. Check for a verification email 📧
 ```
 
@@ -27,26 +27,26 @@ If it is not verified login will be disabled!
 
 Enter your username 😎: my-username
 Enter your password 🥷 :
-[giza][2023-06-23 12:32:17.917] Log into Giza Platform
+[giza][2023-06-23 12:32:17.917] Log into Giza
 [giza][2023-06-23 12:32:18.716] ⛔️Could not authorize the user⛔️
 [giza][2023-06-23 12:32:18.718] ⛔️Status code -> 400⛔️
 [giza][2023-06-23 12:32:18.719] ⛔️Error message -> {'detail': 'Inactive user'}⛔️
 ```
 
-But once we verify the account we will be able to authenticate with the platform.
+But once we verify the account we will be able to authenticate with Giza.
 
 ```console
 > giza users login
 
 Enter your username 😎: my-username
 Enter your password 🥷 :
-[giza][2023-06-23 12:34:33.576] Log into Giza Platform
-[giza][2023-06-23 12:34:34.400] Successfully logged into Giza Platform ✅
+[giza][2023-06-23 12:34:33.576] Log into Giza
+[giza][2023-06-23 12:34:34.400] Successfully logged into Giza ✅
 ```
 
 ## Retrieve user information
 
-Now that we are authenticated we can connect with the platform!
+Now that we are authenticated we can connect with Giza!
 
 ```console
 > giza users me
