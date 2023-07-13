@@ -19,9 +19,9 @@
 
 ```
 
-Welcome to Giza`s Platform CLI!
+Welcome to Giza CLI!
 
-This CLI provides the utilities to interact with Giza Platform using the terminal.
+This CLI provides the utilities to interact with Giza using the terminal.
 
 **Discalimer**: this is still in an experimental stage so the functionality is subject to change.
 

@@ -17,8 +17,8 @@ app = typer.Typer()
 
 
 @app.command(
-    short_help="🔥 Creates a new user in Giza Platform.",
-    help="""🔥 Creates a new user in Giza Platform.
+    short_help="🔥 Creates a new user in Giza.",
+    help="""🔥 Creates a new user in Giza.
 
     This commands ask for a username, password and a valid email address,
     then a confirmation email will be sent to the provided one.
@@ -43,7 +43,7 @@ def create(debug: Optional[bool] = DEBUG_OPTION) -> None:
     user = Prompt.ask("Enter your username :sunglasses:")
     password = Prompt.ask("Enter your password 🥷 ", password=True)
     email = Prompt.ask("Enter your email 📧")
-    echo("Creating user in Giza Platform ✅ ")
+    echo("Creating user in Giza ✅ ")
     try:
         user_create = users.UserCreate(
             username=user, password=SecretStr(password), email=EmailStr(email)
@@ -70,10 +70,10 @@ def create(debug: Optional[bool] = DEBUG_OPTION) -> None:
 
 
 @app.command(
-    short_help="🔶 Log into Giza Platform.",
-    help="""🔶 Log into Giza Platform.
+    short_help="🔶 Log into Giza.",
+    help="""🔶 Log into Giza.
 
-    Log into Giza Platform using the provided credentials. This will retrieve a JWT
+    Log into Giza using the provided credentials. This will retrieve a JWT
     that will be used to authenticate the user.
 
     This will be saved at `~/.giza/.credentials.json` for later re-use until the token expires.
@@ -86,7 +86,7 @@ def login(
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     """
-    Logs the current user to Giza Platform. Under the hood this will retrieve the token for the next requests.
+    Logs the current user into Giza. Under the hood this will retrieve the token for the next requests.
     This token will be saved at `home` directory for further usage.
 
     Args:
@@ -99,7 +99,7 @@ def login(
     user = Prompt.ask("Enter your username :sunglasses:")
     password = Prompt.ask("Enter your password 🥷 ", password=True)
 
-    echo("Log into Giza Platform")
+    echo("Log into Giza")
     client = UsersClient(API_HOST, debug=debug)
     try:
         client.retrieve_token(user, password, renew=renew)
@@ -112,14 +112,14 @@ def login(
         if debug:
             raise e
         sys.exit(1)
-    echo("Successfully logged into Giza Platform ✅ ")
+    echo("Successfully logged into Giza ✅ ")
 
 
 @app.command(
     short_help="💻 Retrieve information about the current user",
     help="""💻 Retrieve information about the current user.
 
-    Makes an API call to retrieve user current information from Giza Platform.
+    Makes an API call to retrieve user current information from Giza.
 
     Verification and an active token is needed.
     """,

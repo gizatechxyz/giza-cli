@@ -21,7 +21,7 @@
 transpile(
     model_path: str,
     output_path: str = 'cairo_model',
-    debug: Optional[bool] = <typer.models.OptionInfo object at 0x104ce5050>
+    debug: Optional[bool] = DEBUG_OPTION
 ) → None
 ```
 

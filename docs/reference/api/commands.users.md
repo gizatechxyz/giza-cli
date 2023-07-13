@@ -19,7 +19,7 @@
 
 ```python
 create(
-    debug: Optional[bool] = <typer.models.OptionInfo object at 0x104ce5050>
+    debug: Optional[bool] = DEBUG_OPTION
 ) → None
 ```
 
@@ -47,12 +47,12 @@ Command to create a user. Asks for the new users information and validates the i
 
 ```python
 login(
-    renew: bool = <typer.models.OptionInfo object at 0x104d1c850>,
-    debug: Optional[bool] = <typer.models.OptionInfo object at 0x104ce5050>
+    renew: bool = typer.Option(False, help="Force the renewal of the JWT token"),
+    debug: Optional[bool] = DEBUG_OPTION
 ) → None
 ```
 
-Logs the current user to Giza Platform. Under the hood this will retrieve the token for the next requests. This token will be saved at `home` directory for further usage.
+Logs the current user into Giza. Under the hood this will retrieve the token for the next requests. This token will be saved at `home` directory for further usage.
 
 
 
@@ -76,7 +76,7 @@ Logs the current user to Giza Platform. Under the hood this will retrieve the to
 
 ```python
 me(
-    debug: Optional[bool] = <typer.models.OptionInfo object at 0x104ce5050>
+    debug: Optional[bool] = DEBUG_OPTION
 ) → None
 ```
 
