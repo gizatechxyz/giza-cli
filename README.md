@@ -1,6 +1,5 @@
 # Giza Command Line Interface
 
-![Logo](https://framerusercontent.com/images/dGhFEb4pIwUJ5SArbs7udVlSs.png)
 [![GitHub Workflow Status](https://github.com/gizatechxyz/giza-cli/actions/workflows/onpush.yml/badge.svg)](https://github.com/gizatechxyz/giza-cli/actions/workflows/onpush.yml)
 [![Project license](https://img.shields.io/github/license/gizatechxyz/orion.svg?style=flat-square)](LICENSE)
 [![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/gizatechxyz/orion/issues?q=is%3Aissue+is%3Aopen)
@@ -72,7 +71,7 @@ Or install it directly from the repo:
 
 ## 📚 Documentation
 
-You can check our official docs [here](https://giza-cli.gizatech.xyz/main).
+You can check our official docs [here](https://orion-giza.gitbook.io/main-1/welcome/readme).
 
 - **Examples** includes examples on how to use the CLI functionalities.
 
