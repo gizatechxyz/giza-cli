@@ -1,2 +1,3 @@
 __version__ = "0.0.2"
-API_HOST = "https://api.gizatech.xyz/"
+# Until DNS is fixed
+API_HOST = "https://giza-platform-non-prod.web.app/"
