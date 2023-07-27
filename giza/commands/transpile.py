@@ -10,7 +10,7 @@ from requests import HTTPError
 from rich import print_json
 
 from giza import API_HOST
-from giza.client import ModelsClient, TranspileClient
+from giza.client import ModelsClient
 from giza.options import DEBUG_OPTION
 from giza.schemas.models import ModelCreate, ModelUpdate
 from giza.utils import echo, get_response_info

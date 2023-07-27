@@ -4,21 +4,39 @@ from unittest.mock import patch
 
 from requests import HTTPError
 
-from giza.client import TranspileClient
+from giza.client import ModelsClient, TranspileClient
+from giza.schemas.models import Model
+from giza.utils.enums import ModelStatus
 from tests.conftest import invoke_cli_runner
 
 
 def test_transpilation_successful(tmpdir):
-    class StubResponse:
+    def return_content():
         tmp = BytesIO()
         with zipfile.ZipFile(tmp, mode="w", compression=zipfile.ZIP_DEFLATED) as f:
             f.writestr("file1.txt", "hi")
-        content = tmp.getvalue()
+        return tmp.getvalue()
+
+    model = Model(id=1, size=0, name="dummy", user_id=1, status=ModelStatus.COMPLETED)
 
     with patch.object(
-        TranspileClient, "transpile", return_value=StubResponse()
-    ) as mock_transpile, patch("builtins.open") as mock_open, patch.object(
-        TranspileClient, "_load_credentials_file"
+        ModelsClient, "create", return_value=(model, "url")
+    ) as mock_transpile, patch.object(
+        ModelsClient,
+        "_upload",
+    ), patch.object(
+        ModelsClient,
+        "update",
+    ), patch.object(
+        ModelsClient, "download", return_value=return_content()
+    ), patch(
+        "giza.commands.transpile.Path"
+    ), patch.object(
+        ModelsClient, "get", return_value=model
+    ), patch(
+        "builtins.open"
+    ) as mock_open, patch.object(
+        ModelsClient, "_load_credentials_file"
     ):
         result = invoke_cli_runner(["transpile", "model", "--output-path", tmpdir])
 
@@ -31,30 +49,43 @@ def test_transpilation_successful(tmpdir):
 
 
 def test_transpilation_http_error(tmpdir):
-    with patch.object(TranspileClient, "transpile", side_effect=HTTPError), patch(
-        "builtins.open"
-    ) as mock_open, patch(
+    with patch.object(ModelsClient, "create", side_effect=HTTPError), patch(
         "giza.commands.transpile.get_response_info", return_value={}
-    ), patch.object(
-        TranspileClient, "_load_credentials_file"
+    ), patch("giza.commands.transpile.Path"), patch.object(
+        ModelsClient, "_load_credentials_file"
     ):
         result = invoke_cli_runner(
             ["transpile", "model", "--output-path", tmpdir], expected_error=True
         )
 
-    mock_open.assert_called_once_with("model", "rb")
     assert "Error at transpilation" in result.stdout
     assert result.exit_code == 1
 
 
 def test_transpilation_bad_zip(tmpdir):
-    class StubResponse:
-        content = b"some bytes"
+    def return_content():
+        return b"some bytes"
+
+    model = Model(id=1, size=0, name="dummy", user_id=1, status=ModelStatus.COMPLETED)
 
     with patch.object(
-        TranspileClient, "transpile", return_value=StubResponse()
-    ) as mock_transpile, patch("builtins.open") as mock_open, patch.object(
-        TranspileClient, "_load_credentials_file"
+        ModelsClient, "create", return_value=(model, "url")
+    ) as mock_transpile, patch.object(
+        ModelsClient,
+        "_upload",
+    ), patch.object(
+        ModelsClient,
+        "update",
+    ), patch.object(
+        ModelsClient, "download", return_value=return_content()
+    ), patch(
+        "giza.commands.transpile.Path"
+    ), patch.object(
+        ModelsClient, "get", return_value=model
+    ), patch(
+        "builtins.open"
+    ) as mock_open, patch.object(
+        ModelsClient, "_load_credentials_file"
     ):
         result = invoke_cli_runner(
             ["transpile", "model", "--output-path", tmpdir], expected_error=True
