@@ -1,8 +1,9 @@
 import copy
 import json
 import os
+from io import BufferedReader
 from pathlib import Path
-from typing import Any, BinaryIO, Dict, Optional
+from typing import Any, BinaryIO, Dict, Optional, Tuple
 from urllib.parse import urlparse
 
 from jose import jwt
@@ -12,12 +13,14 @@ from requests import Response, Session
 from rich import print, print_json
 
 from giza.schemas import users
+from giza.schemas.models import Model, ModelCreate, ModelUpdate
 from giza.schemas.token import TokenResponse
 from giza.utils import echo
 from giza.utils.decorators import auth
 
 DEFAULT_API_VERSION = "v1"
 GIZA_TOKEN_VARIABLE = "GIZA_TOKEN"
+MODEL_URL_HEADER = "X-MODEL-URL"
 
 
 class ApiClient:
@@ -199,7 +202,6 @@ class ApiClient:
 
         if token is not None and not self._is_expired(token) and not renew:
             self.token = token
-            echo("Token is still valid, re-using it from ~/.giza")
 
         if (
             getattr(self, "token", None) is None
@@ -299,3 +301,149 @@ class TranspileClient(ApiClient):
 
         response.raise_for_status()
         return response
+
+
+class ModelsClient(ApiClient):
+    """
+    Client to interact with `models` endpoint.
+    """
+
+    MODELS_ENDPOINT = "models"
+
+    @auth
+    def get(self, model_id: int) -> Model:
+        """
+        Make a call to the API to retrieve model information.
+
+        Args:
+            model_id: Model identfier to retrieve information
+
+        Returns:
+            Model: model entity with the retrieved information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(
+            {"Authorization": f"Bearer {self.token}"},
+        )
+        response = self.session.get(
+            f"{self.url}/{self.MODELS_ENDPOINT}/{model_id}",
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return Model(**response.json())
+
+    @auth
+    def create(self, model_create: ModelCreate) -> Tuple[Model, str]:
+        """
+        Make a call to the API to retrieve model information.
+
+        Args:
+            model_id: Model identfier to retrieve information
+
+        Returns:
+            Model: model entity with the retrieved information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(
+            {"Authorization": f"Bearer {self.token}"},
+        )
+
+        response = self.session.post(
+            f"{self.url}/{self.MODELS_ENDPOINT}",
+            headers=headers,
+            json=model_create.dict(),
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        upload_url = response.headers.get(MODEL_URL_HEADER.lower())
+
+        if upload_url is None:
+            raise Exception("Missing upload URL")
+
+        return Model(**response.json()), upload_url
+
+    def _upload(self, upload_url: str, f: BufferedReader) -> None:
+        """
+        Make a call to the API to retrieve model information.
+
+        Args:
+            model_id: Model identfier to retrieve information
+
+        Returns:
+            Model: model entity with the retrieved information
+        """
+
+        response = self.session.put(
+            upload_url, headers={"Content-Type": "application/octet-stream"}, data=f
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        if response.status_code != 200:
+            raise Exception()
+
+    @auth
+    def update(self, model_id: int, model_update: ModelUpdate) -> Model:
+        """
+        Make a call to the API to retrieve model information.
+
+        Args:
+            model_id: Model identfier to retrieve information
+
+        Returns:
+            Model: model entity with the retrieved information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(
+            {"Authorization": f"Bearer {self.token}"},
+        )
+
+        response = self.session.put(
+            f"{self.url}/{self.MODELS_ENDPOINT}/{model_id}",
+            headers=headers,
+            json=model_update.dict(),
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return Model(**response.json())
+
+    @auth
+    def download(self, model_id: int) -> bytes:
+        """
+        Make a call to the API to retrieve model information.
+
+        Args:
+            model_id: Model identfier to retrieve information
+
+        Returns:
+            Model: model entity with the retrieved information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(
+            {"Authorization": f"Bearer {self.token}"},
+        )
+
+        response = self.session.get(
+            f"{self.url}/{self.MODELS_ENDPOINT}/{model_id}:download",
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+        url = response.json()["download_url"]
+        response.raise_for_status()
+
+        download_response = self.session.get(
+            url, headers={"Content-Type": "application/octet-stream"}
+        )
+
+        self._echo_debug(str(download_response))
+        download_response.raise_for_status()
+
+        return download_response.content

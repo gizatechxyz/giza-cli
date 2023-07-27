@@ -1,40 +1,84 @@
 import sys
+import time
 import zipfile
 from io import BytesIO
+from pathlib import Path
 from typing import Optional
 
+import typer
 from requests import HTTPError
+from rich import print_json
 
 from giza import API_HOST
-from giza.client import TranspileClient
+from giza.client import ModelsClient, TranspileClient
 from giza.options import DEBUG_OPTION
+from giza.schemas.models import ModelCreate, ModelUpdate
 from giza.utils import echo, get_response_info
+from giza.utils.enums import ModelStatus
 
 
 def transpile(
-    model_path: str,
-    output_path: str = "cairo_model",
+    model_path: str = typer.Argument(None, help="Path of the model to transpile"),
+    output_path: str = typer.Option(
+        "cairo_model", "--output-path", "-o", help="Path to output the cairo model"
+    ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     """
     Command to transpile the model using the client. Sends the model and then unzips it to the desired location.
 
+    This command will do a couple of things behind the scenes:
+        * Create a Model entity
+        * Upload the model
+        * Update the status of the model
+        * Poll the model until the status is either FAILED or COMPLETED
+        * If COMPLETED the model is downloaded
+
     Args:
         model_path (str): path for the model to load
         output_path (str): ouput to store the transpiled model. Defaults to "cairo_model".
-        debug (Optional[bool], optional): Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION(False).
+        debug (Optional[bool], optional): Whether to add debug information, will show requests,
+            extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION(False).
 
     Raises:
         BadZipFile: if the recieved file is not a zip, could be due to a transpilation error at the API.
         HTTPError: request error to the API, 4XX or 5XX
     """
     echo(f"Reading model from path: {model_path}")
-    client = TranspileClient(API_HOST, debug=debug)
+    client = ModelsClient(API_HOST, debug=debug)
     echo("Sending model for transpilation")
 
+    model_create = ModelCreate(
+        name=model_path.split("/")[-1], size=Path(model_path).stat().st_size
+    )
+
     try:
-        with open(model_path, "rb") as model:
-            response = client.transpile(model)
+        model, url = client.create(model_create)
+        echo("Model Created! ✅")
+        print_json(model.json())
+        with open(model_path, "rb") as f:
+            client._upload(url, f)
+        echo("Model Uploaded! ✅")
+        updated_model = client.update(
+            model.id, ModelUpdate(status=ModelStatus.UPLOADED)
+        )
+        echo(f"Model Status updated to: {updated_model.status}! ✅")
+
+        start_time = time.time()
+        while True:
+            m = client.get(model.id)
+            if m.status not in (ModelStatus.COMPLETED, ModelStatus.FAILED):
+                spent = time.time() - start_time
+                echo(f"[{spent:.2f}s]Transpilation is not ready yet, retrying in 10s")
+                time.sleep(10)
+            elif m.status == ModelStatus.COMPLETED:
+                echo("Transpilation is ready, downloading! ✅")
+                cairo_model = client.download(model.id)
+                break
+            elif m.status == ModelStatus.FAILED:
+                echo("⛔️ Transpilation failed! ⛔️")
+                echo(f"⛔️ Reason -> {m.message} ⛔️")
+                break
     except HTTPError as http_error:
         info = get_response_info(http_error.response)
         echo.error("Error at transpilation")
@@ -46,7 +90,7 @@ def transpile(
         sys.exit(1)
     echo("Transpilation recieved! ✅")
     try:
-        zip_file = zipfile.ZipFile(BytesIO(response.content))
+        zip_file = zipfile.ZipFile(BytesIO(cairo_model))
     except zipfile.BadZipFile as zip_error:
         echo.error("Something went wrong with the transpiled file")
         echo.error(f"Error -> {zip_error.args[0]}")
