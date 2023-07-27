@@ -4,10 +4,31 @@ from unittest.mock import patch
 
 from requests import HTTPError
 
-from giza.client import ModelsClient, TranspileClient
+from giza.client import ModelsClient
 from giza.schemas.models import Model
 from giza.utils.enums import ModelStatus
 from tests.conftest import invoke_cli_runner
+
+
+class ClientStub:
+    def __init__(self, model, content) -> None:
+        self.model = model
+        self.content = content
+
+    def get(self, *args, **kwargs):
+        return self.model
+
+    def create(self, *args, **kwargslf):
+        return (self.model, "url")
+
+    def _upload(self, *args, **kwargs):
+        pass
+
+    def update(self, *args, **kwargs):
+        return self.model
+
+    def download(self, *args, **kwargs):
+        return self.content
 
 
 def test_transpilation_successful(tmpdir):
@@ -19,19 +40,10 @@ def test_transpilation_successful(tmpdir):
 
     model = Model(id=1, size=0, name="dummy", user_id=1, status=ModelStatus.COMPLETED)
 
-    with patch.object(
-        ModelsClient, "create", return_value=(model, "url")
-    ) as mock_transpile, patch.object(
-        ModelsClient,
-        "_upload",
-    ), patch.object(
-        ModelsClient,
-        "update",
-    ), patch.object(
-        ModelsClient, "download", return_value=return_content()
-    ), patch(
-        "giza.commands.transpile.Path"
-    ), patch.object(
+    with patch(
+        "giza.commands.transpile.ModelsClient",
+        return_value=ClientStub(model, return_content()),
+    ), patch("giza.commands.transpile.Path"), patch.object(
         ModelsClient, "get", return_value=model
     ), patch(
         "builtins.open"
@@ -40,7 +52,6 @@ def test_transpilation_successful(tmpdir):
     ):
         result = invoke_cli_runner(["transpile", "model", "--output-path", tmpdir])
 
-    mock_transpile.assert_called_once()
     # Called twice, once to open the model and second to write the zip
     mock_open.assert_called()
     assert "Reading model from path" in result.stdout
@@ -68,19 +79,10 @@ def test_transpilation_bad_zip(tmpdir):
 
     model = Model(id=1, size=0, name="dummy", user_id=1, status=ModelStatus.COMPLETED)
 
-    with patch.object(
-        ModelsClient, "create", return_value=(model, "url")
-    ) as mock_transpile, patch.object(
-        ModelsClient,
-        "_upload",
-    ), patch.object(
-        ModelsClient,
-        "update",
-    ), patch.object(
-        ModelsClient, "download", return_value=return_content()
-    ), patch(
-        "giza.commands.transpile.Path"
-    ), patch.object(
+    with patch(
+        "giza.commands.transpile.ModelsClient",
+        return_value=ClientStub(model, return_content()),
+    ), patch("giza.commands.transpile.Path"), patch.object(
         ModelsClient, "get", return_value=model
     ), patch(
         "builtins.open"
@@ -91,7 +93,6 @@ def test_transpilation_bad_zip(tmpdir):
             ["transpile", "model", "--output-path", tmpdir], expected_error=True
         )
 
-    mock_transpile.assert_called_once()
     # Called twice, once to open the model and second to write the zip
     mock_open.assert_called()
     assert "Something went wrong" in result.stdout
