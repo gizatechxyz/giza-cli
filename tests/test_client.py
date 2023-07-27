@@ -5,14 +5,20 @@ import pytest
 from jose import ExpiredSignatureError
 from requests import HTTPError
 
-from giza.client import DEFAULT_API_VERSION, ApiClient
+from giza.client import DEFAULT_API_VERSION, MODEL_URL_HEADER, ApiClient, ModelsClient
+from giza.schemas.models import Model, ModelCreate, ModelUpdate
+from giza.utils.enums import ModelStatus
 
 
 class ResponseStub:
-    def __init__(self, data, status_code, exception=None) -> None:
+    def __init__(
+        self, data, status_code, exception=None, headers=None, content=None
+    ) -> None:
         self.status_code = status_code
         self.data = data
         self.exception = exception
+        self.headers = headers
+        self.content = content
 
     def json(self):
         return self.data
@@ -113,3 +119,85 @@ def test_api_client__is_expired_true(tmpdir):
         expired = client._is_expired(token="token")
 
     assert expired
+
+
+def test_models_client_get(tmpdir):
+    model_data = {
+        "name": "model",
+        "size": 100,
+        "status": "COMPLETED",
+        "message": "",
+        "id": 1,
+        "user_id": 1,
+    }
+    model_id = 1
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.get", return_value=ResponseStub(model_data, 200)
+    ) as mock_request, patch("jose.jwt.decode"):
+        client = ModelsClient("http://dummy_host", token="token")
+        model = client.get(model_id)
+
+    mock_request.assert_called_once()
+    assert isinstance(model, Model)
+
+
+def test_models_client_create(tmpdir):
+    model_create = ModelCreate(size=100, name="model")
+    model_data = {
+        "name": "model",
+        "size": 100,
+        "status": "COMPLETED",
+        "message": "",
+        "id": 1,
+        "user_id": 1,
+    }
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.post",
+        return_value=ResponseStub(
+            model_data, 201, headers={MODEL_URL_HEADER.lower(): "url"}
+        ),
+    ) as mock_request, patch("jose.jwt.decode"):
+        client = ModelsClient("http://dummy_host", token="token")
+        model, url = client.create(model_create)
+
+    mock_request.assert_called_once()
+    assert isinstance(model, Model)
+    assert url == "url"
+
+
+def test_models_client_update(tmpdir):
+    model_update = ModelUpdate(status=ModelStatus.COMPLETED)
+    model_data = {
+        "name": "model",
+        "size": 100,
+        "status": "COMPLETED",
+        "message": "",
+        "id": 1,
+        "user_id": 1,
+    }
+    model_id = 1
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.put",
+        return_value=ResponseStub(
+            model_data, 201, headers={MODEL_URL_HEADER.lower(): "url"}
+        ),
+    ) as mock_request, patch("jose.jwt.decode"):
+        client = ModelsClient("http://dummy_host", token="token")
+        model = client.update(model_id, model_update)
+
+    mock_request.assert_called_once()
+    assert isinstance(model, Model)
+
+
+def test_models_client_download(tmpdir):
+    model_id = 1
+    response_download = ResponseStub({"download_url": "url"}, 200)
+    response_url = ResponseStub({"download_url": "url"}, 200, content=b"some bytes")
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.get", side_effect=[response_download, response_url]
+    ) as mock_request, patch("jose.jwt.decode"):
+        client = ModelsClient("http://dummy_host", token="token")
+        result = client.download(model_id)
+
+    mock_request.assert_called()
+    assert isinstance(result, bytes)
