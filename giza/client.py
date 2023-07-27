@@ -338,13 +338,16 @@ class ModelsClient(ApiClient):
     @auth
     def create(self, model_create: ModelCreate) -> Tuple[Model, str]:
         """
-        Make a call to the API to retrieve model information.
+        Create a new model.
 
         Args:
-            model_id: Model identfier to retrieve information
+            model_create: Model information to create
+
+        Raises:
+            Exception: if there is no upload Url
 
         Returns:
-            Model: model entity with the retrieved information
+            Tuple[Model, str]: the recently created model and a url, used to upload the model.
         """
         headers = copy.deepcopy(self.default_headers)
         headers.update(
@@ -369,13 +372,11 @@ class ModelsClient(ApiClient):
 
     def _upload(self, upload_url: str, f: BufferedReader) -> None:
         """
-        Make a call to the API to retrieve model information.
+        Upload the file to the specified url.
 
         Args:
-            model_id: Model identfier to retrieve information
-
-        Returns:
-            Model: model entity with the retrieved information
+            upload_url: Url to perform a PUT operation to load file `f`
+            f: Model to upload, opened as a file
         """
 
         response = self.session.put(
@@ -391,13 +392,14 @@ class ModelsClient(ApiClient):
     @auth
     def update(self, model_id: int, model_update: ModelUpdate) -> Model:
         """
-        Make a call to the API to retrieve model information.
+        Update a model.
 
         Args:
             model_id: Model identfier to retrieve information
+            model_update: body to partially update the model
 
         Returns:
-            Model: model entity with the retrieved information
+            Model: the updated model
         """
         headers = copy.deepcopy(self.default_headers)
         headers.update(
@@ -418,14 +420,15 @@ class ModelsClient(ApiClient):
     @auth
     def download(self, model_id: int) -> bytes:
         """
-        Make a call to the API to retrieve model information.
+        Download a Transpiled model from the API.
 
         Args:
-            model_id: Model identfier to retrieve information
+            model_id: Model identfier to download
 
         Returns:
-            Model: model entity with the retrieved information
+            The model content of the request
         """
+
         headers = copy.deepcopy(self.default_headers)
         headers.update(
             {"Authorization": f"Bearer {self.token}"},

@@ -1,4 +1,5 @@
 import datetime as dt
+from typing import Optional
 
 import typer
 from rich import print as rich_print
@@ -13,6 +14,9 @@ class Echo:
 
     Provides utilities to print different levels of the messages and provides formatting capabilities to each of the levels.
     """
+
+    def __init__(self, debug: Optional[bool] = False) -> None:
+        self._debug = debug
 
     def format_message(
         self, message: str, field: str = "giza", color: str = "orange3"
@@ -93,8 +97,9 @@ class Echo:
         Args:
             message (str): debug message to format and echo
         """
-        formatted_message = self.format_debug(message)
-        self.echo(message, formatted_message)
+        if self._debug:
+            formatted_message = self.format_debug(message)
+            self.echo(message, formatted_message)
 
     def info(self, message: str) -> None:
         """

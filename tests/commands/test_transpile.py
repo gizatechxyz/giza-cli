@@ -50,7 +50,9 @@ def test_transpilation_successful(tmpdir):
     ) as mock_open, patch.object(
         ModelsClient, "_load_credentials_file"
     ):
-        result = invoke_cli_runner(["transpile", "model", "--output-path", tmpdir])
+        result = invoke_cli_runner(
+            ["transpile", "model", "--output-path", tmpdir, "--debug"]
+        )
 
     # Called twice, once to open the model and second to write the zip
     mock_open.assert_called()

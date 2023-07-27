@@ -11,16 +11,17 @@
 ---------------
 - **DEFAULT_API_VERSION**
 - **GIZA_TOKEN_VARIABLE**
+- **MODEL_URL_HEADER**
 
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L23"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L26"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `ApiClient`
 Implementation of the API client to interact with core-services
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L28"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L31"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -43,7 +44,7 @@ __init__(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L159"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L162"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `retrieve_token`
 
@@ -76,12 +77,12 @@ First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L219"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L221"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `UsersClient`
 Client to interact with `users` endpoint.
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L28"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L31"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -104,7 +105,7 @@ __init__(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L226"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L228"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `create`
 
@@ -128,7 +129,7 @@ Call the API to create a new user
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L250"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L252"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `me`
 
@@ -146,7 +147,7 @@ Retrieve information about the current user. Must have a valid token to perform 
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L159"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L162"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `retrieve_token`
 
@@ -179,12 +180,12 @@ First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L271"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L273"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `TranspileClient`
 Client to interact with `users` endpoint.
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L28"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L31"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -207,7 +208,7 @@ __init__(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L159"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L162"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `retrieve_token`
 
@@ -239,7 +240,7 @@ First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L278"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L280"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `transpile`
 
@@ -260,3 +261,166 @@ Make a call to the API transpile endpoint with the model as a file.
 **Returns:**
 
  - <b>`Response`</b>:  raw response from the server with the transpiled model as a zip
+
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L306"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>class</kbd> `ModelsClient`
+Client to interact with `models` endpoint.
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L31"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `__init__`
+
+```python
+__init__(
+    host: str,
+    token: Optional[str] = None,
+    api_version: str = 'v1',
+    verify: bool = True,
+    debug: Optional[bool] = False
+) → None
+```
+
+
+
+
+
+
+
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L338"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `create`
+
+```python
+create(model_create: ModelCreate) → Tuple[Model, str]
+```
+
+Create a new model.
+
+
+
+**Args:**
+
+ - <b>`model_create`</b>:  Model information to create
+
+
+
+**Raises:**
+
+ - <b>`Exception`</b>:  if there is no upload Url
+
+
+
+**Returns:**
+
+ - <b>`Tuple[Model, str]`</b>:  the recently created model and a url, used to upload the model.
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L420"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `download`
+
+```python
+download(model_id: int) → bytes
+```
+
+Download a Transpiled model from the API.
+
+
+
+**Args:**
+
+ - <b>`model_id`</b>:  Model identfier to download
+
+
+
+**Returns:**
+ The model content of the request
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L313"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `get`
+
+```python
+get(model_id: int) → Model
+```
+
+Make a call to the API to retrieve model information.
+
+
+
+**Args:**
+
+ - <b>`model_id`</b>:  Model identfier to retrieve information
+
+
+
+**Returns:**
+
+ - <b>`Model`</b>:  model entity with the retrieved information
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L162"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `retrieve_token`
+
+```python
+retrieve_token(
+    user: Optional[str] = None,
+    password: Optional[str] = None,
+    renew: bool = False
+) → None
+```
+
+Get the JWT token.
+
+First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials.json. And finally it will try to retrieve it from the API login the user in.
+
+
+
+**Args:**
+
+ - <b>`user`</b>:  if provided it will be used to check against current credentials  and if provided with `password` used to retrieve a new token.
+ - <b>`password`</b>:  if provided with `user` it will be used to retrieve a new token.
+ - <b>`renew`</b>:  for renewal of the JWT token by user login.
+
+
+
+**Raises:**
+
+ - <b>`Exception`</b>:  if token could not be retrieved in any way
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L392"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `update`
+
+```python
+update(model_id: int, model_update: ModelUpdate) → Model
+```
+
+Update a model.
+
+
+
+**Args:**
+
+ - <b>`model_id`</b>:  Model identfier to retrieve information
+ - <b>`model_update`</b>:  body to partially update the model
+
+
+
+**Returns:**
+
+ - <b>`Model`</b>:  the updated model

@@ -8,12 +8,13 @@ from typing import Optional
 import typer
 from requests import HTTPError
 from rich import print_json
+from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from giza import API_HOST
 from giza.client import ModelsClient
 from giza.options import DEBUG_OPTION
 from giza.schemas.models import ModelCreate, ModelUpdate
-from giza.utils import echo, get_response_info
+from giza.utils import Echo, get_response_info
 from giza.utils.enums import ModelStatus
 
 
@@ -44,7 +45,8 @@ def transpile(
         BadZipFile: if the recieved file is not a zip, could be due to a transpilation error at the API.
         HTTPError: request error to the API, 4XX or 5XX
     """
-    echo(f"Reading model from path: {model_path}")
+    echo = Echo(debug=debug)
+    echo.debug(f"Reading model from path: {model_path}")
     client = ModelsClient(API_HOST, debug=debug)
     echo("Sending model for transpilation")
 
@@ -53,32 +55,45 @@ def transpile(
     )
 
     try:
-        model, url = client.create(model_create)
-        echo("Model Created! ✅")
-        print_json(model.json())
-        with open(model_path, "rb") as f:
-            client._upload(url, f)
-        echo("Model Uploaded! ✅")
-        updated_model = client.update(
-            model.id, ModelUpdate(status=ModelStatus.UPLOADED)
-        )
-        echo(f"Model Status updated to: {updated_model.status}! ✅")
+        with Progress(
+            SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
+            transient=True,
+        ) as progress:
+            progress.add_task(description="Uploading Model...", total=None)
 
-        start_time = time.time()
-        while True:
-            m = client.get(model.id)
-            if m.status not in (ModelStatus.COMPLETED, ModelStatus.FAILED):
-                spent = time.time() - start_time
-                echo(f"[{spent:.2f}s]Transpilation is not ready yet, retrying in 10s")
-                time.sleep(10)
-            elif m.status == ModelStatus.COMPLETED:
-                echo("Transpilation is ready, downloading! ✅")
-                cairo_model = client.download(model.id)
-                break
-            elif m.status == ModelStatus.FAILED:
-                echo("⛔️ Transpilation failed! ⛔️")
-                echo(f"⛔️ Reason -> {m.message} ⛔️")
-                break
+            model, url = client.create(model_create)
+            echo.debug("Model Created! ✅")
+            if debug:
+                print_json(model.json())
+
+            with open(model_path, "rb") as f:
+                client._upload(url, f)
+            echo.debug("Model Uploaded! ✅")
+
+            updated_model = client.update(
+                model.id, ModelUpdate(status=ModelStatus.UPLOADED)
+            )
+            echo.debug(f"Model Status updated to: {updated_model.status}! ✅")
+
+            progress.add_task(description="Transpiling Model...", total=None)
+            start_time = time.time()
+            while True:
+                m = client.get(model.id)
+                if m.status not in (ModelStatus.COMPLETED, ModelStatus.FAILED):
+                    spent = time.time() - start_time
+                    echo.debug(
+                        f"[{spent:.2f}s]Transpilation is not ready yet, retrying in 10s"
+                    )
+                    time.sleep(10)
+                elif m.status == ModelStatus.COMPLETED:
+                    echo.debug("Transpilation is ready, downloading! ✅")
+                    cairo_model = client.download(model.id)
+                    break
+                elif m.status == ModelStatus.FAILED:
+                    echo.error("⛔️ Transpilation failed! ⛔️")
+                    echo.error(f"⛔️ Reason -> {m.message} ⛔️")
+                    break
     except HTTPError as http_error:
         info = get_response_info(http_error.response)
         echo.error("Error at transpilation")
