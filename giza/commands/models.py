@@ -1,22 +1,17 @@
 import sys
-import time
 import zipfile
 from io import BytesIO
-from pathlib import Path
 from typing import Optional
 
 import typer
-from pydantic import EmailStr, SecretStr, ValidationError
+from pydantic import ValidationError
 from requests import HTTPError
 from rich import print_json
-from rich.prompt import Prompt
 
 from giza import API_HOST
-from giza.client import ModelsClient, UsersClient
+from giza.client import ModelsClient
 from giza.commands.transpile import transpile
 from giza.options import DEBUG_OPTION
-from giza.schemas import users
-from giza.schemas.models import ModelCreate, ModelUpdate
 from giza.utils import echo, get_response_info
 from giza.utils.enums import ModelStatus
 
