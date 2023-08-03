@@ -82,7 +82,7 @@ def test_echo_methods(method):
     """
     Test that the echo methods successfully call the main `echo` method
     """
-    echo = Echo()
+    echo = Echo(debug=True)
     echo_func = getattr(echo, method)
     with patch("giza.utils.echo.Echo.echo") as mock_echo:
         echo_func("Dummy message")
