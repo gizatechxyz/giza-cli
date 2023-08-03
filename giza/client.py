@@ -531,7 +531,7 @@ class JobsClient(ApiClient):
             {"Authorization": f"Bearer {self.token}"},
         )
 
-        response = self.session.put(
+        response = self.session.get(
             f"{self.url}/{self.JOBS_ENDPOINT}",
             headers=headers,
         )

@@ -1,13 +1,24 @@
+import datetime
 import json
-from unittest.mock import MagicMock, patch
+from io import BufferedReader
+from unittest.mock import MagicMock, Mock, patch
 
 import pytest
 from jose import ExpiredSignatureError
 from requests import HTTPError
 
-from giza.client import DEFAULT_API_VERSION, MODEL_URL_HEADER, ApiClient, ModelsClient
+from giza.client import (
+    DEFAULT_API_VERSION,
+    MODEL_URL_HEADER,
+    ApiClient,
+    JobsClient,
+    ModelsClient,
+    ProofsClient,
+)
+from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.models import Model, ModelCreate, ModelUpdate
-from giza.utils.enums import ModelStatus
+from giza.schemas.proofs import Proof
+from giza.utils.enums import JobSize, JobStatus, ModelStatus
 
 
 class ResponseStub:
@@ -198,6 +209,122 @@ def test_models_client_download(tmpdir):
     ) as mock_request, patch("jose.jwt.decode"):
         client = ModelsClient("http://dummy_host", token="token")
         result = client.download(model_id)
+
+    mock_request.assert_called()
+    assert isinstance(result, bytes)
+
+
+def test_jobs_client_get(tmpdir):
+    job_id = 1
+    job = Job(id=1, job_name="job", size=JobSize.S, status=JobStatus.STARTING)
+    response = ResponseStub(job.dict(), 200)
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.get", return_value=response
+    ) as mock_request, patch("jose.jwt.decode"):
+        client = JobsClient("http://dummy_host", token="token")
+        result = client.get(job_id)
+
+    mock_request.assert_called()
+    assert job == result
+
+
+def test_jobs_client_list(tmpdir):
+    job = Job(id=1, job_name="job", size=JobSize.S, status=JobStatus.STARTING)
+    response = ResponseStub([job.dict()], 200)
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.get", return_value=response
+    ) as mock_request, patch("jose.jwt.decode"):
+        client = JobsClient("http://dummy_host", token="token")
+        result = client.list()
+
+    mock_request.assert_called()
+    assert job == result[0]
+
+
+def test_jobs_client_create(tmpdir):
+    job = Job(id=1, job_name="job", size=JobSize.S, status=JobStatus.STARTING)
+    response = ResponseStub(job.dict(), 201)
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.post", return_value=response
+    ) as mock_request, patch("jose.jwt.decode"):
+        mock = Mock(BufferedReader)
+        client = JobsClient("http://dummy_host", token="token")
+        job_create = JobCreate(size=JobSize.S)
+        result = client.create(job_create, mock)
+
+    mock_request.assert_called()
+    assert job == result
+
+
+def test_proof_client_get(tmpdir):
+    proof_id = 1
+    proof = Proof(
+        id=1,
+        job_id=1,
+        proving_time=100,
+        cairo_execution_time=100,
+        created_date=datetime.datetime.now(),
+    )
+    response = ResponseStub(proof.dict(), 200)
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.get", return_value=response
+    ) as mock_request, patch("jose.jwt.decode"):
+        client = ProofsClient("http://dummy_host", token="token")
+        result = client.get(proof_id)
+
+    mock_request.assert_called()
+    assert proof == result
+
+
+def test_proof_client_get_by_job_id(tmpdir):
+    job_id = 1
+    proof = Proof(
+        id=1,
+        job_id=1,
+        proving_time=100,
+        cairo_execution_time=100,
+        created_date=datetime.datetime.now(),
+    )
+    response = ResponseStub([proof.dict()], 200)
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.get", return_value=response
+    ) as mock_request, patch("jose.jwt.decode"):
+        client = ProofsClient("http://dummy_host", token="token")
+        result = client.get_by_job_id(job_id)
+
+    mock_request.assert_called()
+    assert proof == result
+    assert job_id == result.job_id
+
+
+def test_proof_client_list(tmpdir):
+    proof = Proof(
+        id=1,
+        job_id=1,
+        proving_time=100,
+        cairo_execution_time=100,
+        created_date=datetime.datetime.now(),
+    )
+    response = ResponseStub([proof.dict()], 200)
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.get", return_value=response
+    ) as mock_request, patch("jose.jwt.decode"):
+        client = ProofsClient("http://dummy_host", token="token")
+        result = client.list()
+
+    mock_request.assert_called()
+    assert proof == result[0]
+
+
+def test_proof_client_download(tmpdir):
+    proof_id = 1
+    response_download = ResponseStub({"download_url": "url"}, 200)
+    response_url = ResponseStub(None, 200, content=b"some bytes")
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.get", side_effect=[response_download, response_url]
+    ) as mock_request, patch("jose.jwt.decode"):
+        client = ProofsClient("http://dummy_host", token="token")
+        result = client.download(proof_id)
 
     mock_request.assert_called()
     assert isinstance(result, bytes)
