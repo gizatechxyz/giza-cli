@@ -47,8 +47,10 @@ def prove(
                     live.update(echo.format_message("Proving job is successful ✅"))
                     break
                 elif current_job.status == JobStatus.FAILED:
-                    echo.error(
-                        f"Proving Job with name '{current_job.job_name}' and id {current_job.id} failed"
+                    live.update(
+                        echo.format_error(
+                            f"Proving Job with name '{current_job.job_name}' and id {current_job.id} failed"
+                        )
                     )
                     break
                 else:

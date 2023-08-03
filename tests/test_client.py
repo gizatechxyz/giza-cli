@@ -139,7 +139,6 @@ def test_models_client_get(tmpdir):
         "status": "COMPLETED",
         "message": "",
         "id": 1,
-        "user_id": 1,
     }
     model_id = 1
     with patch("pathlib.Path.home", return_value=tmpdir), patch(
@@ -160,7 +159,6 @@ def test_models_client_create(tmpdir):
         "status": "COMPLETED",
         "message": "",
         "id": 1,
-        "user_id": 1,
     }
     with patch("pathlib.Path.home", return_value=tmpdir), patch(
         "requests.Session.post",
@@ -184,7 +182,6 @@ def test_models_client_update(tmpdir):
         "status": "COMPLETED",
         "message": "",
         "id": 1,
-        "user_id": 1,
     }
     model_id = 1
     with patch("pathlib.Path.home", return_value=tmpdir), patch(

@@ -7,7 +7,6 @@ from giza.utils.enums import ModelStatus
 
 class Model(BaseModel):
     id: int
-    user_id: int
     size: int
     name: Optional[str] = None
     status: Optional[ModelStatus] = None

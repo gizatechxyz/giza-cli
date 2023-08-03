@@ -38,7 +38,7 @@ def test_transpilation_successful(tmpdir):
             f.writestr("file1.txt", "hi")
         return tmp.getvalue()
 
-    model = Model(id=1, size=0, name="dummy", user_id=1, status=ModelStatus.COMPLETED)
+    model = Model(id=1, size=0, name="dummy", status=ModelStatus.COMPLETED)
 
     with patch(
         "giza.commands.transpile.ModelsClient",
@@ -79,7 +79,7 @@ def test_transpilation_bad_zip(tmpdir):
     def return_content():
         return b"some bytes"
 
-    model = Model(id=1, size=0, name="dummy", user_id=1, status=ModelStatus.COMPLETED)
+    model = Model(id=1, size=0, name="dummy", status=ModelStatus.COMPLETED)
 
     with patch(
         "giza.commands.transpile.ModelsClient",
