@@ -3,7 +3,7 @@ import json
 import os
 from io import BufferedReader
 from pathlib import Path
-from typing import Any, BinaryIO, Dict, Optional, Tuple
+from typing import Any, BinaryIO, Dict, List, Optional, Tuple
 from urllib.parse import urlparse
 
 from jose import jwt
@@ -13,7 +13,9 @@ from requests import Response, Session
 from rich import print, print_json
 
 from giza.schemas import users
+from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.models import Model, ModelCreate, ModelUpdate
+from giza.schemas.proofs import Proof
 from giza.schemas.token import TokenResponse
 from giza.utils import echo
 from giza.utils.decorators import auth
@@ -450,3 +452,206 @@ class ModelsClient(ApiClient):
         download_response.raise_for_status()
 
         return download_response.content
+
+
+class JobsClient(ApiClient):
+    """
+    Client to interact with `jobs` endpoint.
+    """
+
+    JOBS_ENDPOINT = "jobs"
+
+    @auth
+    def get(self, job_id: int) -> Job:
+        """
+        Make a call to the API to retrieve job information.
+
+        Args:
+            job_id: Job identfier to retrieve information
+
+        Returns:
+            Job: job entity with the retrieved information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(
+            {"Authorization": f"Bearer {self.token}"},
+        )
+        response = self.session.get(
+            f"{self.url}/{self.JOBS_ENDPOINT}/{job_id}",
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return Job(**response.json())
+
+    @auth
+    def create(self, job_create: JobCreate, f: BufferedReader) -> Job:
+        """
+        Create a new job.
+
+        Args:
+            job_create: Job information to create
+            f: filed to upload, a CASM json
+
+        Raises:
+            Exception: if there is no upload Url
+
+        Returns:
+            Tuple[Model, str]: the recently created model and a url, used to upload the model.
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(
+            {"Authorization": f"Bearer {self.token}"},
+        )
+
+        response = self.session.post(
+            f"{self.url}/{self.JOBS_ENDPOINT}",
+            headers=headers,
+            params=job_create.dict(),
+            files={"file": f},
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return Job(**response.json())
+
+    @auth
+    def list(self) -> List[Job]:
+        """
+        List jobs.
+
+        Returns:
+            A list of jobs created by the user
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(
+            {"Authorization": f"Bearer {self.token}"},
+        )
+
+        response = self.session.put(
+            f"{self.url}/{self.JOBS_ENDPOINT}",
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return [Job(**job) for job in response.json()]
+
+
+class ProofsClient(ApiClient):
+    """
+    Client to interact with `proofs` endpoint.
+    """
+
+    PROOFS_ENDPOINT = "proofs"
+
+    @auth
+    def get(self, proof_id: int) -> Proof:
+        """
+        Make a call to the API to retrieve proof information.
+
+        Args:
+            proof_id: Proof identfier to retrieve information
+
+        Returns:
+            Proof: proof entity with the desired information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(
+            {"Authorization": f"Bearer {self.token}"},
+        )
+        response = self.session.get(
+            f"{self.url}/{self.PROOFS_ENDPOINT}/{proof_id}",
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return Proof(**response.json())
+
+    @auth
+    def get_by_job_id(self, job_id: int) -> Proof:
+        """
+        Make a call to the API to retrieve proof information.
+
+        Args:
+            proof_id: Proof identfier to retrieve information
+
+        Returns:
+            Proof: proof entity with the desired information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(
+            {"Authorization": f"Bearer {self.token}"},
+        )
+        response = self.session.get(
+            f"{self.url}/{self.PROOFS_ENDPOINT}",
+            params={"job_id": job_id},
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return Proof(**response.json()[0])
+
+    @auth
+    def download(self, proof_id: int) -> bytes:
+        """
+        Download a proof.
+
+        Args:
+            proof_id: Proof identifier
+
+        Returns:
+            The proof binary file
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(
+            {"Authorization": f"Bearer {self.token}"},
+        )
+
+        response = self.session.get(
+            f"{self.url}/{self.PROOFS_ENDPOINT}/{proof_id}:download",
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        url = response.json()["download_url"]
+
+        download_response = self.session.get(url)
+
+        self._echo_debug(str(download_response))
+        download_response.raise_for_status()
+
+        return download_response.content
+
+    @auth
+    def list(self) -> List[Proof]:
+        """
+        List Proofs.
+
+        Returns:
+            A list of proofs created by the user
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(
+            {"Authorization": f"Bearer {self.token}"},
+        )
+
+        response = self.session.get(
+            f"{self.url}/{self.PROOFS_ENDPOINT}",
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return [Proof(**proof) for proof in response.json()]

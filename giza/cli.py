@@ -4,6 +4,7 @@ import typer.rich_utils
 from rich.traceback import install
 
 from giza.commands.models import app as models_app
+from giza.commands.prove import prove
 from giza.commands.transpile import transpile
 from giza.commands.users import app as users_app
 from giza.commands.version import version_entrypoint
@@ -57,6 +58,8 @@ app.command(
 
     """,
 )(transpile)
+
+app.command(name="prove")(prove)
 
 
 def entrypoint():
