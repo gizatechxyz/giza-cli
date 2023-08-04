@@ -67,8 +67,8 @@ def prove(
         with open(output_path, "wb") as f:
             proof_client = ProofsClient(API_HOST)
             proof: Proof = proof_client.get_by_job_id(current_job.id)
-            echo(f"Proof Cairo VM execution time -> {proof.cairo_execution_time}")
-            echo(f"Proof proving time -> {proof.proving_time}")
+            echo(f"Proof Cairo VM execution time -> {proof.cairo_execution_time}s")
+            echo(f"Proof proving time -> {proof.proving_time}s")
             f.write(proof_client.download(proof.id))
             echo(f"Proof saved at: {output_path}")
     except ValidationError as e:
