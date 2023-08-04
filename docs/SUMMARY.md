@@ -13,6 +13,8 @@
 
 * [Users](resources/users.md)
 * [Transpile](resources/transpile.md)
+* [Prove](resources/prove.md)
+* [Models](resources/models.md)
 
 ## 🧱 Reference
 
