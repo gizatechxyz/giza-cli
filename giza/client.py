@@ -577,10 +577,10 @@ class ProofsClient(ApiClient):
     @auth
     def get_by_job_id(self, job_id: int) -> Proof:
         """
-        Make a call to the API to retrieve proof information.
+        Make a call to the API to retrieve proof information based on the job id.
 
         Args:
-            proof_id: Proof identfier to retrieve information
+            job_id: Job identifier to query by.
 
         Returns:
             Proof: proof entity with the desired information
@@ -636,7 +636,7 @@ class ProofsClient(ApiClient):
     @auth
     def list(self) -> List[Proof]:
         """
-        List Proofs.
+        List all the proofs related to the user.
 
         Returns:
             A list of proofs created by the user

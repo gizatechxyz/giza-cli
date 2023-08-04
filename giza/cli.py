@@ -59,7 +59,29 @@ app.command(
     """,
 )(transpile)
 
-app.command(name="prove")(prove)
+app.command(
+    name="prove",
+    short_help="🔒 Command to prove as spceific cairo program, previously converted to CASM",
+    help="""🔒 Command to prove as spceific cairo program, previously converted to CASM`.
+
+    We take the specified CASM object and create a job for creating a proof using Giza 🔶.
+
+    This command will create a job with the specified size, but the amount of jobs will be rate limited by the backend.
+
+    This command will do a couple of things behind the scenes:
+
+        * Create a Proving Job
+
+        * Check the status of the job periodically
+
+        * If the jobs status is `COMPLETED` then the proof has been created at Giza
+
+        * Perform a request to the API to retrieve the proof metadata
+
+        * Download the proof to the output path
+
+    """,
+)(prove)
 
 
 def entrypoint():

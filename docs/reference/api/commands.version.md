@@ -16,7 +16,7 @@
 
 ```python
 version_entrypoint(
-    version: bool = typer.Option(False, help="Force the renewal of the JWT token")
+    version: bool = <typer.models.OptionInfo object at 0xffff83c52910>
 ) → None
 ```
 

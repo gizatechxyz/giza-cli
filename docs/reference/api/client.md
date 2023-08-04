@@ -644,13 +644,13 @@ Make a call to the API to retrieve proof information.
 get_by_job_id(job_id: int) → Proof
 ```
 
-Make a call to the API to retrieve proof information. 
+Make a call to the API to retrieve proof information based on the job id. 
 
 
 
 **Args:**
  
- - <b>`proof_id`</b>:  Proof identfier to retrieve information 
+ - <b>`job_id`</b>:  Job identifier to query by. 
 
 
 
@@ -668,7 +668,7 @@ Make a call to the API to retrieve proof information.
 list() → List[Proof]
 ```
 
-List Proofs. 
+List all the proofs related to the user. 
 
 
 

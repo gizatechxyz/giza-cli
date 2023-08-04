@@ -26,12 +26,15 @@ prove(
 ) → None
 ```
 
-Command to create a user. Asks for the new users information and validates the input, then sends the information to the API 
+Command to prove as spceific cairo program, previously converted to CASM. This will create a proving job and check the status, once it finishes if COMPLETED the proof is downloaded at the output path The daily jobs allowed are rate limited by the backend. 
 
 
 
 **Args:**
  
+ - <b>`program`</b>:  main CASM file 
+ - <b>`size`</b>:  Size of the job, allowed values are S, M, L and XL. Defaults to S. 
+ - <b>`output_path`</b>:  output path of the zk proof generated in the job 
  - <b>`debug`</b> (Optional[bool], optional):  Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False). 
 
 

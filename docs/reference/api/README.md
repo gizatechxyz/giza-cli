@@ -39,7 +39,7 @@
 - [`cli.entrypoint`](./cli.md#function-entrypoint)
 - [`models.download`](./commands.models.md#function-download): Retrieve information about the current user and print it as json to stdout.
 - [`models.get`](./commands.models.md#function-get): Command to create a user. Asks for the new users information and validates the input,
-- [`prove.prove`](./commands.prove.md#function-prove): Command to create a user. Asks for the new users information and validates the input,
+- [`prove.prove`](./commands.prove.md#function-prove): Command to prove as spceific cairo program, previously converted to CASM.
 - [`transpile.transpile`](./commands.transpile.md#function-transpile): Command to transpile the model using the client. Sends the model and then unzips it to the desired location.
 - [`users.create`](./commands.users.md#function-create): Command to create a user. Asks for the new users information and validates the input,
 - [`users.login`](./commands.users.md#function-login): Logs the current user into Giza. Under the hood this will retrieve the token for the next requests.
