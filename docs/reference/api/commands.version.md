@@ -20,10 +20,12 @@ version_entrypoint(
 ) → None
 ```
 
-Prints the current CLI version.
+Prints the current CLI version. 
 
 
 
 **Args:**
+ 
+ - <b>`version`</b> (bool):  Tper callback to retrieve the version. 
 
- - <b>`version`</b> (bool):  Tper callback to retrieve the version.
+

@@ -18,18 +18,20 @@
 get_response_info(response: Response) → Dict[str, Any]
 ```
 
-Utility to retrieve information of the client response.
+Utility to retrieve information of the client response. 
 
-Try to get the body, if not just get the text.
+Try to get the body, if not just get the text. 
 
 
 
 **Args:**
-
- - <b>`response`</b> (Response):  a response from the API
+ 
+ - <b>`response`</b> (Response):  a response from the API 
 
 
 
 **Returns:**
+ 
+ - <b>`dict`</b>:  information about the returned response 
 
- - <b>`dict`</b>:  information about the returned response
+

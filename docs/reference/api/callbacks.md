@@ -18,19 +18,19 @@
 version_callback(value: bool) → None
 ```
 
-Prints the current version when `--version` flag is added to a call.
+Prints the current version when `--version` flag is added to a call. 
 
 
 
 **Args:**
-
- - <b>`value`</b> (bool):  represents if the flag has been added or not to the call.
+ 
+ - <b>`value`</b> (bool):  represents if the flag has been added or not to the call. 
 
 
 
 **Raises:**
-
- - <b>`Exit`</b>:  exit the CLI execution
+ 
+ - <b>`Exit`</b>:  exit the CLI execution 
 
 
 ---
@@ -43,17 +43,19 @@ Prints the current version when `--version` flag is added to a call.
 debug_callback(_, value: bool)
 ```
 
-If a call adds the `--debug` flag debugging mode is activated for external requests and API Clients.
+If a call adds the `--debug` flag debugging mode is activated for external requests and API Clients. 
 
 
 
 **Args:**
-
- - <b>`_`</b> (_type_):  discarded value
- - <b>`value`</b> (bool):  represents if the flag has been added to the call or not
+ 
+ - <b>`_`</b> (_type_):  discarded value 
+ - <b>`value`</b> (bool):  represents if the flag has been added to the call or not 
 
 
 
 **Returns:**
+ 
+ - <b>`bool`</b>:  pass the value back so it can be used in the clients 
 
- - <b>`bool`</b>:  pass the value back so it can be used in the clients
+

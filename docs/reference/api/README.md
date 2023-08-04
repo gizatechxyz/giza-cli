@@ -9,6 +9,7 @@
 - [`client`](./client.md#module-client)
 - [`commands`](./commands.md#module-commands)
 - [`commands.models`](./commands.models.md#module-commandsmodels)
+- [`commands.prove`](./commands.prove.md#module-commandsprove)
 - [`commands.transpile`](./commands.transpile.md#module-commandstranspile)
 - [`commands.users`](./commands.users.md#module-commandsusers)
 - [`commands.version`](./commands.version.md#module-commandsversion)
@@ -21,10 +22,14 @@
 ## Classes
 
 - [`client.ApiClient`](./client.md#class-apiclient): Implementation of the API client to interact with core-services
+- [`client.JobsClient`](./client.md#class-jobsclient): Client to interact with `jobs` endpoint.
 - [`client.ModelsClient`](./client.md#class-modelsclient): Client to interact with `models` endpoint.
+- [`client.ProofsClient`](./client.md#class-proofsclient): Client to interact with `proofs` endpoint.
 - [`client.TranspileClient`](./client.md#class-transpileclient): Client to interact with `users` endpoint.
 - [`client.UsersClient`](./client.md#class-usersclient): Client to interact with `users` endpoint.
 - [`echo.Echo`](./utils.echo.md#class-echo): Helper class to use when printin output of the CLI.
+- [`enums.JobSize`](./utils.enums.md#class-jobsize)
+- [`enums.JobStatus`](./utils.enums.md#class-jobstatus)
 - [`enums.ModelStatus`](./utils.enums.md#class-modelstatus)
 
 ## Functions
@@ -34,6 +39,7 @@
 - [`cli.entrypoint`](./cli.md#function-entrypoint)
 - [`models.download`](./commands.models.md#function-download): Retrieve information about the current user and print it as json to stdout.
 - [`models.get`](./commands.models.md#function-get): Command to create a user. Asks for the new users information and validates the input,
+- [`prove.prove`](./commands.prove.md#function-prove): Command to create a user. Asks for the new users information and validates the input,
 - [`transpile.transpile`](./commands.transpile.md#function-transpile): Command to transpile the model using the client. Sends the model and then unzips it to the desired location.
 - [`users.create`](./commands.users.md#function-create): Command to create a user. Asks for the new users information and validates the input,
 - [`users.login`](./commands.users.md#function-login): Logs the current user into Giza. Under the hood this will retrieve the token for the next requests.
