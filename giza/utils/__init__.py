@@ -8,6 +8,8 @@ from giza.utils.echo import Echo
 # Provided an instance for ease of use
 echo = Echo()
 
+REQUEST_ID_HEADER = "x-request-id"
+
 
 def get_response_info(response: Response) -> Dict[str, Any]:
     """
@@ -22,10 +24,16 @@ def get_response_info(response: Response) -> Dict[str, Any]:
         dict: information about the returned response
     """
     try:
+        request_id = response.headers.get(REQUEST_ID_HEADER, None)
         content = response.json()
-        detail = content.get("detail")
+        detail = content.get("detail", None)
     except json.JSONDecodeError:
         content = response.text if len(response.text) < 255 else response.text[:255]
         detail = ""
 
-    return {"content": content, "detail": detail, "status_code": response.status_code}
+    return {
+        "content": content,
+        "detail": detail,
+        "status_code": response.status_code,
+        "request_id": request_id,
+    }

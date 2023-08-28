@@ -12,7 +12,12 @@ def test_users_create():
     # `input` for invoke was stuck on pytest, better to directly patch the prompt
     with patch.object(UsersClient, "create") as mock_create, patch(
         "rich.prompt.Prompt.ask",
-        side_effect=["gizabrain", "gizapassword", "giza@gizatech.xyz"],
+        side_effect=[
+            "gizabrain",
+            "Gizapassword1",
+            "Gizapassword1",
+            "giza@gizatech.xyz",
+        ],
     ):
         result = invoke_cli_runner(["users", "create"])
 
@@ -21,10 +26,44 @@ def test_users_create():
     assert "User created" in result.stdout
 
 
+def test_users_create_different_passwords():
+    # `input` for invoke was stuck on pytest, better to directly patch the prompt
+    with patch(
+        "rich.prompt.Prompt.ask",
+        side_effect=[
+            "gizabrain",
+            "12345678aA",
+            "12345678aB",
+            None,
+        ],
+    ):
+        result = invoke_cli_runner(["users", "create"], expected_error=True)
+
+    assert result.exit_code == 1
+    assert "Passwords do not match" in result.stdout
+
+
+def test_users_create_invalid_password():
+    with patch(
+        "rich.prompt.Prompt.ask",
+        side_effect=[
+            "gizabrain",
+            "1234567",
+            "1234567",
+            None,
+        ],
+    ):
+        result = invoke_cli_runner(["users", "create"], expected_error=True)
+
+    assert result.exit_code == 1
+    assert "Password must be at least 8 characters long" in result.stdout
+
+
 def test_users_create_empty_email():
     # `input` for invoke was stuck on pytest, better to directly patch the prompt
     with patch(
-        "rich.prompt.Prompt.ask", side_effect=["gizabrain", "gizapassword", None]
+        "rich.prompt.Prompt.ask",
+        side_effect=["gizabrain", "Gizapassword1", "Gizapassword1", None],
     ):
         result = invoke_cli_runner(["users", "create"], expected_error=True)
 
@@ -37,7 +76,7 @@ def test_users_create_invalid_email():
     # `input` for invoke was stuck on pytest, better to directly patch the prompt
     with patch(
         "rich.prompt.Prompt.ask",
-        side_effect=["gizabrain", "gizapassword", "notanemail"],
+        side_effect=["gizabrain", "Gizapassword1", "Gizapassword1", "notanemail"],
     ):
         result = invoke_cli_runner(["users", "create"], expected_error=True)
 
@@ -50,7 +89,7 @@ def test_users_create_invalid_email_debug():
     # `input` for invoke was stuck on pytest, better to directly patch the prompt
     with patch(
         "rich.prompt.Prompt.ask",
-        side_effect=["gizabrain", "gizapassword", "notanemail"],
+        side_effect=["gizabrain", "Gizapassword1", "Gizapassword1", "notanemail"],
     ):
         result = invoke_cli_runner(["users", "create", "--debug"], expected_error=True)
 
@@ -64,7 +103,12 @@ def test_users_create_invalid_response():
     # `input` for invoke was stuck on pytest, better to directly patch the prompt
     with patch(
         "rich.prompt.Prompt.ask",
-        side_effect=["gizabrain", "gizapassword", "giza@gizatech.xyz"],
+        side_effect=[
+            "gizabrain",
+            "Gizapassword1",
+            "Gizapassword1",
+            "giza@gizatech.xyz",
+        ],
     ), patch.object(UsersClient, "create", side_effect=HTTPError), patch(
         "giza.commands.users.get_response_info", return_value={}
     ):

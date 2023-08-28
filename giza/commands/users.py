@@ -9,9 +9,11 @@ from rich.prompt import Prompt
 
 from giza import API_HOST
 from giza.client import UsersClient
+from giza.exceptions import PasswordError
 from giza.options import DEBUG_OPTION
 from giza.schemas import users
 from giza.utils import echo, get_response_info
+from giza.utils.misc import _check_password_strength
 
 app = typer.Typer()
 
@@ -42,6 +44,18 @@ def create(debug: Optional[bool] = DEBUG_OPTION) -> None:
     """
     user = Prompt.ask("Enter your username :sunglasses:")
     password = Prompt.ask("Enter your password 🥷 ", password=True)
+    try:
+        _check_password_strength(password)
+    except PasswordError as e:
+        echo.error("⛔️Could not create the user⛔️")
+        echo.error(f"⛔️{e}⛔️")
+        if debug:
+            raise e
+        sys.exit(1)
+    confirmation = Prompt.ask("Confirm your password 👉🏻 ", password=True)
+    if password != confirmation:
+        echo.error("⛔️Passwords do not match⛔️")
+        sys.exit(1)
     email = Prompt.ask("Enter your email 📧")
     echo("Creating user in Giza ✅ ")
     try:
@@ -63,6 +77,9 @@ def create(debug: Optional[bool] = DEBUG_OPTION) -> None:
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
+        echo.error(
+            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
+        ) if info.get("request_id") else None
         if debug:
             raise e
         sys.exit(1)
@@ -109,6 +126,9 @@ def login(
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
+        echo.error(
+            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
+        ) if info.get("request_id") else None
         if debug:
             raise e
         sys.exit(1)
