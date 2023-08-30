@@ -20,7 +20,7 @@ The reset token is a unique string of characters that is used to verify your ide
 Once you have received your reset token, you can use it to reset your password. Run the following command, replacing `your_reset_token` with the token you received in your email:
 
 ```console
-> giza reset-password --token your_reset_token --new-password new_password
+> giza reset-password --token your_reset_token
 
 Please enter your new password 🔑: # Your new password goes here
 Please confirm your new password 🔑: 
