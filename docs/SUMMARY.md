@@ -8,6 +8,7 @@
 ## 📖 Examples
 
 * [Basic CLI Example](examples/basic.md)
+* [Reset Your Password](examples/reset_password.md)
 
 ## 📦 Resources
 
