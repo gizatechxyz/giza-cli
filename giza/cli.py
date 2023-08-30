@@ -5,6 +5,7 @@ from rich.traceback import install
 
 from giza.commands.models import app as models_app
 from giza.commands.prove import prove
+from giza.commands.reset_password import request_reset_password_token, reset_password
 from giza.commands.transpile import transpile
 from giza.commands.users import app as users_app
 from giza.commands.version import version_entrypoint
@@ -82,6 +83,31 @@ app.command(
 
     """,
 )(prove)
+
+app.command(
+    name="reset-password",
+    short_help="🔑 Reset the password for a user using a reset token",
+    help="""🔑 Reset the password for a user using a reset token.
+
+    This command will prompt you to enter your reset token and new password. It will then send a request to the server to reset the password for the account associated with the provided reset token. If successful, the password will be reset to the new password.
+
+    If an error occurs during the process, the command will display detailed error information, including the HTTP status code and error message. If the `debug` option is enabled, the command will also raise an exception.
+
+    """,
+)(reset_password)
+
+
+app.command(
+    name="request-reset-password-token",
+    short_help="🔑 Request a reset token for a user",
+    help="""🔑 Request a reset token for a user.
+
+    This command will prompt you to enter your email. It will then send a request to the server to generate a reset token for the account associated with the provided email. If successful, the reset token will be sent to the email associated with the account.
+
+    If an error occurs during the process, the command will display detailed error information, including the HTTP status code and error message. If the `debug` option is enabled, the command will also raise an exception.
+
+    """,
+)(request_reset_password_token)
 
 
 def entrypoint():

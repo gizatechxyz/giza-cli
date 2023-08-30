@@ -13,7 +13,7 @@ def _check_password_strength(password: str) -> None:
     Raises:
         PasswordError: if the password does not meet the requirements
     """
-    regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+    regex = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d#?!@$%^&*-_]{8,}$"
     if not re.match(regex, password):
         raise PasswordError(
             "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter and one number."

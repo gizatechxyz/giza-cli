@@ -14,6 +14,7 @@ from rich import print, print_json
 
 from giza.schemas import users
 from giza.schemas.jobs import Job, JobCreate
+from giza.schemas.message import Msg
 from giza.schemas.models import Model, ModelCreate, ModelUpdate
 from giza.schemas.proofs import Proof
 from giza.schemas.token import TokenResponse
@@ -57,6 +58,16 @@ class ApiClient:
         self.verify = verify
         self.giza_dir = Path.home() / ".giza"
         self._default_credentials = self._load_credentials_file()
+
+    def _get_auth_header(self) -> Dict[str, str]:
+        """
+        Generates the authorization header for API requests.
+
+        Returns:
+            Dict[str, str]: A dictionary containing the authorization header.
+        """
+
+        return {"Authorization": f"Bearer {self.token}"}
 
     def _echo_debug(self, message: str, json: bool = False) -> None:
         """
@@ -219,6 +230,54 @@ class ApiClient:
                 "Please get a new one using `user` and `password`.",
             )
 
+    def request_reset_password_token(self, email: str) -> Msg:
+        """
+        Sends a request to the server to generate a password reset token.
+        The token is sent to the user's email.
+
+        Args:
+            email (str): The email of the user who wants to reset their password.
+
+        Returns:
+            Msg: A message indicating the success or failure of the request.
+        """
+
+        response = self.session.post(
+            f"{self.url}/reset-password-token",
+            params={"email": email},
+        )
+
+        response.raise_for_status()
+        body = response.json()
+        self._echo_debug(body, json=True)
+        if response.status_code == 200:
+            return Msg(**body)
+        raise Exception("Could not request a password reset token")
+
+    def reset_password(self, token: str, new_password: str) -> Msg:
+        """
+        Resets the user's password using the provided token and new password.
+
+        Args:
+            token (str): The password reset token sent to the user's email.
+            new_password (str): The new password the user wants to set.
+
+        Returns:
+            Msg: A message indicating the success or failure of the password reset.
+        """
+
+        response = self.session.post(
+            f"{self.url}/reset-password",
+            json={"token": token, "new_password": new_password},
+        )
+
+        response.raise_for_status()
+        body = response.json()
+        self._echo_debug(body, json=True)
+        if response.status_code == 200:
+            return Msg(**body)
+        raise Exception("Could not reset the password")
+
 
 class UsersClient(ApiClient):
     """
@@ -291,9 +350,7 @@ class TranspileClient(ApiClient):
             Response: raw response from the server with the transpiled model as a zip
         """
         headers = copy.deepcopy(self.default_headers)
-        headers.update(
-            {"Authorization": f"Bearer {self.token}"},
-        )
+        headers.update(self._get_auth_header())
         response = self.session.post(
             f"{self.url}/{self.TRANSPILE_ENDPOINT}",
             files={"file": f},
@@ -324,9 +381,8 @@ class ModelsClient(ApiClient):
             Model: model entity with the retrieved information
         """
         headers = copy.deepcopy(self.default_headers)
-        headers.update(
-            {"Authorization": f"Bearer {self.token}"},
-        )
+        headers.update(self._get_auth_header())
+
         response = self.session.get(
             f"{self.url}/{self.MODELS_ENDPOINT}/{model_id}",
             headers=headers,
@@ -352,9 +408,7 @@ class ModelsClient(ApiClient):
             Tuple[Model, str]: the recently created model and a url, used to upload the model.
         """
         headers = copy.deepcopy(self.default_headers)
-        headers.update(
-            {"Authorization": f"Bearer {self.token}"},
-        )
+        headers.update(self._get_auth_header())
 
         response = self.session.post(
             f"{self.url}/{self.MODELS_ENDPOINT}",
@@ -404,9 +458,7 @@ class ModelsClient(ApiClient):
             Model: the updated model
         """
         headers = copy.deepcopy(self.default_headers)
-        headers.update(
-            {"Authorization": f"Bearer {self.token}"},
-        )
+        headers.update(self._get_auth_header())
 
         response = self.session.put(
             f"{self.url}/{self.MODELS_ENDPOINT}/{model_id}",
@@ -432,9 +484,7 @@ class ModelsClient(ApiClient):
         """
 
         headers = copy.deepcopy(self.default_headers)
-        headers.update(
-            {"Authorization": f"Bearer {self.token}"},
-        )
+        headers.update(self._get_auth_header())
 
         response = self.session.get(
             f"{self.url}/{self.MODELS_ENDPOINT}/{model_id}:download",
@@ -473,9 +523,8 @@ class JobsClient(ApiClient):
             Job: job entity with the retrieved information
         """
         headers = copy.deepcopy(self.default_headers)
-        headers.update(
-            {"Authorization": f"Bearer {self.token}"},
-        )
+        headers.update(self._get_auth_header())
+
         response = self.session.get(
             f"{self.url}/{self.JOBS_ENDPOINT}/{job_id}",
             headers=headers,
@@ -502,9 +551,7 @@ class JobsClient(ApiClient):
             Tuple[Model, str]: the recently created model and a url, used to upload the model.
         """
         headers = copy.deepcopy(self.default_headers)
-        headers.update(
-            {"Authorization": f"Bearer {self.token}"},
-        )
+        headers.update(self._get_auth_header())
 
         response = self.session.post(
             f"{self.url}/{self.JOBS_ENDPOINT}",
@@ -527,9 +574,7 @@ class JobsClient(ApiClient):
             A list of jobs created by the user
         """
         headers = copy.deepcopy(self.default_headers)
-        headers.update(
-            {"Authorization": f"Bearer {self.token}"},
-        )
+        headers.update(self._get_auth_header())
 
         response = self.session.get(
             f"{self.url}/{self.JOBS_ENDPOINT}",
@@ -561,9 +606,8 @@ class ProofsClient(ApiClient):
             Proof: proof entity with the desired information
         """
         headers = copy.deepcopy(self.default_headers)
-        headers.update(
-            {"Authorization": f"Bearer {self.token}"},
-        )
+        headers.update(self._get_auth_header())
+
         response = self.session.get(
             f"{self.url}/{self.PROOFS_ENDPOINT}/{proof_id}",
             headers=headers,
@@ -586,9 +630,8 @@ class ProofsClient(ApiClient):
             Proof: proof entity with the desired information
         """
         headers = copy.deepcopy(self.default_headers)
-        headers.update(
-            {"Authorization": f"Bearer {self.token}"},
-        )
+        headers.update(self._get_auth_header())
+
         response = self.session.get(
             f"{self.url}/{self.PROOFS_ENDPOINT}",
             params={"job_id": job_id},
@@ -612,9 +655,7 @@ class ProofsClient(ApiClient):
             The proof binary file
         """
         headers = copy.deepcopy(self.default_headers)
-        headers.update(
-            {"Authorization": f"Bearer {self.token}"},
-        )
+        headers.update(self._get_auth_header())
 
         response = self.session.get(
             f"{self.url}/{self.PROOFS_ENDPOINT}/{proof_id}:download",
@@ -642,9 +683,7 @@ class ProofsClient(ApiClient):
             A list of proofs created by the user
         """
         headers = copy.deepcopy(self.default_headers)
-        headers.update(
-            {"Authorization": f"Bearer {self.token}"},
-        )
+        headers.update(self._get_auth_header())
 
         response = self.session.get(
             f"{self.url}/{self.PROOFS_ENDPOINT}",
