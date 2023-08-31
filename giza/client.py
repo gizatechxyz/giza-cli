@@ -282,7 +282,7 @@ class UsersClient(ApiClient):
         self._echo_debug(response.json(), json=True)
         return users.UserResponse(**response.json())
 
-    def resend_email(self, email: EmailStr) -> Msg:
+    def resend_email(self, email: str) -> Msg:
         """
         Resend the verification email to the user.
 

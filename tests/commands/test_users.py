@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-from pydantic import ValidationError
+from pydantic import EmailError, ValidationError
 from requests import HTTPError
 
 from giza.client import UsersClient
@@ -177,3 +177,63 @@ def test_users_me():
     mock_me.assert_called_once()
     assert result.exit_code == 0
     assert "Retrieving information about me" in result.stdout
+
+
+def test_resend_email_success():
+    # Test successful email resend
+    with patch("giza.client.UsersClient.resend_email") as mock_resend, patch(
+        "rich.prompt.Prompt.ask",
+        return_value="giza@gizatech.xyz",
+    ):
+        result = invoke_cli_runner(["users", "resend-email"])
+
+    mock_resend.assert_called_once()
+    assert result.exit_code == 0
+    assert "Verification email resent" in result.stdout
+
+
+def test_resend_email_invalid_email():
+    # Test invalid email for resend
+    with patch(
+        "rich.prompt.Prompt.ask",
+        return_value="notanemail",
+    ):
+        result = invoke_cli_runner(["users", "resend-email"], expected_error=True)
+
+    assert result.exit_code == 1
+    assert "Could not resend" in result.stdout
+    assert "value is not a valid email address" in result.stdout
+
+
+def test_resend_email_invalid_email_debug():
+    # Test invalid email for resend with debug mode
+    with patch(
+        "rich.prompt.Prompt.ask",
+        return_value="notanemail",
+    ):
+        result = invoke_cli_runner(
+            ["users", "resend-email", "--debug"], expected_error=True
+        )
+
+    assert result.exit_code == 1
+    assert "Could not resend" in result.stdout
+    assert "Debugging mode is on" in result.stdout
+    assert isinstance(result.exception, EmailError)
+
+
+def test_resend_email_invalid_response():
+    # Test invalid response from server
+    with patch(
+        "rich.prompt.Prompt.ask",
+        return_value="giza@gizatech.xyz",
+    ), patch.object(UsersClient, "resend_email", side_effect=HTTPError), patch(
+        "giza.commands.users.get_response_info", return_value={}
+    ):
+        result = invoke_cli_runner(
+            ["users", "resend-email", "--debug"], expected_error=True
+        )
+
+    assert result.exit_code == 1
+    assert "Could not resend the email" in result.stdout
+    assert "Debugging mode is on" in result.stdout
+    assert isinstance(result.exception, HTTPError)

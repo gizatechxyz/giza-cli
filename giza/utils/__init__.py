@@ -26,7 +26,7 @@ def get_response_info(response: Response) -> Dict[str, Any]:
     try:
         request_id = response.headers.get(REQUEST_ID_HEADER, None)
         content = response.json()
-        detail = content.get("detail", None)
+        detail = content.get("detail", content.get("message", ""))
     except json.JSONDecodeError:
         content = response.text if len(response.text) < 255 else response.text[:255]
         detail = ""
