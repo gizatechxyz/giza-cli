@@ -8,7 +8,7 @@ from urllib.parse import urlparse
 
 from jose import jwt
 from jose.exceptions import ExpiredSignatureError
-from pydantic import EmailStr, SecretStr
+from pydantic import SecretStr
 from requests import Response, Session
 from rich import print, print_json
 
