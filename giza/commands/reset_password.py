@@ -5,7 +5,7 @@ import typer
 from requests import HTTPError
 
 from giza import API_HOST
-from giza.client import ApiClient
+from giza.client import UsersClient
 from giza.exceptions import PasswordError
 from giza.options import DEBUG_OPTION
 from giza.utils import echo, get_response_info
@@ -69,7 +69,7 @@ def request_reset_password_token(
     if email is None:
         email = prompt_for_input("Please enter your email address 📧")
 
-    api_client = ApiClient(API_HOST)
+    api_client = UsersClient(API_HOST)
     try:
         echo(api_client.request_reset_password_token(email).msg)
     except HTTPError as e:
@@ -114,7 +114,7 @@ def reset_password(
             raise e
         sys.exit(1)
 
-    api_client = ApiClient(API_HOST)
+    api_client = UsersClient(API_HOST)
     try:
         echo(api_client.reset_password(token, new_password).msg)
     except HTTPError as e:

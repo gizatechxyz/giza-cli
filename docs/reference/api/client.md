@@ -44,55 +44,6 @@ __init__(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L233"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-### <kbd>method</kbd> `request_reset_password_token`
-
-```python
-request_reset_password_token(email: str) → Msg
-```
-
-Sends a request to the server to generate a password reset token. The token is sent to the user's email. 
-
-
-
-**Args:**
- 
- - <b>`email`</b> (str):  The email of the user who wants to reset their password. 
-
-
-
-**Returns:**
- 
- - <b>`Msg`</b>:  A message indicating the success or failure of the request. 
-
----
-
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L257"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-### <kbd>method</kbd> `reset_password`
-
-```python
-reset_password(token: str, new_password: str) → Msg
-```
-
-Resets the user's password using the provided token and new password. 
-
-
-
-**Args:**
- 
- - <b>`token`</b> (str):  The password reset token sent to the user's email. 
- - <b>`new_password`</b> (str):  The new password the user wants to set. 
-
-
-
-**Returns:**
- 
- - <b>`Msg`</b>:  A message indicating the success or failure of the password reset. 
-
----
-
 <a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L175"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `retrieve_token`
@@ -126,7 +77,7 @@ First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L282"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L234"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `UsersClient`
 Client to interact with `users` endpoint. 
@@ -154,7 +105,7 @@ __init__(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L289"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L241"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `create`
 
@@ -178,7 +129,7 @@ Call the API to create a new user
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L313"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L265"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `me`
 
@@ -196,7 +147,7 @@ Retrieve information about the current user. Must have a valid token to perform 
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L233"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L309"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `request_reset_password_token`
 
@@ -220,7 +171,31 @@ Sends a request to the server to generate a password reset token. The token is s
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L257"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L285"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `resend_email`
+
+```python
+resend_email(email: EmailStr) → Msg
+```
+
+Resend the verification email to the user. 
+
+
+
+**Args:**
+ 
+ - <b>`email`</b> (EmailStr):  The email of the user who wants to resend the verification email. 
+
+
+
+**Returns:**
+ 
+ - <b>`Msg`</b>:  A message indicating the success or failure of the request. 
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L333"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `reset_password`
 
@@ -278,7 +253,7 @@ First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L334"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L358"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `TranspileClient`
 Client to interact with `users` endpoint. 
@@ -306,55 +281,6 @@ __init__(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L233"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-### <kbd>method</kbd> `request_reset_password_token`
-
-```python
-request_reset_password_token(email: str) → Msg
-```
-
-Sends a request to the server to generate a password reset token. The token is sent to the user's email. 
-
-
-
-**Args:**
- 
- - <b>`email`</b> (str):  The email of the user who wants to reset their password. 
-
-
-
-**Returns:**
- 
- - <b>`Msg`</b>:  A message indicating the success or failure of the request. 
-
----
-
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L257"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-### <kbd>method</kbd> `reset_password`
-
-```python
-reset_password(token: str, new_password: str) → Msg
-```
-
-Resets the user's password using the provided token and new password. 
-
-
-
-**Args:**
- 
- - <b>`token`</b> (str):  The password reset token sent to the user's email. 
- - <b>`new_password`</b> (str):  The new password the user wants to set. 
-
-
-
-**Returns:**
- 
- - <b>`Msg`</b>:  A message indicating the success or failure of the password reset. 
-
----
-
 <a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L175"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `retrieve_token`
@@ -387,7 +313,7 @@ First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L341"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L365"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `transpile`
 
@@ -412,7 +338,7 @@ Make a call to the API transpile endpoint with the model as a file.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L365"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L389"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `ModelsClient`
 Client to interact with `models` endpoint. 
@@ -440,7 +366,7 @@ __init__(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L396"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L420"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `create`
 
@@ -470,7 +396,7 @@ Create a new model.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L474"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L498"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `download`
 
@@ -493,7 +419,7 @@ Download a Transpiled model from the API.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L372"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L396"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get`
 
@@ -514,55 +440,6 @@ Make a call to the API to retrieve model information.
 **Returns:**
  
  - <b>`Model`</b>:  model entity with the retrieved information 
-
----
-
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L233"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-### <kbd>method</kbd> `request_reset_password_token`
-
-```python
-request_reset_password_token(email: str) → Msg
-```
-
-Sends a request to the server to generate a password reset token. The token is sent to the user's email. 
-
-
-
-**Args:**
- 
- - <b>`email`</b> (str):  The email of the user who wants to reset their password. 
-
-
-
-**Returns:**
- 
- - <b>`Msg`</b>:  A message indicating the success or failure of the request. 
-
----
-
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L257"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-### <kbd>method</kbd> `reset_password`
-
-```python
-reset_password(token: str, new_password: str) → Msg
-```
-
-Resets the user's password using the provided token and new password. 
-
-
-
-**Args:**
- 
- - <b>`token`</b> (str):  The password reset token sent to the user's email. 
- - <b>`new_password`</b> (str):  The new password the user wants to set. 
-
-
-
-**Returns:**
- 
- - <b>`Msg`</b>:  A message indicating the success or failure of the password reset. 
 
 ---
 
@@ -598,7 +475,7 @@ First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L448"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L472"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `update`
 
@@ -624,7 +501,7 @@ Update a model.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L507"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L531"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `JobsClient`
 Client to interact with `jobs` endpoint. 
@@ -652,7 +529,7 @@ __init__(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L538"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L562"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `create`
 
@@ -683,7 +560,7 @@ Create a new job.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L514"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L538"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get`
 
@@ -707,7 +584,7 @@ Make a call to the API to retrieve job information.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L568"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L592"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `list`
 
@@ -721,55 +598,6 @@ List jobs.
 
 **Returns:**
   A list of jobs created by the user 
-
----
-
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L233"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-### <kbd>method</kbd> `request_reset_password_token`
-
-```python
-request_reset_password_token(email: str) → Msg
-```
-
-Sends a request to the server to generate a password reset token. The token is sent to the user's email. 
-
-
-
-**Args:**
- 
- - <b>`email`</b> (str):  The email of the user who wants to reset their password. 
-
-
-
-**Returns:**
- 
- - <b>`Msg`</b>:  A message indicating the success or failure of the request. 
-
----
-
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L257"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-### <kbd>method</kbd> `reset_password`
-
-```python
-reset_password(token: str, new_password: str) → Msg
-```
-
-Resets the user's password using the provided token and new password. 
-
-
-
-**Args:**
- 
- - <b>`token`</b> (str):  The password reset token sent to the user's email. 
- - <b>`new_password`</b> (str):  The new password the user wants to set. 
-
-
-
-**Returns:**
- 
- - <b>`Msg`</b>:  A message indicating the success or failure of the password reset. 
 
 ---
 
@@ -806,7 +634,7 @@ First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L590"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L614"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `ProofsClient`
 Client to interact with `proofs` endpoint. 
@@ -834,7 +662,7 @@ __init__(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L646"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L670"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `download`
 
@@ -857,7 +685,7 @@ Download a proof.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L597"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L621"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get`
 
@@ -881,7 +709,7 @@ Make a call to the API to retrieve proof information.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L621"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L645"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get_by_job_id`
 
@@ -905,7 +733,7 @@ Make a call to the API to retrieve proof information based on the job id.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L677"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L701"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `list`
 
@@ -919,55 +747,6 @@ List all the proofs related to the user.
 
 **Returns:**
   A list of proofs created by the user 
-
----
-
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L233"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-### <kbd>method</kbd> `request_reset_password_token`
-
-```python
-request_reset_password_token(email: str) → Msg
-```
-
-Sends a request to the server to generate a password reset token. The token is sent to the user's email. 
-
-
-
-**Args:**
- 
- - <b>`email`</b> (str):  The email of the user who wants to reset their password. 
-
-
-
-**Returns:**
- 
- - <b>`Msg`</b>:  A message indicating the success or failure of the request. 
-
----
-
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L257"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
-
-### <kbd>method</kbd> `reset_password`
-
-```python
-reset_password(token: str, new_password: str) → Msg
-```
-
-Resets the user's password using the provided token and new password. 
-
-
-
-**Args:**
- 
- - <b>`token`</b> (str):  The password reset token sent to the user's email. 
- - <b>`new_password`</b> (str):  The new password the user wants to set. 
-
-
-
-**Returns:**
- 
- - <b>`Msg`</b>:  A message indicating the success or failure of the password reset. 
 
 ---
 

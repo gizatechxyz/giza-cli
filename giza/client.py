@@ -8,7 +8,7 @@ from urllib.parse import urlparse
 
 from jose import jwt
 from jose.exceptions import ExpiredSignatureError
-from pydantic import SecretStr
+from pydantic import EmailStr, SecretStr
 from requests import Response, Session
 from rich import print, print_json
 
@@ -230,54 +230,6 @@ class ApiClient:
                 "Please get a new one using `user` and `password`.",
             )
 
-    def request_reset_password_token(self, email: str) -> Msg:
-        """
-        Sends a request to the server to generate a password reset token.
-        The token is sent to the user's email.
-
-        Args:
-            email (str): The email of the user who wants to reset their password.
-
-        Returns:
-            Msg: A message indicating the success or failure of the request.
-        """
-
-        response = self.session.post(
-            f"{self.url}/reset-password-token",
-            params={"email": email},
-        )
-
-        response.raise_for_status()
-        body = response.json()
-        self._echo_debug(body, json=True)
-        if response.status_code == 200:
-            return Msg(**body)
-        raise Exception("Could not request a password reset token")
-
-    def reset_password(self, token: str, new_password: str) -> Msg:
-        """
-        Resets the user's password using the provided token and new password.
-
-        Args:
-            token (str): The password reset token sent to the user's email.
-            new_password (str): The new password the user wants to set.
-
-        Returns:
-            Msg: A message indicating the success or failure of the password reset.
-        """
-
-        response = self.session.post(
-            f"{self.url}/reset-password",
-            json={"token": token, "new_password": new_password},
-        )
-
-        response.raise_for_status()
-        body = response.json()
-        self._echo_debug(body, json=True)
-        if response.status_code == 200:
-            return Msg(**body)
-        raise Exception("Could not reset the password")
-
 
 class UsersClient(ApiClient):
     """
@@ -329,6 +281,79 @@ class UsersClient(ApiClient):
         )
         self._echo_debug(response.json(), json=True)
         return users.UserResponse(**response.json())
+
+    def resend_email(self, email: EmailStr) -> Msg:
+        """
+        Resend the verification email to the user.
+
+        Args:
+            email (EmailStr): The email of the user who wants to resend the verification email.
+
+        Returns:
+            Msg: A message indicating the success or failure of the request.
+        """
+        try:
+            response = self.session.post(
+                f"{self.url}/{self.USERS_ENDPOINT}/resend-email",
+                json={"email": email},
+            )
+            response.raise_for_status()
+            body = response.json()
+            self._echo_debug(body, json=True)
+            if response.status_code == 200:
+                return Msg(**body)
+        except Exception as e:
+            self._echo_debug(f"Could not resend the email: {str(e)}")
+            raise e
+        return Msg(msg="Could not resend the email")
+
+    def request_reset_password_token(self, email: str) -> Msg:
+        """
+        Sends a request to the server to generate a password reset token.
+        The token is sent to the user's email.
+
+        Args:
+            email (str): The email of the user who wants to reset their password.
+
+        Returns:
+            Msg: A message indicating the success or failure of the request.
+        """
+
+        response = self.session.post(
+            f"{self.url}/{self.USERS_ENDPOINT}/reset-password-token",
+            params={"email": email},
+        )
+
+        response.raise_for_status()
+        body = response.json()
+        self._echo_debug(body, json=True)
+        if response.status_code == 200:
+            return Msg(**body)
+        raise Exception("Could not request a password reset token")
+
+    def reset_password(self, token: str, new_password: str) -> Msg:
+        """
+        Resets the user's password using the provided token and new password.
+
+        Args:
+            token (str): The password reset token sent to the user's email.
+            new_password (str): The new password the user wants to set.
+
+        Returns:
+            Msg: A message indicating the success or failure of the password reset.
+        """
+
+        response = self.session.post(
+            f"{self.url}/{self.USERS_ENDPOINT}/reset-password",
+            json={"token": token, "new_password": new_password},
+        )
+
+        response.raise_for_status()
+        body = response.json()
+        self._echo_debug(body, json=True)
+        if response.status_code == 200:
+            return Msg(**body)
+        raise Exception("Could not reset the password")
 
 
 class TranspileClient(ApiClient):

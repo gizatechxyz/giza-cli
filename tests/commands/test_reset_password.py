@@ -10,7 +10,7 @@ from tests.conftest import invoke_cli_runner
 # Test for successful request of reset password token
 def test_request_reset_password_token_success():
     with patch(
-        "giza.client.ApiClient.request_reset_password_token"
+        "giza.client.UsersClient.request_reset_password_token"
     ) as mock_request_token, patch(
         "typer.prompt",
         return_value="test@test.com",
@@ -25,7 +25,7 @@ def test_request_reset_password_token_success():
 # Test for HTTP error during request of reset password token
 def test_request_reset_password_token_http_error():
     with patch(
-        "giza.client.ApiClient.request_reset_password_token", side_effect=HTTPError
+        "giza.client.UsersClient.request_reset_password_token", side_effect=HTTPError
     ) as mock_request_token, patch(
         "typer.prompt",
         return_value="test@test.com",
@@ -43,7 +43,7 @@ def test_request_reset_password_token_http_error():
 
 # Test for successful password reset
 def test_reset_password_success():
-    with patch("giza.client.ApiClient.reset_password") as mock_reset_password, patch(
+    with patch("giza.client.UsersClient.reset_password") as mock_reset_password, patch(
         "typer.prompt",
         side_effect=["request-reset-password-token", "New_password1", "New_password1"],
     ):
@@ -85,7 +85,7 @@ def test_reset_password_invalid_password():
 # Test for HTTP error during password reset
 def test_reset_password_http_error():
     with patch(
-        "giza.client.ApiClient.reset_password", side_effect=HTTPError
+        "giza.client.UsersClient.reset_password", side_effect=HTTPError
     ) as mock_reset_password, patch(
         "typer.prompt",
         side_effect=["reset_token", "New_password1", "New_password1"],
