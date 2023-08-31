@@ -23,20 +23,20 @@ create(
 ) → None
 ```
 
-Command to create a user. Asks for the new users information and validates the input, then sends the information to the API
+Command to create a user. Asks for the new users information and validates the input, then sends the information to the API 
 
 
 
 **Args:**
-
- - <b>`debug`</b> (Optional[bool], optional):  Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False).
+ 
+ - <b>`debug`</b> (Optional[bool], optional):  Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False). 
 
 
 
 **Raises:**
-
- - <b>`ValidationError`</b>:  input fields are validated, if these are not suitable the exception is raised
- - <b>`HTTPError`</b>:  request error to the API, 4XX or 5XX
+ 
+ - <b>`ValidationError`</b>:  input fields are validated, if these are not suitable the exception is raised 
+ - <b>`HTTPError`</b>:  request error to the API, 4XX or 5XX 
 
 
 ---
@@ -52,20 +52,20 @@ login(
 ) → None
 ```
 
-Logs the current user into Giza. Under the hood this will retrieve the token for the next requests. This token will be saved at `home` directory for further usage.
+Logs the current user into Giza. Under the hood this will retrieve the token for the next requests. This token will be saved at `home` directory for further usage. 
 
 
 
 **Args:**
-
- - <b>`renew`</b> (bool):  Force the retrieval of the token to create a new one. Defaults to False.
- - <b>`debug`</b> (Optional[bool]):  Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False)
+ 
+ - <b>`renew`</b> (bool):  Force the retrieval of the token to create a new one. Defaults to False. 
+ - <b>`debug`</b> (Optional[bool]):  Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False) 
 
 
 
 **Raises:**
-
- - <b>`HTTPError`</b>:  request error to the API, 4XX or 5XX
+ 
+ - <b>`HTTPError`</b>:  request error to the API, 4XX or 5XX 
 
 
 ---
@@ -80,10 +80,12 @@ me(
 ) → None
 ```
 
-Retrieve information about the current user and print it as json to stdout.
+Retrieve information about the current user and print it as json to stdout. 
 
 
 
 **Args:**
+ 
+ - <b>`debug`</b> (Optional[bool], optional):  Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False) 
 
- - <b>`debug`</b> (Optional[bool], optional):  Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False)
+

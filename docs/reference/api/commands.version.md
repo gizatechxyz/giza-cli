@@ -16,14 +16,16 @@
 
 ```python
 version_entrypoint(
-    version: bool = typer.Option(False, help="Force the renewal of the JWT token")
+    version: bool = <typer.models.OptionInfo object at 0xffff83c52910>
 ) → None
 ```
 
-Prints the current CLI version.
+Prints the current CLI version. 
 
 
 
 **Args:**
+ 
+ - <b>`version`</b> (bool):  Tper callback to retrieve the version. 
 
- - <b>`version`</b> (bool):  Tper callback to retrieve the version.
+

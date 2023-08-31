@@ -4,7 +4,9 @@ repos:
     hooks:
     - id: check-yaml
     - id: end-of-file-fixer
+      exclude: docs/*
     - id: trailing-whitespace
+      exclude: docs/*
     - id: check-added-large-files
     - id: check-merge-conflict
     - id: no-commit-to-branch

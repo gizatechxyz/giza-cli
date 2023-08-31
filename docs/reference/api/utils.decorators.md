@@ -21,18 +21,20 @@
 auth(func: Callable)
 ```
 
-Check that we have the token and it is not expired before executing
+Check that we have the token and it is not expired before executing 
 
-Expects to be called from an instance of ApiClient to and endpoint that needs authorization
+Expects to be called from an instance of ApiClient to and endpoint that needs authorization 
 
 
 
 **Args:**
-
- - <b>`func`</b> (Callable):  function to decorate
+ 
+ - <b>`func`</b> (Callable):  function to decorate 
 
 
 
 **Returns:**
+ 
+ - <b>`Callable`</b>:  decorated function 
 
- - <b>`Callable`</b>:  decorated function
+

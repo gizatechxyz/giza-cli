@@ -63,7 +63,7 @@ def transpile(
             progress.add_task(description="Uploading Model...", total=None)
 
             model, url = client.create(model_create)
-            echo.debug("Model Created! ✅")
+            echo(f"Model Created with id -> {model.id}! ✅")
             if debug:
                 print_json(model.json())
 
