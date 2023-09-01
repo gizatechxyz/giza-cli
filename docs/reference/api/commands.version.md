@@ -16,7 +16,12 @@
 
 ```python
 version_entrypoint(
-    version: bool = <typer.models.OptionInfo object at 0xffff83c52910>
+    version: bool = typer.Option(
+        None,
+        "--version",
+        callback=version_callback,
+        is_eager=True,
+    )
 ) → None
 ```
 

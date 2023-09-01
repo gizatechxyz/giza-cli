@@ -13,7 +13,7 @@
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/users.py#L19"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/users.py#L21"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `create`
 
@@ -41,7 +41,7 @@ Command to create a user. Asks for the new users information and validates the i
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/users.py#L72"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/users.py#L89"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `login`
 
@@ -70,7 +70,7 @@ Logs the current user into Giza. Under the hood this will retrieve the token for
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/users.py#L118"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/users.py#L138"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `me`
 
@@ -87,5 +87,33 @@ Retrieve information about the current user and print it as json to stdout.
 **Args:**
  
  - <b>`debug`</b> (Optional[bool], optional):  Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False) 
+
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/users.py#L160"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `resend_email`
+
+```python
+resend_email(
+    debug: Optional[bool] = DEBUG_OPTION
+) → None
+```
+
+Command to resend verification email. Asks for the user's email and sends the request to the API 
+
+
+
+**Args:**
+ 
+ - <b>`debug`</b> (Optional[bool], optional):  Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False). 
+
+
+
+**Raises:**
+ 
+ - <b>`ValidationError`</b>:  input fields are validated, if these are not suitable the exception is raised 
+ - <b>`HTTPError`</b>:  request error to the API, 4XX or 5XX 
 
 
