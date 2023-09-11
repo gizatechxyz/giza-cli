@@ -9,7 +9,6 @@ from requests import HTTPError
 
 from giza.client import (
     DEFAULT_API_VERSION,
-    MODEL_URL_HEADER,
     ApiClient,
     JobsClient,
     ModelsClient,
@@ -18,7 +17,7 @@ from giza.client import (
 from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.models import Model, ModelCreate, ModelUpdate
 from giza.schemas.proofs import Proof
-from giza.utils.enums import JobSize, JobStatus, ModelStatus
+from giza.utils.enums import JobSize, JobStatus
 
 
 class ResponseStub:
@@ -152,42 +151,40 @@ def test_models_client_get(tmpdir):
 
 
 def test_models_client_create(tmpdir):
-    model_create = ModelCreate(size=100, name="model")
+    model_create = ModelCreate(description="Dummy Model", name="model")
     model_data = {
         "name": "model",
-        "size": 100,
-        "status": "COMPLETED",
-        "message": "",
+        "description": "Dummy Model",
         "id": 1,
     }
     with patch("pathlib.Path.home", return_value=tmpdir), patch(
         "requests.Session.post",
         return_value=ResponseStub(
-            model_data, 201, headers={MODEL_URL_HEADER.lower(): "url"}
+            model_data,
+            201,
         ),
     ) as mock_request, patch("jose.jwt.decode"):
         client = ModelsClient("http://dummy_host", token="token")
-        model, url = client.create(model_create)
+        model = client.create(model_create)
 
     mock_request.assert_called_once()
     assert isinstance(model, Model)
-    assert url == "url"
+    assert model.name == model_create.name
 
 
 def test_models_client_update(tmpdir):
-    model_update = ModelUpdate(status=ModelStatus.COMPLETED)
+    model_update = ModelUpdate(description="Updated Desc")
     model_data = {
         "name": "model",
-        "size": 100,
-        "status": "COMPLETED",
-        "message": "",
+        "description": "Updated Desc",
         "id": 1,
     }
     model_id = 1
     with patch("pathlib.Path.home", return_value=tmpdir), patch(
         "requests.Session.put",
         return_value=ResponseStub(
-            model_data, 201, headers={MODEL_URL_HEADER.lower(): "url"}
+            model_data,
+            200,
         ),
     ) as mock_request, patch("jose.jwt.decode"):
         client = ModelsClient("http://dummy_host", token="token")
@@ -195,6 +192,7 @@ def test_models_client_update(tmpdir):
 
     mock_request.assert_called_once()
     assert isinstance(model, Model)
+    assert model.description == model_update.description
 
 
 def test_models_client_download(tmpdir):
