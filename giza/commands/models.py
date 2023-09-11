@@ -26,7 +26,9 @@ app = typer.Typer()
     """,
 )
 def get(
-    model_id: int = typer.Argument(None),
+    model_id: int = typer.Option(
+        ..., "--model-id", "-m", help="Model id to retrieve information from"
+    ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     """

@@ -442,7 +442,7 @@ class ModelsClient(ApiClient):
 
         return ModelList(__root__=[Model(**model) for model in response.json()])
 
-    def get_by_name(self, model_name: str, **kwargs) -> Model:
+    def get_by_name(self, model_name: str, **kwargs) -> Any[Model, None]:
         """
         Make a call to the API to retrieve model information by its name.
 
@@ -457,7 +457,7 @@ class ModelsClient(ApiClient):
             model: ModelList = self.list(params={"name": model_name})
         except HTTPError as e:
             self._echo_debug(f"Could not retrieve model by name: {str(e)}")
-            raise e
+            return None
         return model.__root__[0]
 
     @auth
@@ -488,25 +488,6 @@ class ModelsClient(ApiClient):
 
         return Model(**response.json())
 
-    def _upload(self, upload_url: str, f: BufferedReader) -> None:
-        """
-        Upload the file to the specified url.
-
-        Args:
-            upload_url: Url to perform a PUT operation to load file `f`
-            f: Model to upload, opened as a file
-        """
-
-        response = self.session.put(
-            upload_url, headers={"Content-Type": "application/octet-stream"}, data=f
-        )
-        self._echo_debug(str(response))
-
-        response.raise_for_status()
-
-        if response.status_code != 200:
-            raise Exception()
-
     @auth
     def update(self, model_id: int, model_update: ModelUpdate) -> Model:
         """
@@ -532,38 +513,6 @@ class ModelsClient(ApiClient):
         response.raise_for_status()
 
         return Model(**response.json())
-
-    @auth
-    def download(self, model_id: int) -> bytes:
-        """
-        Download a Transpiled model from the API.
-
-        Args:
-            model_id: Model identfier to download
-
-        Returns:
-            The model content of the request
-        """
-
-        headers = copy.deepcopy(self.default_headers)
-        headers.update(self._get_auth_header())
-
-        response = self.session.get(
-            f"{self.url}/{self.MODELS_ENDPOINT}/{model_id}:download",
-            headers=headers,
-        )
-        self._echo_debug(str(response))
-        url = response.json()["download_url"]
-        response.raise_for_status()
-
-        download_response = self.session.get(
-            url, headers={"Content-Type": "application/octet-stream"}
-        )
-
-        self._echo_debug(str(download_response))
-        download_response.raise_for_status()
-
-        return download_response.content
 
 
 class JobsClient(ApiClient):

@@ -5,7 +5,6 @@ from unittest.mock import patch
 from pydantic.error_wrappers import ValidationError
 from requests.exceptions import HTTPError
 
-from giza.commands.models import ModelsClient
 from giza.commands.versions import VersionsClient, VersionStatus
 from giza.schemas.models import Model, ModelList
 from giza.schemas.versions import Version, VersionList
@@ -327,4 +326,23 @@ def test_versions_download_bad_zip(tmpdir):
         )
 
     assert "Something went wrong with the transpiled file" in result.stdout
+    assert result.exit_code == 1
+
+
+# Test version download with missing model_id and version_id
+def test_versions_download_missing_ids():
+    with patch.object(VersionsClient, "get", side_effect=HTTPError), patch(
+        "giza.commands.versions.get_response_info", return_value={}
+    ):
+        result = invoke_cli_runner(
+            [
+                "versions",
+                "download",
+                "--output-path",
+                "path",
+            ],
+            expected_error=True,
+        )
+
+    assert "Model ID and version ID are required" in result.stdout
     assert result.exit_code == 1

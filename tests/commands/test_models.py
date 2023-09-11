@@ -18,7 +18,7 @@ def test_models_get():
         updated_at="2021-08-31T15:00:00.000000",
     )
     with patch.object(ModelsClient, "get", return_value=model) as mock_get:
-        result = invoke_cli_runner(["models", "get", "1"])
+        result = invoke_cli_runner(["models", "get", "--model-id", "1"])
 
     assert result.exit_code == 0
     mock_get.assert_called_once()
@@ -30,7 +30,9 @@ def test_models_get_invalid_id():
     with patch.object(
         ModelsClient, "get", side_effect=ValidationError(errors=[], model=Model)
     ), patch("giza.commands.models.get_response_info", return_value={}):
-        result = invoke_cli_runner(["models", "get", "1"], expected_error=True)
+        result = invoke_cli_runner(
+            ["models", "get", "--model-id", "1"], expected_error=True
+        )
 
     assert result.exit_code == 1
     assert "Model validation error" in result.stdout

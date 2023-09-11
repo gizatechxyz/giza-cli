@@ -9,15 +9,18 @@ from requests import HTTPError
 
 from giza.client import (
     DEFAULT_API_VERSION,
+    MODEL_URL_HEADER,
     ApiClient,
     JobsClient,
     ModelsClient,
     ProofsClient,
+    VersionsClient,
 )
 from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.models import Model, ModelCreate, ModelUpdate
 from giza.schemas.proofs import Proof
-from giza.utils.enums import JobSize, JobStatus
+from giza.schemas.versions import Version, VersionCreate, VersionList
+from giza.utils.enums import JobSize, JobStatus, VersionStatus
 
 
 class ResponseStub:
@@ -195,18 +198,131 @@ def test_models_client_update(tmpdir):
     assert model.description == model_update.description
 
 
-def test_models_client_download(tmpdir):
-    model_id = 1
-    response_download = ResponseStub({"download_url": "url"}, 200)
-    response_url = ResponseStub({"download_url": "url"}, 200, content=b"some bytes")
+def test_models_client_list(tmpdir):
+    model_data = {
+        "name": "model",
+        "description": "Dummy Model",
+        "id": 1,
+    }
     with patch("pathlib.Path.home", return_value=tmpdir), patch(
-        "requests.Session.get", side_effect=[response_download, response_url]
+        "requests.Session.get",
+        return_value=ResponseStub(
+            [model_data],
+            200,
+        ),
     ) as mock_request, patch("jose.jwt.decode"):
         client = ModelsClient("http://dummy_host", token="token")
-        result = client.download(model_id)
+        models = client.list()
+
+    mock_request.assert_called_once()
+    assert isinstance(models.__root__[0], Model)
+    assert models.__root__[0].name == model_data["name"]
+
+
+def test_models_client_get_non_existent(tmpdir):
+    model_id = 999
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.get", side_effect=HTTPError
+    ) as mock_request, patch("jose.jwt.decode"):
+        client = ModelsClient("http://dummy_host", token="token")
+        with pytest.raises(HTTPError):
+            client.get(model_id)
+
+    mock_request.assert_called_once()
+
+
+def test_models_client_update_non_existent(tmpdir):
+    model_update = ModelUpdate(description="Updated Desc")
+    model_id = 999
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.put",
+        side_effect=HTTPError,
+    ) as mock_request, patch("jose.jwt.decode"):
+        client = ModelsClient("http://dummy_host", token="token")
+        with pytest.raises(HTTPError):
+            client.update(model_id, model_update)
+
+    mock_request.assert_called_once()
+
+
+def test_versions_client_get(tmpdir):
+    version = Version(
+        version=1,
+        size=1,
+        description="test_version",
+        status=VersionStatus.STARTING,
+        created_date="2021-08-31T15:00:00.000000",
+        last_update="2021-08-31T15:00:00.000000",
+    )
+    response = ResponseStub(version.dict(), 200)
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.get", return_value=response
+    ) as mock_request, patch("jose.jwt.decode"):
+        client = VersionsClient("http://dummy_host", token="token")
+        result = client.get(model_id=1, version_id=version.version)
 
     mock_request.assert_called()
-    assert isinstance(result, bytes)
+    assert version == result
+
+
+def test_versions_client_list(tmpdir):
+    version = Version(
+        version=1,
+        size=1,
+        description="test_version",
+        status=VersionStatus.COMPLETED,
+        created_date="2021-08-31T15:00:00.000000",
+        last_update="2021-08-31T15:00:00.000000",
+    )
+    response = ResponseStub([version.dict()], 200)
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.get", return_value=response
+    ) as mock_request, patch("jose.jwt.decode"):
+        client = VersionsClient("http://dummy_host", token="token")
+        result = client.list(model_id=1)
+
+    mock_request.assert_called()
+    assert version == result.__root__[0]
+    assert isinstance(result, VersionList)
+
+
+def test_versions_client_create(tmpdir):
+    version = Version(
+        version=1,
+        size=1,
+        description="test_version",
+        status=VersionStatus.STARTING,
+        created_date="2021-08-31T15:00:00.000000",
+        last_update="2021-08-31T15:00:00.000000",
+    )
+    response = ResponseStub(
+        version.dict(), 201, headers={MODEL_URL_HEADER.lower(): "url"}
+    )
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.post", return_value=response
+    ) as mock_request, patch("jose.jwt.decode"):
+        filename = "test.onnx"
+        client = VersionsClient("http://dummy_host", token="token")
+        version_create = VersionCreate(status=VersionStatus.STARTING, size=100)
+        result, url = client.create(
+            model_id=1, version_create=version_create, filename=filename
+        )
+
+    mock_request.assert_called()
+    assert version == result
+    assert url == "url"
+
+
+def test_versions_client_get_non_existent(tmpdir):
+    version_id = 999
+    with patch("pathlib.Path.home", return_value=tmpdir), patch(
+        "requests.Session.get", side_effect=HTTPError
+    ) as mock_request, patch("jose.jwt.decode"):
+        client = VersionsClient("http://dummy_host", token="token")
+        with pytest.raises(HTTPError):
+            client.get(model_id=1, version_id=version_id)
+
+    mock_request.assert_called_once()
 
 
 def test_jobs_client_get(tmpdir):

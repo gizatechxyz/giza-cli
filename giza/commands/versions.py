@@ -1,10 +1,9 @@
-import json
 import sys
 import time
 import zipfile
 from io import BytesIO
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional
 
 import typer
 from pydantic import ValidationError
