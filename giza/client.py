@@ -3,7 +3,7 @@ import json
 import os
 from io import BufferedReader
 from pathlib import Path
-from typing import Any, BinaryIO, Dict, List, Optional, Tuple
+from typing import Any, BinaryIO, Dict, List, Optional, Tuple, Union
 from urllib.parse import urlparse
 
 from jose import jwt
@@ -442,7 +442,7 @@ class ModelsClient(ApiClient):
 
         return ModelList(__root__=[Model(**model) for model in response.json()])
 
-    def get_by_name(self, model_name: str, **kwargs) -> Any[Model, None]:
+    def get_by_name(self, model_name: str, **kwargs) -> Union[Model, None]:
         """
         Make a call to the API to retrieve model information by its name.
 

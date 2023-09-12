@@ -68,3 +68,38 @@ def test_models_list_server_error():
 
     assert result.exit_code == 1
     assert "Could not list models" in result.stdout
+
+
+# Test model retrieval with HTTPError in normal mode
+def test_models_get_httperror():
+    with patch.object(ModelsClient, "get", side_effect=HTTPError), patch(
+        "giza.commands.models.get_response_info", return_value={"request_id": 1}
+    ):
+        result = invoke_cli_runner(
+            ["models", "get", "--model-id", "1"], expected_error=True
+        )
+
+    assert result.exit_code == 1
+    assert "Could not retrieve model information" in result.stdout
+    assert "Detail" in result.stdout
+    assert "Status code" in result.stdout
+    assert "Error message" in result.stdout
+    assert "Request ID" in result.stdout
+
+
+# Test model retrieval with HTTPError in debug mode
+def test_models_get_httperror_debug():
+    with patch.object(ModelsClient, "get", side_effect=HTTPError), patch(
+        "giza.commands.models.get_response_info", return_value={"request_id": 1}
+    ):
+        result = invoke_cli_runner(
+            ["models", "get", "--model-id", "1", "--debug"], expected_error=True
+        )
+
+    assert result.exit_code == 1
+    assert "Could not retrieve model information" in result.stdout
+    assert "Detail" in result.stdout
+    assert "Status code" in result.stdout
+    assert "Error message" in result.stdout
+    assert "Request ID" in result.stdout
+    assert "Debugging mode is on" in result.stdout
