@@ -59,25 +59,37 @@ Now that we are authenticated we can connect with Giza!
 }
 ```
 
-## Transpile a model
+## Transpiling a Model
 
-We have our `onnx` model and we want to transpile it, `giza` makes it easy by providing the command for it!
+Now that we have our `onnx` model, it's time to transpile it into a format that's compatible with `giza`. Transpilation is a process where we convert the model from one format to another without changing its underlying functionality. In this case, we're converting our `onnx` model into a `cairo` model. This is a crucial step as it allows us to leverage the power of `giza` and its ecosystem.
+
+But don't worry, `giza` makes this process a breeze with a simple command! Let's dive into it.
 
 ```console
-> giza transpile MNIST_quant.onnx --output-path my_awesome_model
+> giza transpile awesome_model.onnx --output-path cairo_model
 
-[giza][2023-06-23 12:39:01.587] Reading model from path: MNIST_quant.onnx
-[giza][2023-06-23 12:39:01.588] Sending model for transpilation
-[giza][2023-06-23 12:39:04.657] Transpilation recieved!✅
-[giza][2023-06-23 12:39:04.670] Trasnpilation saved at: my_awesome_model
+[giza][2023-09-13 12:56:43.725] No model id provided, checking if model exists ✅ 
+[giza][2023-09-13 12:56:43.726] Model name is: awesome_model
+[giza][2023-09-13 12:56:43.978] Model Created with id -> 25! ✅
+[giza][2023-09-13 12:56:44.568] Sending model for transpilation ✅ 
+[giza][2023-09-13 12:56:55.577] Transpilation recieved! ✅
+[giza][2023-09-13 12:56:55.583] Transpilation saved at: cairo_model
 ```
 
-Let's check the result:
+As you can see from the console output, if the model does not previously exist, `giza` will automatically create one for you. It assigns a unique id to the new model, in this case, the id is 25. This is indicated by the line `[giza][2023-09-13 12:56:43.978] Model Created with id -> 25! ✅`.
+
+After the model is created, `giza` will create a new version for it and send it for transpilation. This is indicated by the line `[giza][2023-09-13 12:56:44.568] Sending model for transpilation ✅`. The transpiled model is then saved at the specified output path.
+
+This feature of `giza` makes it easy to manage and version your models. You don't have to worry about manually creating a new model or version, `giza` handles it for you.
+
+Additionally, `giza` provides an option to specify the model id while transpiling. If you already have a model and want to create a new version for it, you can use the `--model-id` option followed by the id of the model. This will create a new version for the existing model instead of creating a new model. Here's how you can do it:
+
+Now let's check the result:
 
 ```console
-> tree my_awesome_model
+> tree cairo_model
 
-my_awesome_model
+cairo_model
 ├── cairo_project.cairo
 ├── scarb.toml
 └── src
