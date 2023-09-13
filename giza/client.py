@@ -280,6 +280,7 @@ class UsersClient(ApiClient):
             f"{self.url}/{self.USERS_ENDPOINT}/me",
             headers=headers,
         )
+        response.raise_for_status()
         self._echo_debug(response.json(), json=True)
         return users.UserResponse(**response.json())
 

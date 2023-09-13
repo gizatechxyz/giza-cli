@@ -5,7 +5,6 @@ import typer
 from pydantic import EmailError, EmailStr, SecretStr, ValidationError
 from requests import HTTPError
 from rich import print_json
-from rich.prompt import Prompt
 
 from giza import API_HOST
 from giza.client import UsersClient
@@ -42,8 +41,8 @@ def create(debug: Optional[bool] = DEBUG_OPTION) -> None:
         ValidationError: input fields are validated, if these are not suitable the exception is raised
         HTTPError: request error to the API, 4XX or 5XX
     """
-    user = Prompt.ask("Enter your username :sunglasses:")
-    password = Prompt.ask("Enter your password 🥷 ", password=True)
+    user = typer.prompt("Enter your username 😎")
+    password = typer.prompt("Enter your password 🥷 ", hide_input=True)
     try:
         _check_password_strength(password)
     except PasswordError as e:
@@ -52,11 +51,11 @@ def create(debug: Optional[bool] = DEBUG_OPTION) -> None:
         if debug:
             raise e
         sys.exit(1)
-    confirmation = Prompt.ask("Confirm your password 👉🏻 ", password=True)
+    confirmation = typer.prompt("Confirm your password 👉🏻 ", hide_input=True)
     if password != confirmation:
         echo.error("⛔️Passwords do not match⛔️")
         sys.exit(1)
-    email = Prompt.ask("Enter your email 📧")
+    email = typer.prompt("Enter your email 📧")
     echo("Creating user in Giza ✅ ")
     try:
         user_create = users.UserCreate(
@@ -113,8 +112,8 @@ def login(
     Raises:
         HTTPError: request error to the API, 4XX or 5XX
     """
-    user = Prompt.ask("Enter your username :sunglasses:")
-    password = Prompt.ask("Enter your password 🥷 ", password=True)
+    user = typer.prompt("Enter your username :sunglasses:")
+    password = typer.prompt("Enter your password 🥷 ", hide_input=True)
 
     echo("Log into Giza")
     client = UsersClient(API_HOST, debug=debug)
@@ -176,7 +175,7 @@ def resend_email(debug: Optional[bool] = DEBUG_OPTION) -> None:
         ValidationError: input fields are validated, if these are not suitable the exception is raised
         HTTPError: request error to the API, 4XX or 5XX
     """
-    email = Prompt.ask("Enter your email 📧")
+    email = typer.prompt("Enter your email 📧")
     echo("Resending verification email ✅ ")
     try:
         client = UsersClient(API_HOST)
