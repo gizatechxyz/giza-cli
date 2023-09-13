@@ -16,6 +16,7 @@
 * [Transpile](resources/transpile.md)
 * [Prove](resources/prove.md)
 * [Models](resources/models.md)
+* [Versions](resources/versions.md)
 
 ## 🧱 Reference
 
@@ -26,9 +27,12 @@
   * [commands](reference/api/commands.md)
   * [commands.models](reference/api/commands.models.md)
   * [commands.prove](reference/api/commands.prove.md)
+  * [commands.reset_password](reference/api/commands.reset_password.md)
   * [commands.transpile](reference/api/commands.transpile.md)
   * [commands.users](reference/api/commands.users.md)
   * [commands.version](reference/api/commands.version.md)
+  * [commands.versions](reference/api/commands.versions.md)
+  * [exceptions](reference/api/exceptions.md)
   * [options](reference/api/options.md)
   * [utils.decorators](reference/api/utils.decorators.md)
   * [utils.echo](reference/api/utils.echo.md)
