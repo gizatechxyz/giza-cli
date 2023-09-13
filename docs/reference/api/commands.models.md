@@ -13,13 +13,15 @@
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/models.py#L21"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/models.py#L17"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `get`
 
 ```python
 get(
-    model_id: int = typer.Argument(None),
+    model_id: int = typer.Option(
+        ..., "--model-id", "-m", help="Model id to retrieve information from"
+    ),
     debug: Optional[bool] = DEBUG_OPTION
 ) → None
 ```
@@ -42,26 +44,29 @@ Command to create a user. Asks for the new users information and validates the i
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/models.py#L97"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/models.py#L71"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
-## <kbd>function</kbd> `download`
+## <kbd>function</kbd> `list`
 
 ```python
-download(
-    model_id: int,
-    output_path: str = typer.Option(
-        "cairo_model", "--output-path", "-o", help="Path to output the cairo model",
-    ),
+list(
     debug: Optional[bool] = DEBUG_OPTION
 ) → None
 ```
 
-Retrieve information about the current user and print it as json to stdout. 
+Command to list all models. 
 
 
 
 **Args:**
  
- - <b>`debug`</b> (Optional[bool], optional):  Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False) 
+ - <b>`debug`</b> (Optional[bool], optional):  Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False). 
+
+
+
+**Raises:**
+ 
+ - <b>`ValidationError`</b>:  input fields are validated, if these are not suitable the exception is raised 
+ - <b>`HTTPError`</b>:  request error to the API, 4XX or 5XX 
 
 

@@ -70,12 +70,28 @@ def get(
 
 @app.command(
     short_help="📜 List the available models.",
-    help="""📜 List the available models.
+    help="""📜 Lists all the available models in Giza.
+
+    This command retrieves and displays a list of all models stored in the server.
+    Each model's information is printed in a json format for easy readability and further processing.
+
+    If there are no models available, an empty list is printed.
     """,
 )
 def list(
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    """
+    Command to list all models.
+
+    Args:
+        debug (Optional[bool], optional): Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False).
+
+    Raises:
+        ValidationError: input fields are validated, if these are not suitable the exception is raised
+        HTTPError: request error to the API, 4XX or 5XX
+    """
+
     echo("Listing models ✅ ")
     try:
         client = ModelsClient(API_HOST)
