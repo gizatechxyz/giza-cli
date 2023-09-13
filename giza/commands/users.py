@@ -112,7 +112,7 @@ def login(
     Raises:
         HTTPError: request error to the API, 4XX or 5XX
     """
-    user = typer.prompt("Enter your username :sunglasses:")
+    user = typer.prompt("Enter your username 😎")
     password = typer.prompt("Enter your password 🥷 ", hide_input=True)
 
     echo("Log into Giza")

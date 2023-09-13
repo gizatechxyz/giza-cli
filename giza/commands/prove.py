@@ -56,7 +56,7 @@ def prove(
                             f"Proving Job with name '{current_job.job_name}' and id {current_job.id} failed"
                         )
                     )
-                    break
+                    sys.exit(1)
                 else:
                     live.update(
                         echo.format_message(

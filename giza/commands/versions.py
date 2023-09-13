@@ -240,13 +240,18 @@ app.command(
     """,
 )
 def update(
-    model_id: int = typer.Argument(None),
-    version_id: int = typer.Argument(None),
+    model_id: int = typer.Option(None, help="The ID of the model"),
+    version_id: int = typer.Option(None, help="The ID of the version"),
     description: str = typer.Option(
         None, "--description", "-d", help="New description for the version"
     ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if any([model_id is None, version_id is None, description is None]):
+        echo.error(
+            "⛔️Model ID, version ID and description are required to update the version⛔️"
+        )
+        sys.exit(1)
     echo("Updating version description ✅ ")
     try:
         client = VersionsClient(API_HOST)
@@ -260,7 +265,7 @@ def update(
         sys.exit(1)
     except HTTPError as e:
         info = get_response_info(e.response)
-        echo.error("⛔️Could not update version description")
+        echo.error("⛔️Could not update version")
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
