@@ -52,7 +52,7 @@ Prompt the user for input.
 handle_http_error(
     e: HTTPError,
     error_msg: str,
-    debug: Optional[bool] = <typer.models.OptionInfo object at 0x105bd9a50>
+    debug: Optional[bool] = DEBUG_OPTION
 ) → None
 ```
 

@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 
-class ModelStatus(StrEnum):
+class VersionStatus(StrEnum):
     COMPLETED: str = "COMPLETED"
     FAILED: str = "FAILED"
     STARTING: str = "STARTING"

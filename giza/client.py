@@ -3,21 +3,22 @@ import json
 import os
 from io import BufferedReader
 from pathlib import Path
-from typing import Any, BinaryIO, Dict, List, Optional, Tuple
+from typing import Any, BinaryIO, Dict, List, Optional, Tuple, Union
 from urllib.parse import urlparse
 
 from jose import jwt
 from jose.exceptions import ExpiredSignatureError
 from pydantic import SecretStr
-from requests import Response, Session
+from requests import HTTPError, Response, Session
 from rich import print, print_json
 
 from giza.schemas import users
 from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.message import Msg
-from giza.schemas.models import Model, ModelCreate, ModelUpdate
+from giza.schemas.models import Model, ModelCreate, ModelList, ModelUpdate
 from giza.schemas.proofs import Proof
 from giza.schemas.token import TokenResponse
+from giza.schemas.versions import Version, VersionCreate, VersionList, VersionUpdate
 from giza.utils import echo
 from giza.utils.decorators import auth
 
@@ -279,6 +280,7 @@ class UsersClient(ApiClient):
             f"{self.url}/{self.USERS_ENDPOINT}/me",
             headers=headers,
         )
+        response.raise_for_status()
         self._echo_debug(response.json(), json=True)
         return users.UserResponse(**response.json())
 
@@ -395,7 +397,7 @@ class ModelsClient(ApiClient):
     MODELS_ENDPOINT = "models"
 
     @auth
-    def get(self, model_id: int) -> Model:
+    def get(self, model_id: int, **kwargs) -> Model:
         """
         Make a call to the API to retrieve model information.
 
@@ -411,6 +413,7 @@ class ModelsClient(ApiClient):
         response = self.session.get(
             f"{self.url}/{self.MODELS_ENDPOINT}/{model_id}",
             headers=headers,
+            **kwargs,
         )
         self._echo_debug(str(response))
 
@@ -419,7 +422,47 @@ class ModelsClient(ApiClient):
         return Model(**response.json())
 
     @auth
-    def create(self, model_create: ModelCreate) -> Tuple[Model, str]:
+    def list(self, **kwargs) -> ModelList:
+        """
+        List all the models related to the user.
+
+        Returns:
+            A list of models created by the user
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            f"{self.url}/{self.MODELS_ENDPOINT}",
+            headers=headers,
+            **kwargs,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return ModelList(__root__=[Model(**model) for model in response.json()])
+
+    def get_by_name(self, model_name: str, **kwargs) -> Union[Model, None]:
+        """
+        Make a call to the API to retrieve model information by its name.
+
+        Args:
+            model_name: Model name to retrieve information
+
+        Returns:
+            Model: model entity with the retrieved information
+        """
+        self._echo_debug(f"Retrieving model by name: {model_name}")
+        try:
+            model: ModelList = self.list(params={"name": model_name})
+        except HTTPError as e:
+            self._echo_debug(f"Could not retrieve model by name: {str(e)}")
+            return None
+        return model.__root__[0]
+
+    @auth
+    def create(self, model_create: ModelCreate) -> Model:
         """
         Create a new model.
 
@@ -444,31 +487,7 @@ class ModelsClient(ApiClient):
 
         response.raise_for_status()
 
-        upload_url = response.headers.get(MODEL_URL_HEADER.lower())
-
-        if upload_url is None:
-            raise Exception("Missing upload URL")
-
-        return Model(**response.json()), upload_url
-
-    def _upload(self, upload_url: str, f: BufferedReader) -> None:
-        """
-        Upload the file to the specified url.
-
-        Args:
-            upload_url: Url to perform a PUT operation to load file `f`
-            f: Model to upload, opened as a file
-        """
-
-        response = self.session.put(
-            upload_url, headers={"Content-Type": "application/octet-stream"}, data=f
-        )
-        self._echo_debug(str(response))
-
-        response.raise_for_status()
-
-        if response.status_code != 200:
-            raise Exception()
+        return Model(**response.json())
 
     @auth
     def update(self, model_id: int, model_update: ModelUpdate) -> Model:
@@ -495,38 +514,6 @@ class ModelsClient(ApiClient):
         response.raise_for_status()
 
         return Model(**response.json())
-
-    @auth
-    def download(self, model_id: int) -> bytes:
-        """
-        Download a Transpiled model from the API.
-
-        Args:
-            model_id: Model identfier to download
-
-        Returns:
-            The model content of the request
-        """
-
-        headers = copy.deepcopy(self.default_headers)
-        headers.update(self._get_auth_header())
-
-        response = self.session.get(
-            f"{self.url}/{self.MODELS_ENDPOINT}/{model_id}:download",
-            headers=headers,
-        )
-        self._echo_debug(str(response))
-        url = response.json()["download_url"]
-        response.raise_for_status()
-
-        download_response = self.session.get(
-            url, headers={"Content-Type": "application/octet-stream"}
-        )
-
-        self._echo_debug(str(download_response))
-        download_response.raise_for_status()
-
-        return download_response.content
 
 
 class JobsClient(ApiClient):
@@ -719,3 +706,193 @@ class ProofsClient(ApiClient):
         response.raise_for_status()
 
         return [Proof(**proof) for proof in response.json()]
+
+
+class VersionsClient(ApiClient):
+    """
+    Client to interact with `versions` endpoint.
+    """
+
+    VERSIONS_ENDPOINT = "versions"
+    MODELS_ENDPOINT = "models"
+
+    def _get_version_url(self, model_id: int) -> str:
+        """
+        Helper function to generate the URL for versions.
+
+        Args:
+            model_id: Model identifier
+
+        Returns:
+            The URL for versions
+        """
+        return f"{self.url}/{self.MODELS_ENDPOINT}/{model_id}/{self.VERSIONS_ENDPOINT}"
+
+    @auth
+    def get(self, model_id: int, version_id: int) -> Version:
+        """
+        Get a version.
+
+        Args:
+            model_id: Model identifier
+            version_id: Version identifier
+
+        Returns:
+            The version information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            f"{self._get_version_url(model_id)}/{version_id}",
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        return Version(**response.json())
+
+    @auth
+    def create(
+        self,
+        model_id: int,
+        version_create: VersionCreate,
+        filename: Optional[str] = None,
+    ) -> Tuple[Version, str]:
+        """
+        Create a new version.
+
+        Args:
+            model_id: Model identifier
+            version_create: Version information to create
+
+        Returns:
+            The recently created version information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.post(
+            f"{self._get_version_url(model_id)}",
+            headers=headers,
+            json=version_create.dict(),
+            params={"filename": filename} if filename else None,
+        )
+        self._echo_debug(str(response))
+
+        upload_url = response.headers.get(MODEL_URL_HEADER.lower())
+
+        response.raise_for_status()
+
+        if upload_url is None:
+            raise Exception("Missing upload URL")
+
+        return Version(**response.json()), upload_url
+
+    @auth
+    def download(self, model_id: int, version_id: int) -> bytes:
+        """
+        Download a version.
+
+        Args:
+            model_id: Model identifier
+            version_id: Version identifier
+
+        Returns:
+            The version binary file
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            f"{self._get_version_url(model_id)}/{version_id}:download",
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        url = response.json()["download_url"]
+
+        download_response = self.session.get(
+            url, headers={"Content-Type": "application/octet-stream"}
+        )
+
+        self._echo_debug(str(download_response))
+        download_response.raise_for_status()
+
+        return download_response.content
+
+    def _upload(self, upload_url: str, f: BufferedReader) -> None:
+        """
+        Upload the file to the specified url.
+
+        Args:
+            model_id: Model identifier
+            upload_url: Url to perform a PUT operation to load file `f`
+            f: Version to upload, opened as a file
+        """
+
+        response = self.session.put(
+            upload_url, headers={"Content-Type": "application/octet-stream"}, data=f
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        if response.status_code != 200:
+            raise Exception()
+
+    @auth
+    def list(self, model_id: int) -> VersionList:
+        """
+        List all the versions related to a model.
+
+        Args:
+            model_id: Model identifier
+
+        Returns:
+            A list of versions related to the model
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            f"{self._get_version_url(model_id)}",
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return VersionList(__root__=[Version(**version) for version in response.json()])
+
+    @auth
+    def update(
+        self, model_id: int, version_id: int, version_update: VersionUpdate
+    ) -> Version:
+        """
+        Update a specific version.
+
+        Args:
+            model_id: Model identifier
+            version_id: Version identifier
+            version_update: Version information to update
+
+        Returns:
+            The updated version information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.put(
+            f"{self._get_version_url(model_id)}/{version_id}",
+            headers=headers,
+            json=version_update.dict(),
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return Version(**response.json())

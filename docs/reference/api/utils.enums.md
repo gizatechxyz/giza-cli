@@ -13,7 +13,7 @@
 
 <a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/enums.py#L4"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
-## <kbd>class</kbd> `ModelStatus`
+## <kbd>class</kbd> `VersionStatus`
 
 
 
