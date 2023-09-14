@@ -52,6 +52,20 @@ def test_versions_get():
     assert "Retrieving version information" in result.stdout
 
 
+# Test version retrieval that throws an HTTPError
+def test_versions_get_http_error():
+    with patch.object(VersionsClient, "get", side_effect=HTTPError), patch(
+        "giza.commands.versions.get_response_info", return_value={}
+    ):
+        result = invoke_cli_runner(
+            ["versions", "get", "--model-id", "1", "--version-id", "1"],
+            expected_error=True,
+        )
+
+    assert result.exit_code == 1
+    assert "Could not retrieve version information" in result.stdout
+
+
 # Test version retrieval with invalid version id
 def test_versions_get_invalid_id():
     with patch.object(
@@ -345,4 +359,76 @@ def test_versions_download_missing_ids():
         )
 
     assert "Model ID and version ID are required" in result.stdout
+    assert result.exit_code == 1
+
+
+def test_versions_update_successful():
+    version = Version(
+        version=1,
+        size=1,
+        description="updated_description",
+        status=VersionStatus.COMPLETED,
+        created_date="2021-08-31T15:00:00.000000",
+        last_update="2021-08-31T15:00:00.000000",
+    )
+
+    with patch.object(VersionsClient, "update", return_value=version):
+        result = invoke_cli_runner(
+            [
+                "versions",
+                "update",
+                "--model-id",
+                "1",
+                "--version-id",
+                "1",
+                "--description",
+                "updated_description",
+            ]
+        )
+
+    assert "Updating version description" in result.stdout
+    assert result.exit_code == 0
+    assert "updated_description" in result.stdout
+
+
+def test_versions_update_server_error():
+    with patch.object(VersionsClient, "update", side_effect=HTTPError), patch(
+        "giza.commands.versions.get_response_info", return_value={}
+    ):
+        result = invoke_cli_runner(
+            [
+                "versions",
+                "update",
+                "--model-id",
+                "1",
+                "--version-id",
+                "1",
+                "--description",
+                "updated_description",
+            ],
+            expected_error=True,
+        )
+
+    assert "Could not update version" in result.stdout
+    assert result.exit_code == 1
+
+
+def test_versions_update_missing_ids():
+    with patch.object(VersionsClient, "update", side_effect=HTTPError), patch(
+        "giza.commands.versions.get_response_info", return_value={}
+    ):
+        result = invoke_cli_runner(
+            [
+                "versions",
+                "update",
+                "--description",
+                "updated_description",
+            ],
+            expected_error=True,
+        )
+
+    assert (
+        "Model ID, version ID and description are required to update the version"
+        in result.stdout
+    )
     assert result.exit_code == 1
