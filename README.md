@@ -71,7 +71,7 @@ Or install it directly from the repo:
 
 ## 📚 Documentation
 
-You can check our official docs [here](https://orion-giza.gitbook.io/main-1/welcome/readme).
+You can check our official docs [here](https://cli.gizatech.xyz).
 
 - **Examples** includes examples on how to use the CLI functionalities.
 

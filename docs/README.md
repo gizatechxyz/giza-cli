@@ -1,5 +1,5 @@
 ---
-description: Giza CLI 0.0.2
+description: Giza CLI 0.3.0
 ---
 
 # Giza CLI
@@ -12,10 +12,11 @@ This CLI provides the utilities to interact with Giza using the terminal.
 
 The CLI will serve as the main entrypoint for Giza Platfrom for developers. It aims to provide a tool to ease the managing of resources that exists in Giza Plarform.
 
-For now it provides two capabilities:
+For now it provides the following capabilities:
 
 * User related utilities, like `create` or `login`
 * Model transpilation with `transpile`
+* Create a proof from of a `casm.json` file with `prove`
 
 In the future each new resource added to Giza will have its corresponding capabaility in the CLI.
 
