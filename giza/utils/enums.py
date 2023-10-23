@@ -21,3 +21,9 @@ class JobSize(StrEnum):
     M: str = "M"
     L: str = "L"
     XL: str = "XL"
+
+
+class Framework(StrEnum):
+    CAIRO: str = "CAIRO"
+    EZKL: str = "EZKL"
+    ZKML: str = "ZKML"

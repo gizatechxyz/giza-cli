@@ -17,7 +17,7 @@ from giza.options import DEBUG_OPTION
 from giza.schemas.models import ModelCreate
 from giza.schemas.versions import Version, VersionCreate, VersionList, VersionUpdate
 from giza.utils import Echo, echo, get_response_info
-from giza.utils.enums import VersionStatus
+from giza.utils.enums import Framework, VersionStatus
 
 app = typer.Typer()
 
@@ -145,6 +145,7 @@ def transpile(
             version_create = VersionCreate(
                 description=desc if desc else "Intial version",
                 size=Path(model_path).stat().st_size,
+                framework=Framework.CAIRO,
             )
             version, upload_url = client.create(
                 model.id, version_create, model_path.split("/")[-1]
