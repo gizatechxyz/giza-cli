@@ -25,5 +25,3 @@ class JobSize(StrEnum):
 
 class Framework(StrEnum):
     CAIRO: str = "CAIRO"
-    EZKL: str = "EZKL"
-    ZKML: str = "ZKML"
