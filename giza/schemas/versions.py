@@ -3,12 +3,13 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from giza.utils.enums import VersionStatus
+from giza.utils.enums import Framework, VersionStatus
 
 
 class VersionCreate(BaseModel):
     size: int
     description: Optional[str] = None
+    framework: Framework
 
 
 class VersionUpdate(BaseModel):

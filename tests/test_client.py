@@ -20,7 +20,7 @@ from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.models import Model, ModelCreate, ModelUpdate
 from giza.schemas.proofs import Proof
 from giza.schemas.versions import Version, VersionCreate, VersionList
-from giza.utils.enums import JobSize, JobStatus, VersionStatus
+from giza.utils.enums import Framework, JobSize, JobStatus, VersionStatus
 
 
 class ResponseStub:
@@ -303,7 +303,9 @@ def test_versions_client_create(tmpdir):
     ) as mock_request, patch("jose.jwt.decode"):
         filename = "test.onnx"
         client = VersionsClient("http://dummy_host", token="token")
-        version_create = VersionCreate(status=VersionStatus.STARTING, size=100)
+        version_create = VersionCreate(
+            status=VersionStatus.STARTING, size=100, framework=Framework.CAIRO
+        )
         result, url = client.create(
             model_id=1, version_create=version_create, filename=filename
         )
