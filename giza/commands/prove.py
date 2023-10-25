@@ -1,3 +1,4 @@
+import json
 import sys
 import time
 from typing import Optional
@@ -5,6 +6,7 @@ from typing import Optional
 import typer
 from pydantic import ValidationError
 from requests import HTTPError
+from rich import print_json
 from rich.live import Live
 
 from giza import API_HOST
@@ -67,8 +69,8 @@ def prove(
         with open(output_path, "wb") as f:
             proof_client = ProofsClient(API_HOST)
             proof: Proof = proof_client.get_by_job_id(current_job.id)
-            echo(f"Proof Cairo VM execution time -> {proof.cairo_execution_time}s")
-            echo(f"Proof proving time -> {proof.proving_time}s")
+            echo("Proof metrics:")
+            print_json(json.dumps(proof.metrics))
             f.write(proof_client.download(proof.id))
             echo(f"Proof saved at: {output_path}")
     except ValidationError as e:
