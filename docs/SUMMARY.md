@@ -9,6 +9,7 @@
 
 * [Basic CLI Example](examples/basic.md)
 * [Full Transpilation](examples/full_transpilation.md)
+* [Create a Proof](examples/create_proof.md)
 * [Reset Your Password](examples/reset_password.md)
 
 ## 📦 Resources
