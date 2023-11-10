@@ -3,6 +3,7 @@ import typer
 import typer.rich_utils
 from rich.traceback import install
 
+from giza.commands.ezkl import app as ezkl_app
 from giza.commands.models import app as models_app
 from giza.commands.prove import prove
 from giza.commands.reset_password import request_reset_password_token, reset_password
@@ -42,6 +43,12 @@ app.add_typer(
     help="""💻 Utilities for managing versions""",
 )
 
+app.add_typer(
+    ezkl_app,
+    name="ezkl",
+    short_help="💻 Utilities to execute EZKL workflows",
+    help="""💻 Utilities to execute EZKL workflows""",
+)
 
 app.command(
     name="transpile",

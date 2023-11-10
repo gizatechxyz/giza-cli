@@ -25,3 +25,9 @@ class JobSize(StrEnum):
 
 class Framework(StrEnum):
     CAIRO: str = "CAIRO"
+    EZKL: str = "EZKL"
+
+
+class JobKind(StrEnum):
+    PROOF: str = "PROOF"
+    VERIFY: str = "VERIFY"

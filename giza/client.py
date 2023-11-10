@@ -524,7 +524,7 @@ class JobsClient(ApiClient):
     JOBS_ENDPOINT = "jobs"
 
     @auth
-    def get(self, job_id: int) -> Job:
+    def get(self, job_id: int, params: Optional[dict[str, str]] = None) -> Job:
         """
         Make a call to the API to retrieve job information.
 
@@ -540,6 +540,7 @@ class JobsClient(ApiClient):
         response = self.session.get(
             f"{self.url}/{self.JOBS_ENDPOINT}/{job_id}",
             headers=headers,
+            params=params,
         )
         self._echo_debug(str(response))
 
@@ -564,12 +565,11 @@ class JobsClient(ApiClient):
         """
         headers = copy.deepcopy(self.default_headers)
         headers.update(self._get_auth_header())
-
         response = self.session.post(
             f"{self.url}/{self.JOBS_ENDPOINT}",
             headers=headers,
             params=job_create.dict(),
-            files={"file": f},
+            files={"file": f} if f is not None else None,
         )
         self._echo_debug(str(response))
 
@@ -590,6 +590,114 @@ class JobsClient(ApiClient):
 
         response = self.session.get(
             f"{self.url}/{self.JOBS_ENDPOINT}",
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return [Job(**job) for job in response.json()]
+
+
+class VersionJobsClient(ApiClient):
+    """
+    Client to interact with `jobs` endpoint.
+    """
+
+    MODELS_ENDPOINT = "models"
+    VERSIONS_ENDPOINT = "versions"
+    JOBS_ENDPOINT = "jobs"
+
+    @auth
+    def get(self, model_id: int, version_id: int, job_id: int) -> Job:
+        """
+        Make a call to the API to retrieve job information.
+
+        Args:
+            job_id: Job identfier to retrieve information
+
+        Returns:
+            Job: job entity with the retrieved information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            os.path.join(
+                self.url,
+                self.MODELS_ENDPOINT,
+                str(model_id),
+                self.VERSIONS_ENDPOINT,
+                str(version_id),
+                self.JOBS_ENDPOINT,
+                str(job_id),
+            ),
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return Job(**response.json())
+
+    @auth
+    def create(
+        self, model_id: int, version_id: int, job_create: JobCreate, f: BufferedReader
+    ) -> Job:
+        """
+        Create a new job.
+
+        Args:
+            job_create: Job information to create
+            f: filed to upload, a CASM json
+
+        Raises:
+            Exception: if there is no upload Url
+
+        Returns:
+            Tuple[Model, str]: the recently created model and a url, used to upload the model.
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+        response = self.session.post(
+            os.path.join(
+                self.url,
+                self.MODELS_ENDPOINT,
+                str(model_id),
+                self.VERSIONS_ENDPOINT,
+                str(version_id),
+                self.JOBS_ENDPOINT,
+            ),
+            headers=headers,
+            params=job_create.dict(),
+            files={"file": f},
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return Job(**response.json())
+
+    @auth
+    def list(self, model_id: int, version_id: int) -> List[Job]:
+        """
+        List jobs.
+
+        Returns:
+            A list of jobs created by the user
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            os.path.join(
+                self.url,
+                self.MODELS_ENDPOINT,
+                str(model_id),
+                self.VERSIONS_ENDPOINT,
+                str(version_id),
+                self.JOBS_ENDPOINT,
+            ),
             headers=headers,
         )
         self._echo_debug(str(response))

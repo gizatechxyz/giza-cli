@@ -15,7 +15,7 @@ from giza.options import DEBUG_OPTION
 from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.proofs import Proof
 from giza.utils import echo, get_response_info
-from giza.utils.enums import JobSize, JobStatus
+from giza.utils.enums import Framework, JobSize, JobStatus
 
 app = typer.Typer()
 
@@ -23,6 +23,7 @@ app = typer.Typer()
 def prove(
     program: str = typer.Argument(None),
     size: JobSize = typer.Option(JobSize.S, "--size", "-s"),
+    framework: Framework = typer.Option(Framework.CAIRO, "--framework", "-f"),
     output_path: str = typer.Option("zk.proof", "--output-path", "-o"),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
@@ -44,7 +45,7 @@ def prove(
     try:
         client = JobsClient(API_HOST)
         with open(program) as casm:
-            job: Job = client.create(JobCreate(size=size), casm)
+            job: Job = client.create(JobCreate(size=size, framework=framework), casm)
         echo(f"Proving job created with name '{job.job_name}' and id -> {job.id} ✅")
         with Live() as live:
             while True:
