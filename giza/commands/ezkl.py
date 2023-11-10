@@ -231,6 +231,7 @@ def prove(
         with open(output_path, "wb") as f:
             proof_client = ProofsClient(API_HOST)
             proof: Proof = proof_client.get_by_job_id(current_job.id)
+            echo(f"Proof created with id -> {proof.id} ✅")
             echo("Proof metrics:")
             print_json(json.dumps(proof.metrics))
             f.write(proof_client.download(proof.id))
