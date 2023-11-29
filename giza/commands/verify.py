@@ -2,32 +2,32 @@ from typing import Optional
 
 import typer
 
-from giza.frameworks import cairo, ezkl
+from giza.frameworks import ezkl
 from giza.options import DEBUG_OPTION
 from giza.utils.enums import Framework, JobSize
 
 app = typer.Typer()
 
 
-def prove(
-    data: str = typer.Argument(None),
-    model_id: Optional[str] = typer.Option(None, "--model-id", "-m"),
-    version_id: Optional[str] = typer.Option(None, "--version-id", "-v"),
+def verify(
+    model_id: Optional[int] = typer.Option(None, "--model-id", "-m"),
+    version_id: Optional[int] = typer.Option(None, "--version-id", "-v"),
+    proof_id: Optional[int] = typer.Option(None, "--proof-id", "-p"),
+    proof: Optional[str] = typer.Option(None, "--proof", "-P"),
     size: JobSize = typer.Option(JobSize.S, "--size", "-s"),
     framework: Framework = typer.Option(Framework.CAIRO, "--framework", "-f"),
-    output_path: str = typer.Option("zk.proof", "--output-path", "-o"),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     if framework == Framework.CAIRO:
-        cairo.prove(data=data, size=size, output_path=output_path, debug=debug)
+        pass
     elif framework == Framework.EZKL:
-        ezkl.prove(
-            input_data=data,
+        ezkl.verify(
+            proof_id=proof_id,
             model_id=model_id,
             version_id=version_id,
             size=size,
-            output_path=output_path,
             debug=debug,
+            proof=proof,
         )
     else:
         raise typer.BadParameter(

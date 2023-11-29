@@ -13,11 +13,12 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from giza import API_HOST
 from giza.client import ModelsClient, VersionsClient
+from giza.frameworks import cairo, ezkl
 from giza.options import DEBUG_OPTION
 from giza.schemas.models import ModelCreate
 from giza.schemas.versions import Version, VersionCreate, VersionList, VersionUpdate
 from giza.utils import Echo, echo, get_response_info
-from giza.utils.enums import Framework, VersionStatus
+from giza.utils.enums import Framework, JobSize, VersionStatus
 
 app = typer.Typer()
 
@@ -74,151 +75,53 @@ def transpile(
     model_desc: int = typer.Option(
         None, help="Description of the Model to create if model_id is not provided"
     ),
+    framework: Framework = typer.Option(Framework.CAIRO, "--framework", "-f"),
     output_path: str = typer.Option(
         "cairo_model",
         "--output-path",
         "-o",
         help="The path where the cairo model will be saved",
     ),
+    input_data: str = typer.Option(
+        None,
+        "--input-data",
+        "-i",
+        help="The input data to use for the transpilation",
+    ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
-    """
-    This function is responsible for transpiling a model. The overall objective is to prepare a model for use by converting it into a different format (transpiling).
-    The function performs the following steps:
-
-    1. Checks if a model_id is provided. If not, it extracts the model_name from the model_path.
-    2. If a model description is provided and a model_id is also provided, it ignores the provided description.
-    3. It then attempts to retrieve the model. If the model does not exist, it creates a new one.
-    4. The function then creates a new version for the model, uploads the model file, and updates the status to UPLOADED.
-    5. It then continuously checks the status of the version until it is either COMPLETED or FAILED.
-    6. If the status is COMPLETED, it downloads the model to the specified path.
-    7. If any errors occur during this process, they are handled and appropriate error messages are displayed.
-
-    Args:
-        model_path (str): Path of the model to transpile.
-        model_id (int, optional): The ID of the model where a new version will be created. Defaults to None.
-        desc (int, optional): Description of the version. Defaults to None.
-        model_desc (int, optional): Description of the Model to create if model_id is not provided. Defaults to None.
-        output_path (str, optional): The path where the cairo model will be saved. Defaults to "cairo_model".
-        debug (bool, optional): A flag used to determine whether to raise exceptions or not. Defaults to DEBUG_OPTION.
-
-    Raises:
-        ValidationError: If there is a validation error with the model or version.
-        HTTPError: If there is an HTTP error while communicating with the server.
-    """
-    echo = Echo(debug=debug)
-    if model_id is None:
-        model_name = model_path.split("/")[-1].split(".")[0]
-        echo("No model id provided, checking if model exists ✅ ")
-        echo(f"Model name is: {model_name}")
-    if model_desc is not None and model_id is not None:
-        echo(
-            "Model description is not required when model id is provided, ignoring provided description ✅ "
+    if framework == Framework.CAIRO:
+        cairo.transpile(
+            model_path=model_path,
+            model_id=model_id,
+            desc=desc,
+            model_desc=model_desc,
+            output_path=output_path,
+            debug=debug,
         )
-    try:
-        with Progress(
-            SpinnerColumn(),
-            TextColumn("[progress.description]{task.description}"),
-            transient=True,
-        ) as progress:
-            model_task = progress.add_task(
-                description="Retrieving Model...", total=None
-            )
-            echo.debug(f"Reading model from path: {model_path}")
-            models_client = ModelsClient(API_HOST)
-            if model_id is None:
-                model = models_client.get_by_name(model_name)
-                if model is not None:
-                    echo("Model already exists, using existing model ✅ ")
-                else:
-                    model_create = ModelCreate(name=model_name, description=model_desc)
-                    model = models_client.create(model_create)
-                    echo(f"Model Created with id -> {model.id}! ✅")
-            else:
-                model = models_client.get(model_id)
-                echo(f"Model found with id -> {model.id}! ✅")
-            progress.update(model_task, completed=True, visible=False)
-            version_task = progress.add_task(
-                description="Creating Version...", total=None
-            )
-            client = VersionsClient(API_HOST)
-            version_create = VersionCreate(
-                description=desc if desc else "Intial version",
-                size=Path(model_path).stat().st_size,
-                framework=Framework.CAIRO,
-            )
-            version, upload_url = client.create(
-                model.id, version_create, model_path.split("/")[-1]
-            )
-            progress.update(version_task, completed=True, visible=False)
-            echo("Sending model for transpilation ✅ ")
-            with open(model_path, "rb") as f:
-                client._upload(upload_url, f)
-                echo.debug("Model Uploaded! ✅")
-
-            client.update(
-                model.id, version.version, VersionUpdate(status=VersionStatus.UPLOADED)
-            )
-
-            progress.add_task(description="Transpiling Model...", total=None)
-            start_time = time.time()
-            while True:
-                version = client.get(model.id, version.version)
-                if version.status not in (
-                    VersionStatus.COMPLETED,
-                    VersionStatus.FAILED,
-                ):
-                    spent = time.time() - start_time
-                    echo.debug(
-                        f"[{spent:.2f}s]Transpilation is not ready yet, retrying in 10s"
-                    )
-                    time.sleep(10)
-                elif version.status == VersionStatus.COMPLETED:
-                    echo.debug("Transpilation is ready, downloading! ✅")
-                    cairo_model = client.download(model.id, version.version)
-                    break
-                elif version.status == VersionStatus.FAILED:
-                    echo.error("⛔️ Transpilation failed! ⛔️")
-                    echo.error(f"⛔️ Reason -> {version.message} ⛔️")
-                    sys.exit(1)
-
-    except ValidationError as e:
-        echo.error("Version validation error")
-        echo.error("Review the provided information")
-        if debug:
-            raise e
-        echo.error(str(e))
-        sys.exit(1)
-    except HTTPError as e:
-        info = get_response_info(e.response)
-        echo.error("⛔️Error at transpilation⛔️")
-        echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
-        echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
-        echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
-        echo.error(
-            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
-        ) if info.get("request_id") else None
-        if debug:
-            raise e
-        sys.exit(1)
-
-    echo("Transpilation recieved! ✅")
-    try:
-        zip_file = zipfile.ZipFile(BytesIO(cairo_model))
-    except zipfile.BadZipFile as zip_error:
-        echo.error("Something went wrong with the transpiled file")
-        echo.error(f"Error -> {zip_error.args[0]}")
-        if debug:
-            raise zip_error
-        sys.exit(1)
-
-    zip_file.extractall(output_path)
-    echo(f"Transpilation saved at: {output_path}")
+    elif framework == Framework.EZKL:
+        ezkl.setup(
+            model_path=model_path,
+            model_id=model_id,
+            desc=desc,
+            model_desc=model_desc,
+            input_data=input_data,
+            debug=debug,
+        )
+    else:
+        raise typer.BadParameter(
+            f"Framework {framework} is not supported, please use one of the following: {Framework.CAIRO}, {Framework.EZKL}"
+        )
 
 
 app.command(
     short_help="🔧 Sends the specified model for transpilation.",
     help="""🔧 Sends the specified model for transpilation.
+
+    This command has different behavior depending on the framework:
+
+        * For Cairo, it will transpile the specified file and upload it to Giza.
+        * For EZKL, it will create a version and perform the trusted setup, creating al the necessary files for it.
 
     This command performs several operations:
 

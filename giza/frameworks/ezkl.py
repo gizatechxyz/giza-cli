@@ -19,7 +19,6 @@ from giza.client import (
     VersionJobsClient,
     VersionsClient,
 )
-from giza.options import DEBUG_OPTION
 from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.models import ModelCreate
 from giza.schemas.proofs import Proof
@@ -27,32 +26,15 @@ from giza.schemas.versions import VersionCreate, VersionStatus, VersionUpdate
 from giza.utils import Echo, get_response_info
 from giza.utils.enums import Framework, JobKind, JobSize, JobStatus
 
-app = typer.Typer()
 
-
-@app.command(
-    short_help="🔥 Sets up a model and creates the outputs, handled by Giza.",
-    help="""🔥 This command sets up a model and creates the outputs, handled by Giza.
-    It requires the path to the ONNX model and the ID of the model where a new version will be created.
-    If the model ID is not provided, it will check if the model exists and use it if it does, or create a new one if it doesn't.
-    It also requires the size of the job and the input data.
-    If the model description is provided when the model ID is also provided, it will ignore the provided description.
-    The command will then retrieve the model, create a version, send the model for setup, and create a setup job.
-    It will keep checking the status of the job until it is completed or fails.
-    If the job validation fails or there is an HTTP error, it will print an error message and exit the program.""",
-)
 def setup(
-    model_path: str = typer.Argument(None, help="Path to the ONNX model"),
-    model_id: int = typer.Option(
-        None, help="The ID of the model where a new version will be created"
-    ),
-    desc: str = typer.Option(None, help="Description of the version"),
-    model_desc: int = typer.Option(
-        None, help="Description of the Model to create if model_id is not provided"
-    ),
-    size: JobSize = typer.Option(JobSize.S, "--size", "-s"),
-    input_data: str = typer.Option(None, "--input-data", "-i"),
-    debug: Optional[bool] = DEBUG_OPTION,
+    model_path: str,
+    model_id: int,
+    desc: str,
+    model_desc: int,
+    input_data: str,
+    debug: Optional[bool],
+    size: JobSize = JobSize.S,
 ) -> None:
     """
     This function executes the setup of the model and creates the outputs, handled by Giza.
@@ -169,26 +151,13 @@ def setup(
         sys.exit(1)
 
 
-@app.command(
-    short_help="🔥 Proves a specific EZKL model.",
-    help="""🔥 Proves a specific EZKL model using the provided model id and version id.
-    This will create a proving job and check the status, once it finishes if COMPLETED the proof is downloaded at the output path
-    The daily jobs allowed are rate limited by the backend.
-    """,
-)
 def prove(
-    model_id: Optional[int] = typer.Option(
-        None, "--model-id", "-m", help="The ID of the model to prove"
-    ),
-    version_id: Optional[int] = typer.Option(
-        None, "--version-id", "-v", help="The version ID of the model to prove"
-    ),
-    input_data: str = typer.Option(None, "--input-data", "-i"),
-    output_path: str = typer.Option(
-        "proof.ezkl", "--output-path", "-o", help="The output path for the proof"
-    ),
-    size: JobSize = typer.Option(JobSize.S, "--size", "-s"),
-    debug: Optional[bool] = DEBUG_OPTION,
+    model_id: Optional[int],
+    version_id: Optional[int],
+    input_data: str,
+    output_path: str,
+    debug: Optional[bool],
+    size: JobSize = JobSize.S,
 ) -> None:
     echo = Echo(debug=debug)
     if model_id is None or version_id is None or input_data is None:
@@ -257,20 +226,13 @@ def prove(
         sys.exit(1)
 
 
-@app.command()
 def verify(
-    proof_id: Optional[int] = typer.Option(
-        None, "--proof-id", "-p", help="The id of the proof to verify"
-    ),
+    proof_id: Optional[int],
+    model_id: Optional[int],
+    version_id: Optional[int],
+    proof: str = None,
+    debug: bool = False,
     size: JobSize = typer.Option(JobSize.S, "--size", "-s"),
-    model_id: Optional[int] = typer.Option(
-        None, "--model-id", "-m", help="The ID of the model to prove"
-    ),
-    version_id: Optional[int] = typer.Option(
-        None, "--version-id", "-v", help="The version ID of the model to prove"
-    ),
-    proof: str = typer.Option(None, "--input-data", "-i"),
-    debug: bool = DEBUG_OPTION,
 ):
     """
     Create a verification job.
