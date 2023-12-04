@@ -13,7 +13,7 @@ We need to install the following tools:
 
 ## Embed the model into a Starknet Contract
 
-First, we need to compile the Cairo contract to a Starknet Contract, more information about starknet contracts [here](https://book.cairo-lang.org/ch99-00-starknet-smart-contracts.html). For now we don't need to dive deep into how these contracts works, as currently we need to make it a contract due a temporary limitation in the prover, once this is solved we should be able to generate the proof without the need of a contract.
+First, we need to compile the Cairo contract to a Starknet Contract, more information about starknet contracts [here](https://book.cairo-lang.org/ch99-00-starknet-smart-contracts.html). For now we don't need to dive deep into how these contracts work, as currently we need to make it a contract due a temporary limitation in the prover, once this is solved we should be able to generate the proof without the need of a contract.
 
 Add the `starknet` as a dependency in the `Scarb.toml` file:
 
@@ -38,7 +38,7 @@ mod OrionRunner {
     // Kepp your imports as declared previously
     // use ...
 
-    // Declare the contract storage, in this case is a dummy storage as we wo't use it
+    // Declare the contract storage, in this case is a dummy storage as we won't use it
 	#[storage]
 	struct Storage { 
 		id: u8,
