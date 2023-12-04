@@ -51,7 +51,7 @@ Here's how you can do it:
 
 ## Retrieve Model Information
 
-You can retrieve detailed information about a model stored on the server using its unique model id. This includes its name, descrtiption, and other id:
+You can retrieve detailed information about a model stored on the server using its unique model id. This includes its name, description, and other id:
 
 ```console
 > giza models get --model-id 1  # When we create model for you we output it in the logs so be aware
