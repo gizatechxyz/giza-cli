@@ -22,11 +22,11 @@ Welcome to Giza CLI!
 
 This CLI provides the utilities to interact with Giza using the terminal.
 
-**Discalimer**: this is still in an experimental stage so the functionality is subject to change.
+**Disclaimer**: this is still in an experimental stage so the functionality is subject to change.
 
 - [Giza Command Line Interface](#giza-command-line-interface)
   - [🚀 Installation](#-installation)
-    - [Recomended installation with pipx](#recomended-installation-with-pipx)
+    - [Recommended installation with pipx](#recommended-installation-with-pipx)
     - [Install from PyPi](#install-from-pypi)
     - [Installing from source](#installing-from-source)
   - [📚 Documentation](#-documentation)
@@ -37,9 +37,9 @@ This CLI provides the utilities to interact with Giza using the terminal.
 
 ## 🚀 Installation
 
-### Recomended installation with pipx
+### Recommended installation with pipx
 
-[pipx](https://pypa.github.io/pipx/) allows to install the dependency in an isolated environment. With ths we can make sure that it does not conflict with any of our installed dependencies.
+[pipx](https://pypa.github.io/pipx/) allows to install the dependency in an isolated environment. With this we can make sure that it does not conflict with any of our installed dependencies.
 
 ```bash
 pipx install giza-cli
