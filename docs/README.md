@@ -10,7 +10,7 @@ This CLI provides the utilities to interact with Giza using the terminal.
 
 ## 🤔 What capabilities does the CLI offer?
 
-The CLI will serve as the main entrypoint for Giza Platfrom for developers. It aims to provide a tool to ease the managing of resources that exists in Giza Plarform.
+The CLI will serve as the main entrypoint for Giza Platform for developers. It aims to provide a tool to ease the managing of resources that exists in Giza Platform.
 
 For now it provides the following capabilities:
 
@@ -18,7 +18,7 @@ For now it provides the following capabilities:
 * Model transpilation with `transpile`
 * Create a proof from of a `casm.json` file with `prove`
 
-In the future each new resource added to Giza will have its corresponding capabaility in the CLI.
+In the future each new resource added to Giza will have its corresponding capability in the CLI.
 
 ## ✨ What's new?
 
