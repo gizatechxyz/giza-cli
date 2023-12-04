@@ -154,7 +154,7 @@ def train(epoch):
         (batch_idx*64) + ((epoch-1)*len(train_loader.dataset)))
 ```
 
-Time to start training the model! We have choosen 10 epochs, but you can increase/decrease the number as you wish.
+Time to start training the model! We have chosen 10 epochs, but you can increase/decrease the number as you wish.
 
 
 ```python
@@ -305,7 +305,7 @@ We should be ready to start using Giza's capabilities, we can easily check by ru
 }
 ```
 
-Now we are ready to transpile our model to Cairo! We want to help you jumpstart your journey into ZKML by helping you to create this amazing models, we asbtract you from the tedious process of instrospecting the model and getting the ifnromation needed to use it in Cairo, thats why we build the transpilation process, to ease this and improve the iteration time from creating a model to using it in Cairo! 
+Now we are ready to transpile our model to Cairo! We want to help you jumpstart your journey into ZKML by helping you to create this amazing models, we abstract you from the tedious process of introspecting the model and getting the information needed to use it in Cairo, that's why we build the transpilation process, to ease this and improve the iteration time from creating a model to using it in Cairo! 
 
 Lets check how we can do it:
 
@@ -323,7 +323,7 @@ To explain a bit what is happening here, we are calling the `giza transpile` com
 
 We can see that we make reference to a `model` this is because in Giza we organize the transpilations under models and versions:
 
-* A `model` is a collection of versions of the same model, we we are iterating over the model and improving it we can create different versions of the same model and keep track of the changes.
+* A `model` is a collection of versions of the same model, we are iterating over the model and improving it we can create different versions of the same model and keep track of the changes.
 * A `version` is a reference to the transpiled model, each new transpilation will be referenced as a new version of the model.
 
 We handle the creation for you, and if the model has the same name we will re-use the model and create a new version under it. If you want to know more about the model and version concept you can read the [docs](https://cli.gizatech.xyz/).
@@ -336,7 +336,7 @@ Also, if you ever have a question about the commands that you can run you can al
 
 Back to the transpilation!
 
-So we have recieve a file that we have saved in the `mnist_cairo` directory, lets check the contents of the directory:
+So we have received a file that we have saved in the `mnist_cairo` directory, lets check the contents of the directory:
 
 ```console
 ❯ tree mnist_cairo
