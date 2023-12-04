@@ -1,13 +1,13 @@
 # Installation
 
 * [🚀 Installation](Installation.md#-installation)
-  * [Recomended installation with pipx](Installation.md#recomended-installation-with-pipx)
+  * [Recommended installation with pipx](Installation.md#recommended-installation-with-pipx)
   * [Install from PyPi](Installation.md#install-from-pypi)
   * [Installing from source](Installation.md#installing-from-source)
 
-## Recomended installation with pipx
+## Recommended installation with pipx
 
-[pipx](https://pypa.github.io/pipx/) allows to install the dependency in an isolated environment. With ths we can make sure that it does not conflict with any of our installed dependencies.
+[pipx](https://pypa.github.io/pipx/) allows to install the dependency in an isolated environment. With this we can make sure that it does not conflict with any of our installed dependencies.
 
 ```bash
 pipx install giza-cli
