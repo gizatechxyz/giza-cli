@@ -232,7 +232,7 @@ def verify(
     version_id: Optional[int],
     proof: str = None,
     debug: bool = False,
-    size: JobSize = typer.Option(JobSize.S, "--size", "-s"),
+    size: JobSize = JobSize.S,
 ):
     """
     Create a verification job.

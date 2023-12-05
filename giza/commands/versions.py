@@ -1,23 +1,19 @@
 import sys
-import time
 import zipfile
 from io import BytesIO
-from pathlib import Path
 from typing import Optional
 
 import typer
 from pydantic import ValidationError
 from requests import HTTPError
 from rich import print_json
-from rich.progress import Progress, SpinnerColumn, TextColumn
 
 from giza import API_HOST
-from giza.client import ModelsClient, VersionsClient
+from giza.client import VersionsClient
 from giza.frameworks import cairo, ezkl
 from giza.options import DEBUG_OPTION
-from giza.schemas.models import ModelCreate
-from giza.schemas.versions import Version, VersionCreate, VersionList, VersionUpdate
-from giza.utils import Echo, echo, get_response_info
+from giza.schemas.versions import Version, VersionList
+from giza.utils import echo, get_response_info
 from giza.utils.enums import Framework, JobSize, VersionStatus
 
 app = typer.Typer()
