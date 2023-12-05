@@ -18,7 +18,7 @@
 ## <kbd>function</kbd> `get_response_info`
 
 ```python
-get_response_info(response: Response) → Dict[str, Any]
+get_response_info(response: Response | None) → Dict[str, Any]
 ```
 
 Utility to retrieve information of the client response. 
