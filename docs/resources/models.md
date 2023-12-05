@@ -22,7 +22,7 @@ Here's how you can do it:
 }
 ```
 
-Typically, the `transpile` command is used to handle model creation. During this process, the filename is checked for an existing model. If none is found, a new model is automatically created. However, manual creation of a model is also supported. For more information, refer to the [transpile documentation](transpile.md).
+Typically, the `transpile` command is used to handle model creation. During this process, the filename is checked for an existing model. If none is found, a new model is automatically created. However, manual creation of a model is also supported. For more information, refer to the transpile documentation ([cairo](../frameworks/cairo/transpile.md) and [ezkl](../frameworks/ezkl/transpile.md)).
 
 ## List Models
 
@@ -103,6 +103,8 @@ Transpiling a model in Giza can be done in three ways, each designed to provide 
 
 3. **Using a previous model:** If you have a previously created model, you can transpile it by indicating the model-id in the `giza transpile --model-id ...` or `giza versions transpile --model-id` command. This method is useful when you want to create a new version of an existing model.
 
+*Note: remember to use the `--framework` flag to indicate which one to use. It defaultss to Cairo*
+
 Remember, the choice of method depends on your specific needs and workflow. Giza provides these options to ensure that you can work with your models in the most efficient way possible.
 
-For more information, refer to the [transpile documentation](transpile.md).
+For more information, refer to the transpile documentation ([cairo](../frameworks/cairo/transpile.md) and [ezkl](../frameworks/ezkl/transpile.md)).
