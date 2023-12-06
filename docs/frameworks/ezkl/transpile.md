@@ -26,16 +26,16 @@ There are three main methods for transpiling a model:
 
 ### **Method 1: Using the `giza transpile --framework EZKL` command**
 
-- This is the simplest method and is recommended for most users. 
-- When you run this command, Giza handles everything for you. 
-- It first checks if a model with the specified name already exists. If not, it creates a new model and then transpiles it. 
+- This is the simplest method and is recommended for most users.
+- When you run this command, Giza handles everything for you.
+- It first checks if a model with the specified name already exists. If not, it creates a new model and then transpiles it.
 - The output of this process is managed by Giza.
 - This is the strategy that we followed in the example before.
 
 ### **Method 2: Manually creating a model and then transpiling it**
 
-- This method gives you more control over the process. 
-- First, you create a model manually using the `giza models create` command. 
+- This method gives you more control over the process.
+- First, you create a model manually using the `giza models create` command.
 - After the model is created, you can transpile it using the `giza transpile --framework EZKL --model-id ...` or `giza versions transpile --framework EZKL --model-id` command.
 - This method is useful when you want to specify particular options or parameters during the model creation and transpilation process.
 

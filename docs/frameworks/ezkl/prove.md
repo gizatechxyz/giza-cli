@@ -4,7 +4,7 @@ Time to create a Proof of our EZKL version!
 
 Once we have the input data that we want to use we can use the `prove` command to create our proof!
 
-Basically this command will create a proving job at Giza and once the job completes we will download the created proof.
+This command will create a proving job at Giza and once the job is completed we will download the created proof.
 
 ```console
 > giza prove --framework EZKL --model-id 1 --version-id 1 --size M input.json
@@ -17,6 +17,6 @@ Basically this command will create a proving job at Giza and once the job comple
 [giza][2023-12-04 19:43:37.046] Proof saved at: zk.proof
 ```
 
-As we can see the job takes some time, because of this we are actively waiting for the job to be completed, once it's done all information and the prove is retrieved.
+As we can see the job takes some time, and because of this we are actively waiting for the job to be completed, once it's done all information and the proof are retrieved.
 
 Now we can see that we have a proof successfully created! Now if we want we could verify it! Let's check the [verify](../frameworks/ezkl/verify.md) documentation to see how to do it!

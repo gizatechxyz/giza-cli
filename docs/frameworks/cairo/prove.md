@@ -4,7 +4,7 @@ Time to create a Proof of our Cairo program!
 
 Once we have our `json` we can use the `prove` command to create our proof!
 
-Basically this command will create a proving job at Giza and once the job completes we will download the created proof.
+Basically, this command will create a proving job at Giza and once the job is completed we will download the created proof.
 
 ```console
 > giza prove orion_runner.casm.json --size M
@@ -15,4 +15,4 @@ Basically this command will create a proving job at Giza and once the job comple
 [giza][2023-08-04 11:37:43.007] Proof saved at: zk.proof
 ```
 
-As we can see the job takes some time, because of this we are actively waiting for the job to be completed, once it's done all information and the prove is retrieved.
+As we can see the job takes some time, and because of this we are actively waiting for the job to be completed, once it's done all information and the proof are retrieved.

@@ -12,4 +12,4 @@ As we are using a managed `version` we need to specify `--model-id` and `--versi
 [giza][2023-12-04 19:45:18.683] Verification job is successful ✅
 ```
 
-If the job is successful that means that the proof is valid! Otherwise we will get an error message.
+If the job is successful that means that the proof is valid! Otherwise, we will get an error message.
