@@ -14,7 +14,7 @@ from giza.frameworks import cairo, ezkl
 from giza.options import DEBUG_OPTION
 from giza.schemas.versions import Version, VersionList
 from giza.utils import echo, get_response_info
-from giza.utils.enums import Framework, JobSize, VersionStatus
+from giza.utils.enums import Framework, VersionStatus
 
 app = typer.Typer()
 

@@ -4,7 +4,6 @@ import time
 from pathlib import Path
 from typing import Optional
 
-import typer
 from pydantic import ValidationError
 from requests import HTTPError
 from rich import print_json
