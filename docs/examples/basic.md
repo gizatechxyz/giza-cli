@@ -16,7 +16,7 @@ Enter your email 📧: gonzalo@gizatech.xyz
 [giza][2023-06-23 12:29:41.417] User created ✅. Check for a verification email 📧
 ```
 
-Then we need to verify the email. We just need to click on the buttom and we'll be redireted to the verification endpoint.
+Then we need to verify the email. We just need to click on the button and we'll be redirected to the verification endpoint.
 
 ## Login
 
