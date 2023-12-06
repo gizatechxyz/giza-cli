@@ -5,7 +5,7 @@
 [![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/gizatechxyz/orion/issues?q=is%3Aissue+is%3Aopen)
 [![Join the community](https://dcbadge.vercel.app/api/server/FR3Cd88x6r?style=flat-square)](https://discord.gg/FR3Cd88x6r)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ```text
@@ -22,11 +22,11 @@ Welcome to Giza CLI!
 
 This CLI provides the utilities to interact with Giza using the terminal.
 
-**Discalimer**: this is still in an experimental stage so the functionality is subject to change.
+**Disclaimer**: this is still in an experimental stage so the functionality is subject to change.
 
 - [Giza Command Line Interface](#giza-command-line-interface)
   - [🚀 Installation](#-installation)
-    - [Recomended installation with pipx](#recomended-installation-with-pipx)
+    - [Recommended installation with pipx](#recommended-installation-with-pipx)
     - [Install from PyPi](#install-from-pypi)
     - [Installing from source](#installing-from-source)
   - [📚 Documentation](#-documentation)
@@ -37,9 +37,9 @@ This CLI provides the utilities to interact with Giza using the terminal.
 
 ## 🚀 Installation
 
-### Recomended installation with pipx
+### Recommended installation with pipx
 
-[pipx](https://pypa.github.io/pipx/) allows to install the dependency in an isolated environment. With ths we can make sure that it does not conflict with any of our installed dependencies.
+[pipx](https://pypa.github.io/pipx/) allows to install the dependency in an isolated environment. With this we can make sure that it does not conflict with any of our installed dependencies.
 
 ```bash
 pipx install giza-cli
@@ -98,6 +98,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://es.linkedin.com/in/gonzalo-mellizo-soto-diaz-590260108"><img src="https://avatars.githubusercontent.com/u/18899187?v=4?s=100" width="100px;" alt="Gonzalo Mellizo"/><br /><sub><b>Gonzalo Mellizo</b></sub></a><br /><a href="https://github.com/gizatechxyz/giza-cli/commits?author=Gonmeso" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/omahs"><img src="https://avatars.githubusercontent.com/u/73983677?v=4?s=100" width="100px;" alt="omahs"/><br /><sub><b>omahs</b></sub></a><br /><a href="https://github.com/gizatechxyz/giza-cli/commits?author=omahs" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
