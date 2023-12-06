@@ -11,7 +11,7 @@ echo = Echo()
 REQUEST_ID_HEADER = "x-request-id"
 
 
-def get_response_info(response: Response) -> Dict[str, Any]:
+def get_response_info(response: Response | None) -> Dict[str, Any]:
     """
     Utility to retrieve information of the client response.
 
@@ -23,6 +23,13 @@ def get_response_info(response: Response) -> Dict[str, Any]:
     Returns:
         dict: information about the returned response
     """
+    if response is None:
+        return {
+            "content": "",
+            "detail": "",
+            "status_code": 999,
+            "request_id": "",
+        }
     try:
         request_id = response.headers.get(REQUEST_ID_HEADER, None)
         content = response.json()

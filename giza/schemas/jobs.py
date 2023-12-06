@@ -3,7 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from giza.utils.enums import JobSize, JobStatus
+from giza.utils.enums import Framework, JobKind, JobSize, JobStatus
 
 
 class Job(BaseModel):
@@ -18,3 +18,8 @@ class Job(BaseModel):
 
 class JobCreate(BaseModel):
     size: JobSize
+    framework: Optional[Framework] = None
+    kind: Optional[JobKind] = None
+    model_id: Optional[int] = None
+    version_id: Optional[int] = None
+    proof_id: Optional[int] = None

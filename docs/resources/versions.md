@@ -61,16 +61,16 @@ Here's how you can do it:
 
 ## Transpile a Model Version
 
-**Note:** This has been explained previously in the [transpile documentation](transpile.md).
+**Note:** This has been explained previously in the transpile documentation ([cairo](../frameworks/cairo/transpile.md) and [ezkl](../frameworks/ezkl/transpile.md)).
 
-Transpiling a model version in Giza is a crucial step in the model deployment process. Transpilation is the process of converting your machine learning model into a format that can be executed on Giza. This process involves converting the model into a series of Cairo instructions.
+Transpiling a model version in Giza is a crucial step in the model deployment process. Transpilation is the process of converting your machine learning model into a format that can be executed on Giza. This process involves converting the model into a series of Cairo instructions or performing the setup using `ezkl`.
 
 When you transpile a model, you're essentially creating a new version of that model. Each version represents a specific iteration of your machine learning model, allowing you to track and manage the evolution of your models effectively.
 
 Here's how you can transpile a model version:
 
 ```console
-> giza versions transpile awesome_model.onnx --output-path my_awesome_model
+> giza versions transpile --framework CAIRO awesome_model.onnx --output-path my_awesome_model
 [giza][2023-09-13 12:56:43.725] No model id provided, checking if model exists ✅ 
 [giza][2023-09-13 12:56:43.726] Model name is: awesome_model
 [giza][2023-09-13 12:56:43.978] Model Created with id -> 1! ✅
@@ -84,6 +84,8 @@ Once the transpilation process is complete, a new version of the model is create
 ## Download a Successfully Transpiled Version
 
 Once a model has been successfully transpiled, it's not necessary to go through the transpilation process again. The transpiled version is stored and can be downloaded anytime you need it. This is done using the download command in the CLI. This command specifically requires the model_id and version_id to accurately identify and download the correct transpiled version. This feature saves time and computational resources, making the management of your models more efficient.
+
+*Note: currently is only available for the Cairo framework*
 
 ```console
 > giza versions download --model-id 1 --version-id 1 --output-path path
@@ -109,4 +111,4 @@ path/
     └── weights.cairo
 ```
 
-For more information on how to transpile a model, refer to the [transpile documentation](transpile.md).
+For more information on how to transpile a model, refer to the transpile documentation ([cairo](../frameworks/cairo/transpile.md) and [ezkl](../frameworks/ezkl/transpile.md)).

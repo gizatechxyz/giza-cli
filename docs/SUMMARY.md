@@ -4,21 +4,31 @@
 
 * [Giza CLI](README.md)
 * [Installation](welcome/Installation.md)
-
-## 📖 Examples
-
-* [Basic CLI Example](examples/basic.md)
-* [Full Transpilation](examples/full_transpilation.md)
-* [Create a Proof](examples/create_proof.md)
-* [Reset Your Password](examples/reset_password.md)
+* [Frameworks](welcome/frameworks.md)
 
 ## 📦 Resources
 
 * [Users](resources/users.md)
-* [Transpile](resources/transpile.md)
-* [Prove](resources/prove.md)
 * [Models](resources/models.md)
 * [Versions](resources/versions.md)
+
+## 📚 Frameworks
+
+* [Cairo](frameworks/cairo.md)
+  * [Transpile](frameworks/cairo/transpile.md)
+  * [Prove](frameworks/cairo/prove.md)
+
+* [EZKL](frameworks/ezkl.md)
+  * [Transpile](frameworks/ezkl/transpile.md)
+  * [Prove](frameworks/ezkl/prove.md)
+  * [Verify](frameworks/ezkl/verify.md)
+
+## 📖 Examples
+
+* [Basic Cairo CLI Example](examples/basic.md)
+* [Full Cairo Transpilation](examples/full_transpilation.md)
+* [Create a Cairo Proof](examples/create_proof.md)
+* [Reset Your Password](examples/reset_password.md)
 
 ## 🧱 Reference
 

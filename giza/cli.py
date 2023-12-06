@@ -7,6 +7,7 @@ from giza.commands.models import app as models_app
 from giza.commands.prove import prove
 from giza.commands.reset_password import request_reset_password_token, reset_password
 from giza.commands.users import app as users_app
+from giza.commands.verify import verify
 from giza.commands.version import version_entrypoint
 from giza.commands.versions import app as versions_app
 from giza.commands.versions import transpile
@@ -42,11 +43,15 @@ app.add_typer(
     help="""💻 Utilities for managing versions""",
 )
 
-
 app.command(
     name="transpile",
     short_help="🔧 Sends the specified model for transpilation. Shortcut for `giza versions transpile`",
     help="""🔧 Sends the specified model for transpilation. Shortcut for `giza versions transpile`
+
+    This command has different behavior depending on the framework:
+
+        * For Cairo, it will transpile the specified file and upload it to Giza.
+        * For EZKL, it will create a version and perform the trusted setup, creating al the necessary files for it.
 
     This command performs several operations:
 
@@ -63,10 +68,13 @@ app.command(
 
 app.command(
     name="prove",
-    short_help="🔒 Command to prove as spceific cairo program, previously converted to CASM",
-    help="""🔒 Command to prove as spceific cairo program, previously converted to CASM`.
+    short_help="🔒 Command to generate a proof",
+    help="""🔒 Command to generate a proof.
 
-    We take the specified CASM object and create a job for creating a proof using Giza 🔶.
+    Depending on the framework, this command will do different things:
+
+        * For Cairo, it will generate a proof using a `CASM.JSON` as the representation to create the proof for.
+        * For EZKL, it will generate a proof using the provided input, all the trusted setup will be retrieve during the job.
 
     This command will create a job with the specified size, but the amount of jobs will be rate limited by the backend.
 
@@ -84,6 +92,33 @@ app.command(
 
     """,
 )(prove)
+
+app.command(
+    name="verify",
+    short_help="✔️ Command to verify a proof",
+    help="""✔️ Command to verify a proof.
+
+    Depending on the framework, this command will do different things:
+
+        * For Cairo, it will verify the proof using the without the need of a trusted setup.
+        * For EZKL, it will verify the proof using the trusted setup, retrieving all the neccessary information from the API.
+
+    This command will create a job with the specified size, but the amount of jobs will be rate limited by the backend.
+
+    This command will do a couple of things behind the scenes:
+
+        * Create a Verifying Job
+
+        * Check the status of the job periodically
+
+        * If the jobs status is `COMPLETED` then the proof has been created at Giza
+
+        * Perform a request to the API to retrieve the proof metadata
+
+        * If the job its successfull the verification will be OK, otherwise it will fail
+
+    """,
+)(verify)
 
 app.command(
     name="reset-password",

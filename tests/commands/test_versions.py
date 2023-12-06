@@ -145,13 +145,13 @@ def test_versions_transpile_successful(tmpdir):
     )
 
     with patch(
-        "giza.commands.versions.VersionsClient",
+        "giza.frameworks.cairo.VersionsClient",
         return_value=ClientStub(version, return_content()),
     ), patch(
-        "giza.commands.versions.ModelsClient.list",
+        "giza.frameworks.cairo.ModelsClient.list",
         return_value=models,
     ), patch(
-        "giza.commands.versions.Path"
+        "giza.frameworks.cairo.Path"
     ), patch.object(
         VersionsClient, "get", return_value=version
     ), patch(
@@ -159,7 +159,7 @@ def test_versions_transpile_successful(tmpdir):
     ) as mock_open, patch.object(
         VersionsClient, "_load_credentials_file"
     ), patch(
-        "giza.commands.versions.ModelsClient._load_credentials_file"
+        "giza.frameworks.cairo.ModelsClient._load_credentials_file"
     ):
         result = invoke_cli_runner(
             ["versions", "transpile", "model", "--output-path", tmpdir, "--debug"]
@@ -175,9 +175,9 @@ def test_versions_transpile_successful(tmpdir):
 # Test version transpilation with HTTP error
 def test_versions_transpile_http_error(tmpdir):
     with patch(
-        "giza.commands.versions.ModelsClient.get_by_name", side_effect=HTTPError
-    ), patch("giza.commands.versions.get_response_info", return_value={}), patch(
-        "giza.commands.versions.Path"
+        "giza.frameworks.cairo.ModelsClient.get_by_name", side_effect=HTTPError
+    ), patch("giza.frameworks.cairo.get_response_info", return_value={}), patch(
+        "giza.frameworks.cairo.Path"
     ), patch.object(
         VersionsClient, "_load_credentials_file"
     ):
@@ -217,13 +217,13 @@ def test_versions_transpile_bad_zip(tmpdir):
     )
 
     with patch(
-        "giza.commands.versions.VersionsClient",
+        "giza.frameworks.cairo.VersionsClient",
         return_value=ClientStub(version, return_content()),
     ), patch(
-        "giza.commands.versions.ModelsClient.list",
+        "giza.frameworks.cairo.ModelsClient.list",
         return_value=models,
     ), patch(
-        "giza.commands.versions.Path"
+        "giza.frameworks.cairo.Path"
     ), patch.object(
         VersionsClient, "get", return_value=version
     ), patch(
@@ -231,7 +231,7 @@ def test_versions_transpile_bad_zip(tmpdir):
     ) as mock_open, patch.object(
         VersionsClient, "_load_credentials_file"
     ), patch(
-        "giza.commands.versions.ModelsClient._load_credentials_file"
+        "giza.frameworks.cairo.ModelsClient._load_credentials_file"
     ):
         result = invoke_cli_runner(
             ["versions", "transpile", "model", "--output-path", tmpdir],
