@@ -134,9 +134,7 @@ def transpile(
     """
     echo = Echo(debug=debug)
     if model_path is None:
-        echo.error(
-            "No model name provided, please provide a model path ⛔️"
-        )
+        echo.error("No model name provided, please provide a model path ⛔️")
         sys.exit(1)
     if model_id is None:
         model_name = model_path.split("/")[-1].split(".")[0]

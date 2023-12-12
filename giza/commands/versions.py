@@ -1,5 +1,4 @@
 import sys
-import os
 import zipfile
 from io import BytesIO
 from typing import Optional
@@ -69,7 +68,7 @@ def transpile(
         None, help="The ID of the model where a new version will be created"
     ),
     desc: str = typer.Option(None, help="Description of the version"),
-    model_desc: int = typer.Option(
+    model_desc: str = typer.Option(
         None, help="Description of the Model to create if model_id is not provided"
     ),
     framework: Framework = typer.Option(Framework.CAIRO, "--framework", "-f"),
@@ -320,7 +319,7 @@ def download_original(
         echo("ONNX model is ready, downloading! ✅")
         onnx_model = client.download_original(model_id, version.version)
 
-        with open(output_path, 'wb') as f:
+        with open(output_path, "wb") as f:
             f.write(onnx_model)
 
         echo(f"ONNX model saved at: {output_path}")

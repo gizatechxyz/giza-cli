@@ -30,7 +30,7 @@ def setup(
     model_path: str,
     model_id: int,
     desc: str,
-    model_desc: int,
+    model_desc: str,
     input_data: str,
     debug: Optional[bool],
     size: JobSize = JobSize.S,
@@ -229,8 +229,8 @@ def verify(
     proof_id: Optional[int],
     model_id: Optional[int],
     version_id: Optional[int],
-    proof: str = None,
-    debug: bool = False,
+    proof: Optional[str] = None,
+    debug: Optional[bool] = False,
     size: JobSize = JobSize.S,
 ):
     """

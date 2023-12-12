@@ -62,7 +62,7 @@ class Echo:
             str: error formatted message
         """
         return self.format_message(rf"[red]{message}[/red]", "ERROR", "red")
-    
+
     def format_warning(self, message: str) -> str:
         """
         Specific format for warning purposes
@@ -74,8 +74,9 @@ class Echo:
             str: error formatted message
         """
         yellow = typer.colors.YELLOW
-        return self.format_message(rf"[{yellow}]{message}[/{yellow}]", "WARNING", f"{yellow}")
-
+        return self.format_message(
+            rf"[{yellow}]{message}[/{yellow}]", "WARNING", f"{yellow}"
+        )
 
     def echo(self, message: str, formatted: str) -> None:
         """
