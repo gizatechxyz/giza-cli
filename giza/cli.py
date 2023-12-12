@@ -8,7 +8,7 @@ from giza.commands.prove import prove
 from giza.commands.reset_password import request_reset_password_token, reset_password
 from giza.commands.users import app as users_app
 from giza.commands.verify import verify
-from giza.commands.version import version_entrypoint
+from giza.commands.version import check_version
 from giza.commands.versions import app as versions_app
 from giza.commands.versions import transpile
 
@@ -33,8 +33,10 @@ app.callback(
     name="giza",
     help="""
     🔶 Giza-CLI to manage the resources at Giza 🔶.
-""",
-)(version_entrypoint)
+    """,
+    invoke_without_command=True,
+)(check_version)
+
 
 app.add_typer(
     versions_app,

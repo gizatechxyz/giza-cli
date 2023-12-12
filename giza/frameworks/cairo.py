@@ -133,6 +133,9 @@ def transpile(
         HTTPError: If there is an HTTP error while communicating with the server.
     """
     echo = Echo(debug=debug)
+    if model_path is None:
+        echo.error("No model name provided, please provide a model path ⛔️")
+        sys.exit(1)
     if model_id is None:
         model_name = model_path.split("/")[-1].split(".")[0]
         echo("No model id provided, checking if model exists ✅ ")

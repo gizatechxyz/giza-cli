@@ -63,6 +63,21 @@ class Echo:
         """
         return self.format_message(rf"[red]{message}[/red]", "ERROR", "red")
 
+    def format_warning(self, message: str) -> str:
+        """
+        Specific format for warning purposes
+
+        Args:
+            message (str): message to format
+
+        Returns:
+            str: error formatted message
+        """
+        yellow = typer.colors.YELLOW
+        return self.format_message(
+            rf"[{yellow}]{message}[/{yellow}]", "WARNING", f"{yellow}"
+        )
+
     def echo(self, message: str, formatted: str) -> None:
         """
         Main function to print information of a message, original message is provided as well as the formatted one.
@@ -109,6 +124,16 @@ class Echo:
             message (str): message to format and echo
         """
         formatted_message = self.format_message(message)
+        self.echo(message, formatted_message)
+
+    def warning(self, message: str) -> None:
+        """
+        Format and echo a warning message
+
+        Args:
+            message (str): message to format and echo
+        """
+        formatted_message = self.format_warning(message)
         self.echo(message, formatted_message)
 
     def __call__(self, message: str) -> None:

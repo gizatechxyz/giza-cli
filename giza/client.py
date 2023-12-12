@@ -932,6 +932,40 @@ class VersionsClient(ApiClient):
 
         return download_response.content
 
+    @auth
+    def download_original(self, model_id: int, version_id: int) -> bytes:
+        """
+        Download the original version.
+
+        Args:
+            model_id: Model identifier
+            version_id: Version identifier
+
+        Returns:
+            The version binary file
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            f"{self._get_version_url(model_id)}/{version_id}:download_original",
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        url = response.json()["download_url"]
+
+        download_response = self.session.get(
+            url, headers={"Content-Type": "application/octet-stream"}
+        )
+
+        self._echo_debug(str(download_response))
+        download_response.raise_for_status()
+
+        return download_response.content
+
     def _upload(self, upload_url: str, f: BufferedReader) -> None:
         """
         Upload the file to the specified url.

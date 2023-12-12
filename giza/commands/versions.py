@@ -68,7 +68,7 @@ def transpile(
         None, help="The ID of the model where a new version will be created"
     ),
     desc: str = typer.Option(None, help="Description of the version"),
-    model_desc: int = typer.Option(
+    model_desc: str = typer.Option(
         None, help="Description of the Model to create if model_id is not provided"
     ),
     framework: Framework = typer.Option(Framework.CAIRO, "--framework", "-f"),
@@ -219,7 +219,7 @@ def list(
 
 
 @app.command(
-    short_help="⚡️ Download the transpiled cairo model if available",
+    short_help="⚡️ Download the transpiled cairo model if available.",
     help="""⚡️ Download the transpiled cairo model if available.
 
     Download an unzip a transpiled model.
@@ -264,6 +264,65 @@ def download(
 
         zip_file.extractall(output_path)
         echo(f"Transpilation saved at: {output_path}")
+
+    except ValueError as e:
+        echo.error(e.args[0])
+        if debug:
+            raise e
+        sys.exit(1)
+    except HTTPError as e:
+        info = get_response_info(e.response)
+        echo.error("⛔️Error at download")
+        echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
+        echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
+        echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
+        echo.error(
+            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
+        ) if info.get("request_id") else None
+        if debug:
+            raise e
+        sys.exit(1)
+
+
+@app.command(
+    short_help="⚡️ Download the original ONNX model.",
+    help="""⚡️ Download the original ONNX model.
+
+    Verification and an active token is needed.
+    """,
+)
+def download_original(
+    model_id: int = typer.Option(None, help="The ID of the model"),
+    version_id: int = typer.Option(None, help="The ID of the version"),
+    output_path: str = typer.Option(
+        "model.onnx", "--output-path", "-o", help="Path to output the ONNX model"
+    ),
+    debug: Optional[bool] = DEBUG_OPTION,
+) -> None:
+    """
+    Retrieve information about the current user and print it as json to stdout.
+
+    Args:
+        debug (Optional[bool], optional): Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False)
+    """
+
+    try:
+        if any([model_id is None, version_id is None]):
+            raise ValueError("⛔️Model ID and version ID are required⛔️")
+
+        client = VersionsClient(API_HOST, debug=debug)
+        version = client.get(model_id, version_id)
+
+        if version.status != VersionStatus.COMPLETED:
+            raise ValueError(f"Model version status is not completed {version.status}")
+
+        echo("ONNX model is ready, downloading! ✅")
+        onnx_model = client.download_original(model_id, version.version)
+
+        with open(output_path, "wb") as f:
+            f.write(onnx_model)
+
+        echo(f"ONNX model saved at: {output_path}")
 
     except ValueError as e:
         echo.error(e.args[0])
