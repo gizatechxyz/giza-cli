@@ -296,7 +296,7 @@ def download_original(
     model_id: int = typer.Option(None, help="The ID of the model"),
     version_id: int = typer.Option(None, help="The ID of the version"),
     output_path: str = typer.Option(
-        "onnx_model", "--output-path", "-o", help="Path to output the ONNX model"
+        "model.onnx", "--output-path", "-o", help="Path to output the ONNX model"
     ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
@@ -318,9 +318,8 @@ def download_original(
             raise ValueError(f"Model version status is not completed {version.status}")
 
         echo("ONNX model is ready, downloading! ✅")
-        onnx_model = client.download(model_id, version.version)
+        onnx_model = client.download_original(model_id, version.version)
 
-        os.makedirs(os.path.dirname(output_path), exist_ok=True)
         with open(output_path, 'wb') as f:
             f.write(onnx_model)
 
