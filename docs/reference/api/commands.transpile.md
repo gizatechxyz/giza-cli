@@ -43,7 +43,7 @@ This command will do a couple of things behind the scenes:  * Create a Model ent
 
 **Raises:**
  
- - <b>`BadZipFile`</b>:  if the recieved file is not a zip, could be due to a transpilation error at the API. 
+ - <b>`BadZipFile`</b>:  if the received file is not a zip, could be due to a transpilation error at the API. 
  - <b>`HTTPError`</b>:  request error to the API, 4XX or 5XX 
 
 
