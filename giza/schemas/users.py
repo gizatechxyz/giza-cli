@@ -41,3 +41,8 @@ class UserResponse(UserBase):
     username: str
     email: EmailStr
     is_active: bool
+
+
+class UserCrateApiKeys(BaseModel):
+    id: SecretStr
+    user_id: str

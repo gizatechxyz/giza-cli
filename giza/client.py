@@ -36,6 +36,7 @@ class ApiClient:
         self,
         host: str,
         token: Optional[str] = None,
+        api_key: Optional[str] = None,
         api_version: str = DEFAULT_API_VERSION,
         verify: bool = True,
         debug: Optional[bool] = False,
@@ -50,6 +51,9 @@ class ApiClient:
         if token is not None:
             headers = {"Authorization": "Bearer {token}", "Content-Type": "text/json"}
             self.token = token
+        elif api_key is not None:
+            headers = {"X-API-Key": api_key, "Content-Type": "text/json"}
+            self.api_key = api_key
         else:
             headers = {}
 
@@ -68,7 +72,11 @@ class ApiClient:
             Dict[str, str]: A dictionary containing the authorization header.
         """
 
-        return {"Authorization": f"Bearer {self.token}"}
+        if self.token is not None:
+            header = {"Authorization": f"Bearer {self.token}"}
+        elif self.api_key is not None:
+            header = {"X-API-Key": self.api_key}
+        return header
 
     def _echo_debug(self, message: str, json: bool = False) -> None:
         """
@@ -151,6 +159,22 @@ class ApiClient:
                 json.dump(kwargs, f, indent=4)
             echo(f"Credentials written to: {self.giza_dir / '.credentials.json'}")
 
+    def _write_api_key(self, **kwargs: Any) -> None:
+        """
+        Write API key to the giza api_key file for later retrieval
+
+        Args:
+            kwargs(dict): extra keyword arguments to save with the credentials, usually `user`.
+        """
+        if self.token is not None:
+            if not self.giza_dir.exists():
+                echo("Creating default giza dir")
+                self.giza_dir.mkdir()
+            kwargs.update({"api_key": self.api_key})
+            with open(self.giza_dir / ".api_key.json", "w") as f:
+                json.dump(kwargs, f, indent=4)
+            echo(f"API Key written to: {self.giza_dir / '.api_key.json'}")
+
     def _is_expired(self, token: str) -> bool:
         """
         Check if the token is expired.
@@ -172,6 +196,29 @@ class ApiClient:
         except ExpiredSignatureError:
             self._echo_debug("Token is expired")
             return True
+
+    def retrieve_api_key(self) -> None:
+        """
+        Retrieve the API key from the `~/.giza/.api_key.json` file.
+
+        Raises:
+            Exception: if the file does not exist
+
+        Returns:
+            str: the API key
+        """
+
+        if not (self.giza_dir / ".api_key.json").exists():
+            echo.debug("API Key not found. Create one using `giza create-api-key`")
+        else:
+            if self.api_key is None:
+                with open(self.giza_dir / ".api_key.json") as f:
+                    api_key = json.load(f)
+                    api_key = api_key.get("api_key")
+                    self._echo_debug(
+                        f"API Key loaded from: {self.giza_dir / '.api_key.json'}",
+                    )
+                    self.api_key = api_key
 
     def retrieve_token(
         self,
@@ -264,6 +311,25 @@ class UsersClient(ApiClient):
         return users.UserResponse(**body)
 
     @auth
+    def create_api_key(self):
+        """
+        Call the API to create a new API key
+
+        Returns:
+            users.UserResponse: the created user information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+        response = self.session.post(
+            f"{self.url}/{self.USERS_ENDPOINT}/create-api-key",
+            headers=headers,
+        )
+        response.raise_for_status()
+        body = response.json()
+        self._echo_debug(body, json=True)
+        return users.UserResponse(**body)
+
+    @auth
     def me(self) -> users.UserResponse:
         """
         Retrieve information about the current user.
@@ -273,9 +339,12 @@ class UsersClient(ApiClient):
             users.UserResponse: User information from the server
         """
         headers = copy.deepcopy(self.default_headers)
-        headers.update(
-            {"Authorization": f"Bearer {self.token}", "Content-Type": "text/json"},
-        )
+        if self.token is not None:
+            headers.update(
+                {"Authorization": f"Bearer {self.token}", "Content-Type": "text/json"},
+            )
+        elif self.api_key is not None:
+            headers.update({"X-API-Key": self.api_key, "Content-Type": "text/json"})
         response = self.session.get(
             f"{self.url}/{self.USERS_ENDPOINT}/me",
             headers=headers,

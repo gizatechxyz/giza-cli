@@ -37,11 +37,15 @@ def auth(func: Callable):
 
         self_.retrieve_token()
 
+        self_.retrieve_api_key()
+
         if self_.token is not None:
             expired = self_._is_expired(self_.token)
 
-        if self_.token is None or expired:
-            raise Exception("Token expired or not set. Log in again.")
+        if self_.token is None or expired and self_.api_key is None:
+            raise Exception(
+                "Token expired or not set. API Key not available. Log in again."
+            )
         return func(*args, **kwargs)
 
     return wrapper
