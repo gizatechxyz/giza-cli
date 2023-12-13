@@ -14,7 +14,7 @@
 <a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/echo.py#L11"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Echo`
-Helper class to use when printin output of the CLI. 
+Helper class to use when printing output of the CLI. 
 
 Provides utilities to print different levels of the messages and provides formatting capabilities to each of the levels. 
 
@@ -80,7 +80,7 @@ Main function to print information of a message, original message is provided as
 error(message: str) → None
 ```
 
-Format and echo a error message 
+Format and echo an error message 
 
 
 
