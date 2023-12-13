@@ -121,7 +121,7 @@ class Net(nn.Module):
         return F.log_softmax(x, dim=1)
 ```
 
-Now lets instantiate the model and define the optimizer:
+Now let's instantiate the model and define the optimizer:
 
 
 ```python
@@ -276,13 +276,13 @@ Enter your email 📧: # YOUR EMAIL GOES HERE
 [giza][2023-10-12 12:04:13.875] User created ✅. Check for a verification email 📧
 ```
 
-You will be prompted to add tour username, password and email. Finally you will need to verify your email address by clicking on the link that you will receive in your inbox.
+You will be prompted to add your username, password and email. Finally you will need to verify your email address by clicking on the link that you will receive in your inbox.
 
 ![email](img/email.png)
 
 Once we click the link we will be redirected to a verification endpoint and we will see a message saying that our email has been verified. Now we are ready to start using Giza CLI!
 
-Lets start by login into the platform:
+Let's start by login into the platform:
 
 ```console
 ❯ giza users login 
@@ -307,7 +307,7 @@ We should be ready to start using Giza's capabilities, we can easily check by ru
 
 Now we are ready to transpile our model to Cairo! We want to help you jumpstart your journey into ZKML by helping you to create this amazing models, we abstract you from the tedious process of introspecting the model and getting the information needed to use it in Cairo, that's why we build the transpilation process, to ease this and improve the iteration time from creating a model to using it in Cairo! 
 
-Lets check how we can do it:
+Let's check how we can do it:
 
 ```console
 ❯ giza transpile mnist_pytorch.onnx --output-path mnist_cairo
