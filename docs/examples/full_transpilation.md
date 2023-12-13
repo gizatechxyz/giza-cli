@@ -87,7 +87,7 @@ test_loader = torch.utils.data.DataLoader(
                              ])), shuffle=True)
 ```
 
-Now lets see an example of the data that we have just downloaded:
+Now let's see an example of the data that we have just downloaded:
 
 
 ```python
@@ -103,7 +103,7 @@ print(f"example_targets.shape: {example_targets.shape}")
 
 ## How To Train The Model
 
-Now its time to train the model, for this we are going to define a basic neural network with 2 hidden layers and 1 output layer.
+Now it's time to train the model, for this we are going to define a basic neural network with 2 hidden layers and 1 output layer.
 
 We will follow the usual way of training a model in Pytorch by creating a `torch.nn.Module` class and defining the `forward` method. The `forward` method is the method that will be called when we pass an input to the model.
 
@@ -121,7 +121,7 @@ class Net(nn.Module):
         return F.log_softmax(x, dim=1)
 ```
 
-Now lets instantiate the model and define the optimizer:
+Now let's instantiate the model and define the optimizer:
 
 
 ```python
@@ -224,7 +224,7 @@ for i in range(10):
     Train Epoch: 9 [50000/60000 (83%)]	Loss: 0.000008
 
 
-Lets perform a simple prediction to see how the model performs:
+Let's perform a simple prediction to see how the model performs:
 
 
 ```python
@@ -276,13 +276,13 @@ Enter your email 📧: # YOUR EMAIL GOES HERE
 [giza][2023-10-12 12:04:13.875] User created ✅. Check for a verification email 📧
 ```
 
-You will be prompted to add tour username, password and email. Finally you will need to verify your email address by clicking on the link that you will receive in your inbox.
+You will be prompted to add your username, password and email. Finally you will need to verify your email address by clicking on the link that you will receive in your inbox.
 
 ![email](img/email.png)
 
 Once we click the link we will be redirected to a verification endpoint and we will see a message saying that our email has been verified. Now we are ready to start using Giza CLI!
 
-Lets start by login into the platform:
+Let's start by login into the platform:
 
 ```console
 ❯ giza users login 
@@ -307,7 +307,7 @@ We should be ready to start using Giza's capabilities, we can easily check by ru
 
 Now we are ready to transpile our model to Cairo! We want to help you jumpstart your journey into ZKML by helping you to create this amazing models, we abstract you from the tedious process of introspecting the model and getting the information needed to use it in Cairo, that's why we build the transpilation process, to ease this and improve the iteration time from creating a model to using it in Cairo! 
 
-Lets check how we can do it:
+Let's check how we can do it:
 
 ```console
 ❯ giza transpile mnist_pytorch.onnx --output-path mnist_cairo
@@ -336,7 +336,7 @@ Also, if you ever have a question about the commands that you can run you can al
 
 Back to the transpilation!
 
-So we have received a file that we have saved in the `mnist_cairo` directory, lets check the contents of the directory:
+So we have received a file that we have saved in the `mnist_cairo` directory, let's check the contents of the directory:
 
 ```console
 ❯ tree mnist_cairo
@@ -408,7 +408,7 @@ mod inference;
 +mod input;
 ```
 
-Now lets create the `input.cairo` file. For this we are going to take the example data that we used to train the model and we are going to convert it to Cairo tensors. In cairo the tensors that contains `floats` are represented as `FP16x16` numbers, so we need to convert the data to this format.
+Now let's create the `input.cairo` file. For this we are going to take the example data that we used to train the model and we are going to convert it to Cairo tensors. In cairo the tensors that contains `floats` are represented as `FP16x16` numbers, so we need to convert the data to this format.
 
 
 ```python

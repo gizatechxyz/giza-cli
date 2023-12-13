@@ -410,7 +410,7 @@ Make a call to the API to retrieve model information.
 
 **Args:**
  
- - <b>`model_id`</b>:  Model identfier to retrieve information 
+ - <b>`model_id`</b>:  Model identifier to retrieve information 
 
 
 
@@ -507,7 +507,7 @@ Update a model.
 
 **Args:**
  
- - <b>`model_id`</b>:  Model identfier to retrieve information 
+ - <b>`model_id`</b>:  Model identifier to retrieve information 
  - <b>`model_update`</b>:  body to partially update the model 
 
 
@@ -592,7 +592,7 @@ Make a call to the API to retrieve job information.
 
 **Args:**
  
- - <b>`job_id`</b>:  Job identfier to retrieve information 
+ - <b>`job_id`</b>:  Job identifier to retrieve information 
 
 
 
@@ -730,7 +730,7 @@ Make a call to the API to retrieve job information.
 
 **Args:**
  
- - <b>`job_id`</b>:  Job identfier to retrieve information 
+ - <b>`job_id`</b>:  Job identifier to retrieve information 
 
 
 
@@ -855,7 +855,7 @@ Make a call to the API to retrieve proof information.
 
 **Args:**
  
- - <b>`proof_id`</b>:  Proof identfier to retrieve information 
+ - <b>`proof_id`</b>:  Proof identifier to retrieve information 
 
 
 

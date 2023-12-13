@@ -64,7 +64,7 @@ There are three main methods for transpiling a model:
 - The output of the transpilation process is saved in the same location as the original model.
 
 ```console
-# Using the previous model (id: 2) we can transpile a new model, which will create verion 2 of the model.
+# Using the previous model (id: 2) we can transpile a new model, which will create version 2 of the model.
 > giza transpile --framework EZKL --model-id 2 --input-data input.json awesome_model.onnx
 [giza][2023-12-04 19:40:10.646] Model found with id -> 2! ✅
 [giza][2023-12-04 19:40:12.176] Sending model for Setup ✅ 
@@ -96,7 +96,7 @@ giza versions list --model-id 29
     "size": 52735,
     "status": "COMPLETED",
     "message": "Setup Successful!",
-    "description": "Intial version",
+    "description": "Initial version",
     "created_date": "2023-09-13T12:08:38.177605",
     "last_update": "2023-09-13T12:08:43.986137"
   },
@@ -105,7 +105,7 @@ giza versions list --model-id 29
     "size": 52735,
     "status": "Setup",
     "message": "Transpilation Successful!",
-    "description": "Intial version",
+    "description": "Initial version",
     "created_date": "2023-12-04T12:11:30.165440",
     "last_update": "2023-12-04T12:11:31.625834"
   }
