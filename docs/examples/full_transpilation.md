@@ -87,7 +87,7 @@ test_loader = torch.utils.data.DataLoader(
                              ])), shuffle=True)
 ```
 
-Now lets see an example of the data that we have just downloaded:
+Now let's see an example of the data that we have just downloaded:
 
 
 ```python
@@ -103,7 +103,7 @@ print(f"example_targets.shape: {example_targets.shape}")
 
 ## How To Train The Model
 
-Now its time to train the model, for this we are going to define a basic neural network with 2 hidden layers and 1 output layer.
+Now it's time to train the model, for this we are going to define a basic neural network with 2 hidden layers and 1 output layer.
 
 We will follow the usual way of training a model in Pytorch by creating a `torch.nn.Module` class and defining the `forward` method. The `forward` method is the method that will be called when we pass an input to the model.
 
@@ -224,7 +224,7 @@ for i in range(10):
     Train Epoch: 9 [50000/60000 (83%)]	Loss: 0.000008
 
 
-Lets perform a simple prediction to see how the model performs:
+Let's perform a simple prediction to see how the model performs:
 
 
 ```python
@@ -336,7 +336,7 @@ Also, if you ever have a question about the commands that you can run you can al
 
 Back to the transpilation!
 
-So we have received a file that we have saved in the `mnist_cairo` directory, lets check the contents of the directory:
+So we have received a file that we have saved in the `mnist_cairo` directory, let's check the contents of the directory:
 
 ```console
 ❯ tree mnist_cairo
@@ -408,7 +408,7 @@ mod inference;
 +mod input;
 ```
 
-Now lets create the `input.cairo` file. For this we are going to take the example data that we used to train the model and we are going to convert it to Cairo tensors. In cairo the tensors that contains `floats` are represented as `FP16x16` numbers, so we need to convert the data to this format.
+Now let's create the `input.cairo` file. For this we are going to take the example data that we used to train the model and we are going to convert it to Cairo tensors. In cairo the tensors that contains `floats` are represented as `FP16x16` numbers, so we need to convert the data to this format.
 
 
 ```python
