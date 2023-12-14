@@ -64,6 +64,7 @@ class ApiClient:
         self.verify = verify
         self.giza_dir = Path.home() / ".giza"
         self._default_credentials = self._load_credentials_file()
+        self.api_key = None
 
     def _get_auth_header(self) -> Dict[str, str]:
         """
@@ -171,7 +172,6 @@ class ApiClient:
             if not self.giza_dir.exists():
                 echo("Creating default giza dir")
                 self.giza_dir.mkdir()
-            kwargs.update({"api_key": self.api_key})
             with open(self.giza_dir / ".api_key.json", "w") as f:
                 json.dump(kwargs, f, indent=4)
             echo(f"API Key written to: {self.giza_dir / '.api_key.json'}")
@@ -274,7 +274,8 @@ class ApiClient:
             self._write_credentials(user=user)
 
         if getattr(self, "token", None) is None:
-            raise Exception(
+            self.token = None
+            echo.debug(
                 "Token is expired or could not retrieve it. "
                 "Please get a new one using `user` and `password`.",
             )
@@ -328,7 +329,8 @@ class UsersClient(ApiClient):
         response.raise_for_status()
         body = response.json()
         self._echo_debug(body, json=True)
-        return users.UserResponse(**body)
+        self._write_api_key(api_key=body.get("id"))
+        return users.UserCreateApiKeys(**body)
 
     @auth
     def me(self) -> users.UserResponse:

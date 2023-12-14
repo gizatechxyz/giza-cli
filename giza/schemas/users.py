@@ -45,4 +45,3 @@ class UserResponse(UserBase):
 
 class UserCreateApiKeys(BaseModel):
     id: SecretStr
-    user_id: str
