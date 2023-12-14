@@ -25,6 +25,7 @@ from giza.utils.decorators import auth
 DEFAULT_API_VERSION = "v1"
 GIZA_TOKEN_VARIABLE = "GIZA_TOKEN"
 MODEL_URL_HEADER = "X-MODEL-URL"
+API_KEY_HEADER = "X-API-KEY"
 
 
 class ApiClient:
@@ -52,7 +53,7 @@ class ApiClient:
             headers = {"Authorization": "Bearer {token}", "Content-Type": "text/json"}
             self.token = token
         elif api_key is not None:
-            headers = {"X-API-Key": api_key, "Content-Type": "text/json"}
+            headers = {API_KEY_HEADER: api_key, "Content-Type": "text/json"}
             self.api_key = api_key
         else:
             headers = {}
@@ -344,7 +345,7 @@ class UsersClient(ApiClient):
                 {"Authorization": f"Bearer {self.token}", "Content-Type": "text/json"},
             )
         elif self.api_key is not None:
-            headers.update({"X-API-Key": self.api_key, "Content-Type": "text/json"})
+            headers.update({API_KEY_HEADER: self.api_key, "Content-Type": "text/json"})
         response = self.session.get(
             f"{self.url}/{self.USERS_ENDPOINT}/me",
             headers=headers,

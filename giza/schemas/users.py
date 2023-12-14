@@ -43,6 +43,6 @@ class UserResponse(UserBase):
     is_active: bool
 
 
-class UserCrateApiKeys(BaseModel):
+class UserCreateApiKeys(BaseModel):
     id: SecretStr
     user_id: str
