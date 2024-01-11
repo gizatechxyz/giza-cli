@@ -19,6 +19,7 @@ from giza.schemas.models import Model, ModelCreate, ModelList, ModelUpdate
 from giza.schemas.proofs import Proof
 from giza.schemas.token import TokenResponse
 from giza.schemas.versions import Version, VersionCreate, VersionList, VersionUpdate
+from giza.schemas.workspaces import Workspace
 from giza.utils import echo
 from giza.utils.decorators import auth
 
@@ -1038,3 +1039,76 @@ class VersionsClient(ApiClient):
         response.raise_for_status()
 
         return Version(**response.json())
+
+
+class WorkspaceClient(ApiClient):
+    """
+    Client to interact with `workspaces` endpoint.
+    """
+
+    WORKSPACES_ENDPOINT = "workspaces"
+
+    @auth
+    def get(self) -> Workspace:
+        """
+        Make a call to the API to retrieve workspace information. Only one should exist.
+
+        Returns:
+            Workspace: workspace information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            f"{self.url}/{self.WORKSPACES_ENDPOINT}",
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return Workspace(**response.json())
+
+    @auth
+    def create(self) -> Workspace:
+        """
+        Call the API to create a new workspace. If the workspace already exists it will return a 400.
+
+        Returns:
+            Workspace: the created workspace information
+        """
+
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.post(
+            f"{self.url}/{self.WORKSPACES_ENDPOINT}",
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return Workspace(**response.json())
+
+    @auth
+    def delete(self) -> None:
+        """
+        Call the API to delete the workspace. If the workspace does not exist it will return a 404.
+
+        Returns:
+            None
+        """
+
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.delete(
+            f"{self.url}/{self.WORKSPACES_ENDPOINT}",
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
