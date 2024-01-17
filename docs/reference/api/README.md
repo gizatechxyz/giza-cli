@@ -15,6 +15,7 @@
 - [`commands.verify`](./commands.verify.md#module-commandsverify)
 - [`commands.version`](./commands.version.md#module-commandsversion)
 - [`commands.versions`](./commands.versions.md#module-commandsversions)
+- [`commands.workspaces`](./commands.workspaces.md#module-commandsworkspaces)
 - [`exceptions`](./exceptions.md#module-exceptions)
 - [`frameworks`](./frameworks.md#module-frameworks)
 - [`frameworks.cairo`](./frameworks.cairo.md#module-frameworkscairo)
@@ -36,6 +37,7 @@
 - [`client.UsersClient`](./client.md#class-usersclient): Client to interact with `users` endpoint.
 - [`client.VersionJobsClient`](./client.md#class-versionjobsclient): Client to interact with `jobs` endpoint.
 - [`client.VersionsClient`](./client.md#class-versionsclient): Client to interact with `versions` endpoint.
+- [`client.WorkspaceClient`](./client.md#class-workspaceclient): Client to interact with `workspaces` endpoint.
 - [`exceptions.PasswordError`](./exceptions.md#class-passworderror)
 - [`echo.Echo`](./utils.echo.md#class-echo): Helper class to use when printin output of the CLI.
 - [`enums.Framework`](./utils.enums.md#class-framework)
@@ -62,12 +64,16 @@
 - [`users.me`](./commands.users.md#function-me): Retrieve information about the current user and print it as json to stdout.
 - [`users.resend_email`](./commands.users.md#function-resend_email): Command to resend verification email. Asks for the user's email and sends the request to the API
 - [`verify.verify`](./commands.verify.md#function-verify)
-- [`version.version_entrypoint`](./commands.version.md#function-version_entrypoint): Prints the current CLI version.
+- [`version.check_version`](./commands.version.md#function-check_version): Check if there is a new version available of the cli in pypi to suggest upgrade
 - [`versions.download`](./commands.versions.md#function-download): Retrieve information about the current user and print it as json to stdout.
+- [`versions.download_original`](./commands.versions.md#function-download_original): Retrieve information about the current user and print it as json to stdout.
 - [`versions.get`](./commands.versions.md#function-get)
 - [`versions.list`](./commands.versions.md#function-list)
 - [`versions.transpile`](./commands.versions.md#function-transpile)
 - [`versions.update`](./commands.versions.md#function-update)
+- [`workspaces.create`](./commands.workspaces.md#function-create): Command to create a Giza Workspace.
+- [`workspaces.delete`](./commands.workspaces.md#function-delete)
+- [`workspaces.get`](./commands.workspaces.md#function-get)
 - [`cairo.prove`](./frameworks.cairo.md#function-prove): Command to prove as spceific cairo program, previously converted to CASM.
 - [`cairo.transpile`](./frameworks.cairo.md#function-transpile): This function is responsible for transpiling a model. The overall objective is to prepare a model for use by converting it into a different format (transpiling).
 - [`ezkl.prove`](./frameworks.ezkl.md#function-prove)

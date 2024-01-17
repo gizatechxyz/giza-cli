@@ -13,7 +13,7 @@
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/ezkl.py#L30"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/ezkl.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `setup`
 
@@ -22,7 +22,7 @@ setup(
     model_path: str,
     model_id: int,
     desc: str,
-    model_desc: int,
+    model_desc: str,
     input_data: str,
     debug: Optional[bool],
     size: JobSize = <JobSize.S: 'S'>
@@ -34,7 +34,7 @@ This function executes the setup of the model and creates the outputs, handled b
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/ezkl.py#L154"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/ezkl.py#L153"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `prove`
 
@@ -56,7 +56,7 @@ prove(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/ezkl.py#L229"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/ezkl.py#L228"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `verify`
 
@@ -65,8 +65,8 @@ verify(
     proof_id: Optional[int],
     model_id: Optional[int],
     version_id: Optional[int],
-    proof: str = None,
-    debug: bool = False,
+    proof: Optional[str] = None,
+    debug: Optional[bool] = False,
     size: JobSize = <JobSize.S: 'S'>
 )
 ```

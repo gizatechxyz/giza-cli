@@ -51,10 +51,10 @@ Once activated you can successfully log into Giza:
 ```console
 > giza users login
 
-Enter your username 😎: gonmeso
+Enter your username 😎: gizabrain
 Enter your password 🥷 :
 [giza][2023-07-12 10:52:25.199] Log into Giza
-[giza][2023-07-12 10:52:46.998] Credentials written to: /Users/gonmeso/.giza/.credentials.json
+[giza][2023-07-12 10:52:46.998] Credentials written to: /Users/gizabrain/.giza/.credentials.json
 [giza][2023-07-12 10:52:47.000] Successfully logged into Giza ✅
 ```
 
@@ -63,7 +63,7 @@ If you want force the renewal of the token you can use `--renew` to force the lo
 ```console
 > giza users login
 
-Enter your username 😎: gonmeso
+Enter your username 😎: gizabrain
 Enter your password 🥷 :
 [giza][2023-07-12 10:55:26.219] Log into Giza
 [giza][2023-07-12 10:55:26.224] Token it still valid, re-using it from ~/.giza
@@ -75,10 +75,10 @@ With `--renew`:
 ```console
 > giza users login --renew
 
-Enter your username 😎: gonmeso
+Enter your username 😎: gizabrain
 Enter your password 🥷 :
 [giza][2023-07-12 10:56:44.316] Log into Giza
-[giza][2023-07-12 10:56:44.979] Credentials written to: /Users/gonmeso/.giza/.credentials.json
+[giza][2023-07-12 10:56:44.979] Credentials written to: /Users/gizabrain/.giza/.credentials.json
 [giza][2023-07-12 10:56:44.980] Successfully logged into Giza ✅
 ```
 
@@ -96,8 +96,8 @@ Retrieve information about the current user.
 [giza][2023-07-12 10:59:43.821] Retrieving information about me!
 [giza][2023-07-12 10:59:43.823] Token it still valid, re-using it from ~/.giza
 {
-  "username": "gonmeso",
-  "email": "gonzalo@gizatech.xyz",
+  "username": "gizabrain",
+  "email": "gizabrain@gizatech.xyz",
   "is_active": true
 }
 ```
