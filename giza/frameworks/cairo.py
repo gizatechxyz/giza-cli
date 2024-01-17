@@ -133,9 +133,8 @@ def deploy(
     try:
         client = DeploymentsClient(API_HOST)
 
-        deployments: DeploymentsList = client.list(model_id, version_id)
-        deployments = deployments.json()
-        deployments = json.loads(deployments)
+        deployments_list: DeploymentsList = client.list(model_id, version_id)
+        deployments: dict = json.loads(deployments_list.json())
 
         if len(deployments) > 0:
             echo.info(
@@ -146,7 +145,7 @@ def deploy(
 
         spinner = Spinner(name="aesthetic", text="Creating deployment!")
 
-        with Live(renderable=spinner) as live:
+        with Live(renderable=spinner):
             with open(data) as casm:
                 deployment = client.create(
                     model_id,
