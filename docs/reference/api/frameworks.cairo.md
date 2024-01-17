@@ -13,7 +13,7 @@
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/cairo.py#L28"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/cairo.py#L37"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `prove`
 
@@ -48,7 +48,43 @@ Command to prove as spceific cairo program, previously converted to CASM. This w
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/cairo.py#L103"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/cairo.py#L112"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `deploy`
+
+```python
+deploy(
+    data: str,
+    model_id: int,
+    version_id: int,
+    size: ServiceSize = <ServiceSize.S: 'S'>,
+    debug: Optional[bool] = DEBUG_OPTION
+) → str
+```
+
+Command to deploy a specific version of a model. This will create a deployment for the specified version and check the status, once it finishes if COMPLETED the deployment is ready to be used. 
+
+
+
+**Args:**
+ 
+ - <b>`data`</b>:  main CASM file 
+ - <b>`model_id`</b>:  model id to deploy 
+ - <b>`version_id`</b>:  version id to deploy 
+ - <b>`size`</b>:  Size of the service, allowed values are S, M, L and XL. Defaults to S. 
+ - <b>`debug`</b> (Optional[bool], optional):  Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False). 
+
+
+
+**Raises:**
+ 
+ - <b>`ValidationError`</b>:  input fields are validated, if these are not suitable the exception is raised 
+ - <b>`HTTPError`</b>:  request error to the API, 4XX or 5XX 
+
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/cairo.py#L185"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `transpile`
 

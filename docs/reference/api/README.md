@@ -8,6 +8,7 @@
 - [`cli`](./cli.md#module-cli)
 - [`client`](./client.md#module-client)
 - [`commands`](./commands.md#module-commands)
+- [`commands.deployments`](./commands.deployments.md#module-commandsdeployments)
 - [`commands.models`](./commands.models.md#module-commandsmodels)
 - [`commands.prove`](./commands.prove.md#module-commandsprove)
 - [`commands.reset_password`](./commands.reset_password.md#module-commandsreset_password)
@@ -29,6 +30,7 @@
 ## Classes
 
 - [`client.ApiClient`](./client.md#class-apiclient): Implementation of the API client to interact with core-services
+- [`client.DeploymentsClient`](./client.md#class-deploymentsclient): Client to interact with `deployments` endpoint.
 - [`client.JobsClient`](./client.md#class-jobsclient): Client to interact with `jobs` endpoint.
 - [`client.ModelsClient`](./client.md#class-modelsclient): Client to interact with `models` endpoint.
 - [`client.ProofsClient`](./client.md#class-proofsclient): Client to interact with `proofs` endpoint.
@@ -42,6 +44,7 @@
 - [`enums.JobKind`](./utils.enums.md#class-jobkind)
 - [`enums.JobSize`](./utils.enums.md#class-jobsize)
 - [`enums.JobStatus`](./utils.enums.md#class-jobstatus)
+- [`enums.ServiceSize`](./utils.enums.md#class-servicesize)
 - [`enums.VersionStatus`](./utils.enums.md#class-versionstatus)
 
 ## Functions
@@ -49,6 +52,9 @@
 - [`callbacks.debug_callback`](./callbacks.md#function-debug_callback): If a call adds the `--debug` flag debugging mode is activated for external requests and API Clients.
 - [`callbacks.version_callback`](./callbacks.md#function-version_callback): Prints the current version when `--version` flag is added to a call.
 - [`cli.entrypoint`](./cli.md#function-entrypoint)
+- [`deployments.deploy`](./commands.deployments.md#function-deploy)
+- [`deployments.get`](./commands.deployments.md#function-get)
+- [`deployments.list`](./commands.deployments.md#function-list)
 - [`models.create`](./commands.models.md#function-create): Command to create a model. Asks for the new model's information and validates the input,
 - [`models.get`](./commands.models.md#function-get): Command to create a user. Asks for the new users information and validates the input,
 - [`models.list`](./commands.models.md#function-list): Command to list all models.
@@ -70,6 +76,7 @@
 - [`versions.list`](./commands.versions.md#function-list)
 - [`versions.transpile`](./commands.versions.md#function-transpile)
 - [`versions.update`](./commands.versions.md#function-update)
+- [`cairo.deploy`](./frameworks.cairo.md#function-deploy): Command to deploy a specific version of a model. This will create a deployment for the specified version and check the status, once it finishes if COMPLETED the deployment is ready to be used.
 - [`cairo.prove`](./frameworks.cairo.md#function-prove): Command to prove as spceific cairo program, previously converted to CASM.
 - [`cairo.transpile`](./frameworks.cairo.md#function-transpile): This function is responsible for transpiling a model. The overall objective is to prepare a model for use by converting it into a different format (transpiling).
 - [`ezkl.prove`](./frameworks.ezkl.md#function-prove)
