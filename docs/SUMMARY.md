@@ -4,6 +4,7 @@
 
 * [Giza CLI](README.md)
 * [Installation](welcome/Installation.md)
+* [Authentication](welcome/Authentication.md)
 * [Frameworks](welcome/frameworks.md)
 
 ## 📦 Resources
@@ -11,6 +12,7 @@
 * [Users](resources/users.md)
 * [Models](resources/models.md)
 * [Versions](resources/versions.md)
+* [Deployments](resources/deployments.md)
 
 ## 📚 Frameworks
 
@@ -37,6 +39,7 @@
   * [cli](reference/api/cli.md)
   * [client](reference/api/client.md)
   * [commands](reference/api/commands.md)
+  * [commands.deploy](reference/api/commands.deploy.md)
   * [commands.models](reference/api/commands.models.md)
   * [commands.prove](reference/api/commands.prove.md)
   * [commands.reset_password](reference/api/commands.reset_password.md)

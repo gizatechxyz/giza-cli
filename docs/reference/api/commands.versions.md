@@ -121,7 +121,33 @@ download(
     output_path: str = typer.Option(
         "cairo_model", "--output-path", "-o", help="Path to output the cairo model"
     ),
-    debug: Optional[bool] = DEBUG_OPTION,
+    debug: Optional[bool] = DEBUG_OPTION
+) → None
+```
+
+Retrieve information about the current user and print it as json to stdout. 
+
+
+
+**Args:**
+ 
+ - <b>`debug`</b> (Optional[bool], optional):  Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False) 
+
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/versions.py#L287"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `download_original`
+
+```python
+download_original(
+    model_id: int = typer.Option(None, help="The ID of the model"),
+    version_id: int = typer.Option(None, help="The ID of the version"),
+    output_path: str = typer.Option(
+        "cairo_model", "--output-path", "-o", help="Path to output the cairo model"
+    ),
+    debug: Optional[bool] = DEBUG_OPTION
 ) → None
 ```
 
