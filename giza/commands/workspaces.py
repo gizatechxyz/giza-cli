@@ -153,7 +153,7 @@ def delete(
         sys.exit(1)
     except HTTPError as e:
         info = get_response_info(e.response)
-        echo.error("⛔️There is an error retrieving the workspace information")
+        echo.error("⛔️There is an error while deleting workspace")
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
