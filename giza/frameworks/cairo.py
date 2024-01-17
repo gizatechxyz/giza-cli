@@ -12,15 +12,24 @@ from requests import HTTPError
 from rich import print_json
 from rich.live import Live
 from rich.progress import Progress, SpinnerColumn, TextColumn
+from rich.spinner import Spinner
 
 from giza import API_HOST
-from giza.client import JobsClient, ModelsClient, ProofsClient, VersionsClient
+from giza.client import (
+    DeploymentsClient,
+    JobsClient,
+    ModelsClient,
+    ProofsClient,
+    VersionsClient,
+)
+from giza.options import DEBUG_OPTION
+from giza.schemas.deployments import DeploymentCreate, DeploymentsList
 from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.models import ModelCreate
 from giza.schemas.proofs import Proof
 from giza.schemas.versions import VersionCreate, VersionUpdate
 from giza.utils import Echo, echo, get_response_info
-from giza.utils.enums import Framework, JobSize, JobStatus, VersionStatus
+from giza.utils.enums import Framework, JobSize, JobStatus, ServiceSize, VersionStatus
 
 app = typer.Typer()
 
@@ -98,6 +107,79 @@ def prove(
         if debug:
             raise e
         sys.exit(1)
+
+
+def deploy(
+    data: str,
+    model_id: int,
+    version_id: int,
+    size: ServiceSize = ServiceSize.S,
+    debug: Optional[bool] = DEBUG_OPTION,
+) -> str:
+    """
+    Command to deploy a specific version of a model. This will create a deployment for the specified version and check the status, once it finishes if COMPLETED the deployment is ready to be used.
+
+    Args:
+        data: main CASM file
+        model_id: model id to deploy
+        version_id: version id to deploy
+        size: Size of the service, allowed values are S, M, L and XL. Defaults to S.
+        debug (Optional[bool], optional): Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False).
+
+    Raises:
+        ValidationError: input fields are validated, if these are not suitable the exception is raised
+        HTTPError: request error to the API, 4XX or 5XX
+    """
+    try:
+        client = DeploymentsClient(API_HOST)
+
+        deployments_list: DeploymentsList = client.list(model_id, version_id)
+        deployments: dict = json.loads(deployments_list.json())
+
+        if len(deployments) > 0:
+            echo.info(
+                f"Deployment for model id {model_id} and version id {version_id} already exists! ✅"
+            )
+            echo.info(f'You can start doing inferences at: {deployments[0]["uri"]} 🚀')
+            sys.exit(1)
+
+        spinner = Spinner(name="aesthetic", text="Creating deployment!")
+
+        with Live(renderable=spinner):
+            with open(data) as casm:
+                deployment = client.create(
+                    model_id,
+                    version_id,
+                    DeploymentCreate(
+                        size=size,
+                        model_id=model_id,
+                        version_id=version_id,
+                    ),
+                    casm,
+                )
+
+    except ValidationError as e:
+        echo.error("Deployment validation error")
+        echo.error("Review the provided information")
+        if debug:
+            raise e
+        echo.error(str(e))
+        sys.exit(1)
+    except HTTPError as e:
+        info = get_response_info(e.response)
+        echo.error("⛔️Could not create the deployment")
+        echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
+        echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
+        echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
+        echo.error(
+            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
+        ) if info.get("request_id") else None
+        if debug:
+            raise e
+        sys.exit(1)
+    echo("Deployment is successful ✅")
+    echo(f"Deployment created with endpoint URL: {deployment.uri} 🎉")
+    return deployment
 
 
 def transpile(

@@ -13,6 +13,7 @@ from requests import HTTPError, Response, Session
 from rich import print, print_json
 
 from giza.schemas import users
+from giza.schemas.deployments import Deployment, DeploymentCreate, DeploymentsList
 from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.message import Msg
 from giza.schemas.models import Model, ModelCreate, ModelList, ModelUpdate
@@ -428,6 +429,117 @@ class UsersClient(ApiClient):
         if response.status_code == 200:
             return Msg(**body)
         raise Exception("Could not reset the password")
+
+
+class DeploymentsClient(ApiClient):
+    """
+    Client to interact with `deployments` endpoint.
+    """
+
+    DEPLOYMENTS_ENDPOINT = "deployments"
+    MODELS_ENDPOINT = "models"
+    VERSIONS_ENDPOINT = "versions"
+
+    @auth
+    def create(
+        self,
+        model_id: int,
+        version_id: int,
+        deployment_create: DeploymentCreate,
+        f: BufferedReader,
+    ) -> Deployment:
+        """
+        Create a new deployment.
+
+        Args:
+            deployment_create: Deployment information to create
+
+        Returns:
+            The recently created deployment information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.post(
+            os.path.join(
+                self.url,
+                self.MODELS_ENDPOINT,
+                str(model_id),
+                self.VERSIONS_ENDPOINT,
+                str(version_id),
+                self.DEPLOYMENTS_ENDPOINT,
+            ),
+            headers=headers,
+            params=deployment_create.dict(),
+            files={"casm": f} if f is not None else None,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return Deployment(**response.json())
+
+    @auth
+    def list(self, model_id: int, version_id: int) -> List[Deployment]:
+        """
+        List deployments.
+
+        Returns:
+            A list of deployments created by the user
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            os.path.join(
+                self.url,
+                self.MODELS_ENDPOINT,
+                str(model_id),
+                self.VERSIONS_ENDPOINT,
+                str(version_id),
+                self.DEPLOYMENTS_ENDPOINT,
+            ),
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return DeploymentsList(
+            __root__=[Deployment(**deployment) for deployment in response.json()]
+        )
+
+    @auth
+    def get(self, model_id: int, version_id: int, deployment_id: int) -> Deployment:
+        """
+        Get a deployment.
+
+        Args:
+            deployment_id: Deployment identifier
+
+        Returns:
+            The deployment information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            os.path.join(
+                self.url,
+                self.MODELS_ENDPOINT,
+                str(model_id),
+                self.VERSIONS_ENDPOINT,
+                str(version_id),
+                self.DEPLOYMENTS_ENDPOINT,
+                str(deployment_id),
+            ),
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        return Deployment(**response.json())
 
 
 class TranspileClient(ApiClient):
