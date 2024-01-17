@@ -72,6 +72,33 @@ Logs the current user into Giza. Under the hood this will retrieve the token for
 
 <a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/users.py#L137"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
+## <kbd>function</kbd> `create_api_key`
+
+```python
+create_api_key(
+    debug: Optional[bool] = DEBUG_OPTION
+) → None
+```
+
+Create an API key for your user. You need to be logged in to create an API key. The API Key will be saved at `home` directory for further usage. 
+
+
+
+**Args:**
+ 
+ - <b>`debug`</b> (Optional[bool]):  Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False) 
+
+
+
+**Raises:**
+ 
+ - <b>`HTTPError`</b>:  request error to the API, 4XX or 5XX 
+
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/users.py#L181"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
 ## <kbd>function</kbd> `me`
 
 ```python
@@ -91,7 +118,7 @@ Retrieve information about the current user and print it as json to stdout.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/users.py#L160"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/users.py#L204"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `resend_email`
 

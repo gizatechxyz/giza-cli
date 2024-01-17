@@ -10,22 +10,14 @@
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/version.py#L6"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/version.py#L8"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
-## <kbd>function</kbd> `version_entrypoint`
+## <kbd>function</kbd> `check_version`
 
 ```python
-version_entrypoint(
-    version: bool = <typer.models.OptionInfo object at 0x10336e5d0>
-) → None
+check_version(ctx: Context)
 ```
 
-Prints the current CLI version. 
-
-
-
-**Args:**
- 
- - <b>`version`</b> (bool):  Tper callback to retrieve the version. 
+Check if there is a new version available of the cli in pypi to suggest upgrade 
 
 
