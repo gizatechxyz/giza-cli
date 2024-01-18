@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "giza-cli"
-version = "0.9.0"
+version = "0.7.0"
 description = "CLI for interacting with Giza"
 authors = ["Gonzalo Mellizo-Soto <gonzalo@gizatech.xyz>"]
 readme = "README.md"
@@ -23,6 +23,7 @@ email-validator = "^2.0.0.post2"
 types-python-jose = "^3.3.4.8"
 types-requests = "^2.31.0.2"
 cookiecutter = "^2.5.0"
+semver = "^3.0.2"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.3.3"

@@ -1,4 +1,5 @@
 import requests
+import semver
 import typer
 
 from giza import __version__
@@ -9,9 +10,9 @@ def check_version(ctx: typer.Context):
     """
     Check if there is a new version available of the cli in pypi to suggest upgrade
     """
-    current_version = __version__
-    response = requests.get("https://pypi.org/pypi/giza/json")
-    latest_version = response.json()["info"]["version"]
+    current_version = semver.Version.parse(__version__)
+    response = requests.get("https://pypi.org/pypi/giza-cli/json")
+    latest_version = semver.Version.parse(response.json()["info"]["version"])
 
     if latest_version > current_version:
         echo = Echo()
