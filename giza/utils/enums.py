@@ -16,6 +16,13 @@ class JobStatus(StrEnum):
     PROCESSING: str = "PROCESSING"
 
 
+class ServiceSize(StrEnum):
+    S: str = "S"
+    M: str = "M"
+    L: str = "L"
+    XL: str = "XL"
+
+
 class JobSize(StrEnum):
     S: str = "S"
     M: str = "M"

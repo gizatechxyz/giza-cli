@@ -3,6 +3,9 @@ import typer
 import typer.rich_utils
 from rich.traceback import install
 
+from giza.commands.actions import app as actions_app
+from giza.commands.deployments import app as deployments_app
+from giza.commands.deployments import deploy
 from giza.commands.models import app as models_app
 from giza.commands.prove import prove
 from giza.commands.reset_password import request_reset_password_token, reset_password
@@ -36,6 +39,21 @@ app.add_typer(
     short_help="💻 Utilities for managing workspaces",
     help="""💻 Utilities for managing workspaces""",
 )
+
+app.add_typer(
+    deployments_app,
+    name="deployments",
+    short_help="🚀 Utilities for managing deployments",
+    help="""🚀 Utilities for managing deployments""",
+)
+
+app.add_typer(
+    actions_app,
+    name="actions",
+    short_help="🎯 Utilities for managing actions",
+    help="""🎯 Utilities for managing actions""",
+)
+
 
 app.callback(
     name="giza",
@@ -75,6 +93,26 @@ app.command(
 
     """,
 )(transpile)
+
+app.command(
+    short_help="🚀 Creates a deployment for the specified model version. Shortcut for `giza deployments deploy`",
+    help="""🚀 Creates a deployment for the specified model version. Shortcut for `giza deployments deploy`.
+
+    This command has different behavior depending on the framework:
+
+        * For Cairo, it will create an inference endpoint of the deployment in Giza.
+        * For EZKL, not implemented yet.
+
+    This command performs several operations:
+
+        * Creates a deployment for the specified version
+        * Uploads the specified version file
+        * Polls the version until the status is either FAILED or COMPLETED
+        * If the status is COMPLETED, sends back the deployment url to make inference requests
+
+    Error handling is also incorporated into this process.
+    """,
+)(deploy)
 
 app.command(
     name="prove",

@@ -147,7 +147,7 @@ download_original(
     output_path: str = typer.Option(
         "cairo_model", "--output-path", "-o", help="Path to output the cairo model"
     ),
-    debug: Optional[bool] = DEBUG_OPTION,
+    debug: Optional[bool] = DEBUG_OPTION
 ) → None
 ```
 

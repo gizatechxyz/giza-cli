@@ -135,6 +135,50 @@ def login(
 
 
 @app.command(
+    short_help="🔑 Create an API Key for your user.",
+    help="""🔑 Create an API Key for your user.
+
+    Create an API key for your user. You need to be logged in to create an API key.
+
+    This will be saved at `~/.giza/.credentials.json` for later re-use until the token expires.
+
+    Verification is needed to create an API key.
+    """,
+)
+def create_api_key(
+    debug: Optional[bool] = DEBUG_OPTION,
+) -> None:
+    """
+    Create an API key for your user. You need to be logged in to create an API key.
+    The API Key will be saved at `home` directory for further usage.
+
+    Args:
+        debug (Optional[bool]): Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False)
+        renew (bool): Force the retrieval of the token to create a new one. Defaults to False.
+
+    Raises:
+        HTTPError: request error to the API, 4XX or 5XX
+    """
+    echo("Creating API Key ✅ ")
+    client = UsersClient(API_HOST, debug=debug)
+    try:
+        client.create_api_key()
+    except HTTPError as e:
+        info = get_response_info(e.response)
+        echo.error("⛔️Could not authorize the user⛔️")
+        echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
+        echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
+        echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
+        echo.error(
+            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
+        ) if info.get("request_id") else None
+        if debug:
+            raise e
+        sys.exit(1)
+    echo("Successfully created API Key. It will be used for future requests ✅ ")
+
+
+@app.command(
     short_help="💻 Retrieve information about the current user",
     help="""💻 Retrieve information about the current user.
 

@@ -15,7 +15,7 @@
 ## <kbd>function</kbd> `check_version`
 
 ```python
-check_version(ctx: Context)
+check_version()
 ```
 
 Check if there is a new version available of the cli in pypi to suggest upgrade 

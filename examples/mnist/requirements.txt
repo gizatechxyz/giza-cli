@@ -1,4 +1,4 @@
-giza-cli==0.3.0
+giza-cli==0.7.0
 onnx==1.14.1
 tf2onnx==1.15.1
 torch==2.1.0

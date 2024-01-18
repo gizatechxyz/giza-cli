@@ -13,6 +13,7 @@ from requests import HTTPError, Response, Session
 from rich import print, print_json
 
 from giza.schemas import users
+from giza.schemas.deployments import Deployment, DeploymentCreate, DeploymentsList
 from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.message import Msg
 from giza.schemas.models import Model, ModelCreate, ModelList, ModelUpdate
@@ -26,6 +27,7 @@ from giza.utils.decorators import auth
 DEFAULT_API_VERSION = "v1"
 GIZA_TOKEN_VARIABLE = "GIZA_TOKEN"
 MODEL_URL_HEADER = "X-MODEL-URL"
+API_KEY_HEADER = "X-API-KEY"
 
 
 class ApiClient:
@@ -37,11 +39,15 @@ class ApiClient:
         self,
         host: str,
         token: Optional[str] = None,
+        api_key: Optional[str] = None,
         api_version: str = DEFAULT_API_VERSION,
         verify: bool = True,
         debug: Optional[bool] = False,
     ) -> None:
         self.session = Session()
+        self.api_key = None
+        self.token = None
+
         if host[-1] == "/":
             host = host[:-1]
         parsed_url = urlparse(host)
@@ -51,6 +57,9 @@ class ApiClient:
         if token is not None:
             headers = {"Authorization": "Bearer {token}", "Content-Type": "text/json"}
             self.token = token
+        elif api_key is not None:
+            headers = {API_KEY_HEADER: api_key, "Content-Type": "text/json"}
+            self.api_key = api_key
         else:
             headers = {}
 
@@ -69,7 +78,11 @@ class ApiClient:
             Dict[str, str]: A dictionary containing the authorization header.
         """
 
-        return {"Authorization": f"Bearer {self.token}"}
+        if self.token is not None:
+            header = {"Authorization": f"Bearer {self.token}"}
+        elif self.api_key is not None:
+            header = {"X-API-Key": self.api_key}
+        return header
 
     def _echo_debug(self, message: str, json: bool = False) -> None:
         """
@@ -133,7 +146,7 @@ class ApiClient:
             raise
 
         self.token = token.access_token
-        self._echo_debug(response.json(), json=True)
+        self._echo_debug(response.text, json=True)
         self._echo_debug(f"Token: {self.token}")
 
     def _write_credentials(self, **kwargs: Any) -> None:
@@ -151,6 +164,21 @@ class ApiClient:
             with open(self.giza_dir / ".credentials.json", "w") as f:
                 json.dump(kwargs, f, indent=4)
             echo(f"Credentials written to: {self.giza_dir / '.credentials.json'}")
+
+    def _write_api_key(self, **kwargs: Any) -> None:
+        """
+        Write API key to the giza api_key file for later retrieval
+
+        Args:
+            kwargs(dict): extra keyword arguments to save with the credentials, usually `user`.
+        """
+        if self.token is not None:
+            if not self.giza_dir.exists():
+                echo("Creating default giza dir")
+                self.giza_dir.mkdir()
+            with open(self.giza_dir / ".api_key.json", "w") as f:
+                json.dump(kwargs, f, indent=4)
+            echo(f"API Key written to: {self.giza_dir / '.api_key.json'}")
 
     def _is_expired(self, token: str) -> bool:
         """
@@ -173,6 +201,29 @@ class ApiClient:
         except ExpiredSignatureError:
             self._echo_debug("Token is expired")
             return True
+
+    def retrieve_api_key(self) -> None:
+        """
+        Retrieve the API key from the `~/.giza/.api_key.json` file.
+
+        Raises:
+            Exception: if the file does not exist
+
+        Returns:
+            str: the API key
+        """
+
+        if not (self.giza_dir / ".api_key.json").exists():
+            echo.debug("API Key not found. Create one using `giza create-api-key`")
+        else:
+            if self.api_key is None:
+                with open(self.giza_dir / ".api_key.json") as f:
+                    api_key = json.load(f)
+                    api_key = api_key.get("api_key")
+                    self._echo_debug(
+                        f"API Key loaded from: {self.giza_dir / '.api_key.json'}",
+                    )
+                    self.api_key = api_key
 
     def retrieve_token(
         self,
@@ -197,7 +248,7 @@ class ApiClient:
             Exception: if token could not be retrieved in any way
         """
 
-        token = os.environ.get(GIZA_TOKEN_VARIABLE)
+        token = os.environ.get(GIZA_TOKEN_VARIABLE, None)
         if token is None:
             self._echo_debug(
                 f"No token found in environment variable {GIZA_TOKEN_VARIABLE}",
@@ -227,7 +278,8 @@ class ApiClient:
             self._write_credentials(user=user)
 
         if getattr(self, "token", None) is None:
-            raise Exception(
+            self.token = None
+            echo.debug(
                 "Token is expired or could not retrieve it. "
                 "Please get a new one using `user` and `password`.",
             )
@@ -265,6 +317,26 @@ class UsersClient(ApiClient):
         return users.UserResponse(**body)
 
     @auth
+    def create_api_key(self):
+        """
+        Call the API to create a new API key
+
+        Returns:
+            users.UserResponse: the created user information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+        response = self.session.post(
+            f"{self.url}/{self.USERS_ENDPOINT}/create-api-key",
+            headers=headers,
+        )
+        response.raise_for_status()
+        body = response.json()
+        self._echo_debug(body, json=True)
+        self._write_api_key(api_key=body.get("id"))
+        return users.UserCreateApiKeys(**body)
+
+    @auth
     def me(self) -> users.UserResponse:
         """
         Retrieve information about the current user.
@@ -274,9 +346,12 @@ class UsersClient(ApiClient):
             users.UserResponse: User information from the server
         """
         headers = copy.deepcopy(self.default_headers)
-        headers.update(
-            {"Authorization": f"Bearer {self.token}", "Content-Type": "text/json"},
-        )
+        if self.token is not None:
+            headers.update(
+                {"Authorization": f"Bearer {self.token}", "Content-Type": "text/json"},
+            )
+        elif self.api_key is not None:
+            headers.update({API_KEY_HEADER: self.api_key, "Content-Type": "text/json"})
         response = self.session.get(
             f"{self.url}/{self.USERS_ENDPOINT}/me",
             headers=headers,
@@ -357,6 +432,117 @@ class UsersClient(ApiClient):
         if response.status_code == 200:
             return Msg(**body)
         raise Exception("Could not reset the password")
+
+
+class DeploymentsClient(ApiClient):
+    """
+    Client to interact with `deployments` endpoint.
+    """
+
+    DEPLOYMENTS_ENDPOINT = "deployments"
+    MODELS_ENDPOINT = "models"
+    VERSIONS_ENDPOINT = "versions"
+
+    @auth
+    def create(
+        self,
+        model_id: int,
+        version_id: int,
+        deployment_create: DeploymentCreate,
+        f: BufferedReader,
+    ) -> Deployment:
+        """
+        Create a new deployment.
+
+        Args:
+            deployment_create: Deployment information to create
+
+        Returns:
+            The recently created deployment information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.post(
+            os.path.join(
+                self.url,
+                self.MODELS_ENDPOINT,
+                str(model_id),
+                self.VERSIONS_ENDPOINT,
+                str(version_id),
+                self.DEPLOYMENTS_ENDPOINT,
+            ),
+            headers=headers,
+            params=deployment_create.dict(),
+            files={"casm": f} if f is not None else None,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return Deployment(**response.json())
+
+    @auth
+    def list(self, model_id: int, version_id: int) -> DeploymentsList:
+        """
+        List deployments.
+
+        Returns:
+            A list of deployments created by the user
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            os.path.join(
+                self.url,
+                self.MODELS_ENDPOINT,
+                str(model_id),
+                self.VERSIONS_ENDPOINT,
+                str(version_id),
+                self.DEPLOYMENTS_ENDPOINT,
+            ),
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return DeploymentsList(
+            __root__=[Deployment(**deployment) for deployment in response.json()]
+        )
+
+    @auth
+    def get(self, model_id: int, version_id: int, deployment_id: int) -> Deployment:
+        """
+        Get a deployment.
+
+        Args:
+            deployment_id: Deployment identifier
+
+        Returns:
+            The deployment information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            os.path.join(
+                self.url,
+                self.MODELS_ENDPOINT,
+                str(model_id),
+                self.VERSIONS_ENDPOINT,
+                str(version_id),
+                self.DEPLOYMENTS_ENDPOINT,
+                str(deployment_id),
+            ),
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        return Deployment(**response.json())
 
 
 class TranspileClient(ApiClient):

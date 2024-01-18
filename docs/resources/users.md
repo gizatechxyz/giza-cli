@@ -6,6 +6,7 @@ Giza CLI provides the capabilities to manage users in Giza.
   - [Available commands](#available-commands)
     - [Create](#create)
     - [Login](#login)
+    - [Create API Key](#create-api-key)
     - [Me](#me)
 
 ## Available commands
@@ -83,6 +84,23 @@ Enter your password 🥷 :
 ```
 
 **Note**: `--debug` its also available.
+
+### Create API Key
+
+Create an API key for the current user. This API key will be stored and will be used to authenticate the user in the future.
+
+**You need te have an active account to log in**
+
+```console
+> giza users create-api-key
+[giza][2024-01-17 15:27:27.936] Creating API Key ✅ 
+[giza][2024-01-17 15:27:53.605] API Key written to: /Users/gizabrain/.giza/.api_key.json
+[giza][2024-01-17 15:27:53.606] Successfully created API Key. It will be used for future requests ✅ 
+```
+
+Now you can use the API key to authenticate yourself withouth the need of login again and again.
+
+**NOTE: The usage of API key is less secure than JWT, so use it with caution.**
 
 ### Me
 
