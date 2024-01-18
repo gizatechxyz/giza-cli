@@ -1,5 +1,6 @@
 import logging
 
+import pytest
 from typer.testing import CliRunner
 
 from giza.cli import app
@@ -22,3 +23,14 @@ def invoke_cli_runner(*args, **kwargs):
             logging.info("Expected exception in the cli runner: %s" % res.exception)
 
     return res
+
+
+@pytest.fixture(autouse=True, scope="session")
+def no_version_check():
+    """
+    Disable version check for all tests.
+    """
+    # As app is a global object, we need to make sure that we reset the callback
+    # TODO: find a better way to do this
+    app.registered_callback.callback = lambda: None
+    yield

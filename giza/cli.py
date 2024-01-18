@@ -3,6 +3,7 @@ import typer
 import typer.rich_utils
 from rich.traceback import install
 
+from giza.commands.actions import app as actions_app
 from giza.commands.deployments import app as deployments_app
 from giza.commands.deployments import deploy
 from giza.commands.models import app as models_app
@@ -37,6 +38,14 @@ app.add_typer(
     short_help="🚀 Utilities for managing deployments",
     help="""🚀 Utilities for managing deployments""",
 )
+
+app.add_typer(
+    actions_app,
+    name="actions",
+    short_help="🎯 Utilities for managing actions",
+    help="""🎯 Utilities for managing actions""",
+)
+
 
 app.callback(
     name="giza",
