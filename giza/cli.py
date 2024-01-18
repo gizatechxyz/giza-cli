@@ -4,7 +4,6 @@ import typer.rich_utils
 from rich.traceback import install
 
 from giza.commands.actions import app as actions_app
-from giza.commands.actions import new
 from giza.commands.deployments import app as deployments_app
 from giza.commands.deployments import deploy
 from giza.commands.models import app as models_app

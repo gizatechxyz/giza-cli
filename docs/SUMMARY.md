@@ -6,6 +6,7 @@
 * [Installation](welcome/Installation.md)
 * [Authentication](welcome/Authentication.md)
 * [Frameworks](welcome/frameworks.md)
+* [Actions](welcome/actions.md)
 
 ## 📦 Resources
 
