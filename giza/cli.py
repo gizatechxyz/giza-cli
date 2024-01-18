@@ -14,6 +14,7 @@ from giza.commands.verify import verify
 from giza.commands.version import check_version
 from giza.commands.versions import app as versions_app
 from giza.commands.versions import transpile
+from giza.commands.workspaces import app as workspaces_app
 
 install(suppress=[click])
 
@@ -30,6 +31,13 @@ app.add_typer(
     name="models",
     short_help="💻 Utilities for managing models",
     help="""💻 Utilities for managing models""",
+)
+
+app.add_typer(
+    workspaces_app,
+    name="workspaces",
+    short_help="💻 Utilities for managing workspaces",
+    help="""💻 Utilities for managing workspaces""",
 )
 
 app.add_typer(

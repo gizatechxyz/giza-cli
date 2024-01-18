@@ -14,9 +14,13 @@ The CLI will serve as the main entrypoint for Giza Platform for developers. It a
 
 For now it provides the following capabilities:
 
-* User related utilities, like `create` or `login`
-* Model transpilation with `transpile`
-* Create a proof from of a `casm.json` file with `prove`
+* User related utilities, like `create`, `login` (JWT Authentication) and `create_api_key` (API Key Authentication)
+* Model transpilation with `transpile` using multiple frameworks, like Cairo or EZKL
+* Model versioning
+* Proof generation for multiple frameworks, like Cairo or EZKL
+* Deployment of models to the Giza Platform for verifiable inferences
+* Workspace management to help you with Giza Actions
+* Actions jumostart with `new` command to help you get started with your actions
 
 In the future each new resource added to Giza will have its corresponding capability in the CLI.
 

@@ -117,11 +117,11 @@ list(
 ```python
 download(
     model_id: int = typer.Option(None, help="The ID of the model"),
-    version_id: int = typer.Option(None, help="The ID of the version"),
+    version_id: int = typer.Option(None, help="The ID of the version")
     output_path: str = typer.Option(
         "cairo_model", "--output-path", "-o", help="Path to output the cairo model"
     ),
-    debug: Optional[bool] = DEBUG_OPTION
+    debug: Optional[bool] = DEBUG_OPTION,
 ) → None
 ```
 
@@ -143,7 +143,7 @@ Retrieve information about the current user and print it as json to stdout.
 ```python
 download_original(
     model_id: int = typer.Option(None, help="The ID of the model"),
-    version_id: int = typer.Option(None, help="The ID of the version"),
+    version_id: int = typer.Option(None, help="The ID of the version")
     output_path: str = typer.Option(
         "cairo_model", "--output-path", "-o", help="Path to output the cairo model"
     ),

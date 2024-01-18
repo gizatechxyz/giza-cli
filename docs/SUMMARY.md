@@ -13,6 +13,7 @@
 * [Users](resources/users.md)
 * [Models](resources/models.md)
 * [Versions](resources/versions.md)
+* [Workspaces](resources/workspaces.md)
 * [Deployments](resources/deployments.md)
 
 ## 📚 Frameworks
@@ -48,6 +49,7 @@
   * [commands.users](reference/api/commands.users.md)
   * [commands.version](reference/api/commands.version.md)
   * [commands.versions](reference/api/commands.versions.md)
+  * [commands.workspaces](reference/api/commands.workspaces.md)
   * [exceptions](reference/api/exceptions.md)
   * [options](reference/api/options.md)
   * [utils.decorators](reference/api/utils.decorators.md)

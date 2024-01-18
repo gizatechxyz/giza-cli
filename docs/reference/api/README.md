@@ -8,6 +8,7 @@
 - [`cli`](./cli.md#module-cli)
 - [`client`](./client.md#module-client)
 - [`commands`](./commands.md#module-commands)
+- [`commands.actions`](./commands.actions.md#module-commandsactions)
 - [`commands.deployments`](./commands.deployments.md#module-commandsdeployments)
 - [`commands.models`](./commands.models.md#module-commandsmodels)
 - [`commands.prove`](./commands.prove.md#module-commandsprove)
@@ -16,6 +17,7 @@
 - [`commands.verify`](./commands.verify.md#module-commandsverify)
 - [`commands.version`](./commands.version.md#module-commandsversion)
 - [`commands.versions`](./commands.versions.md#module-commandsversions)
+- [`commands.workspaces`](./commands.workspaces.md#module-commandsworkspaces)
 - [`exceptions`](./exceptions.md#module-exceptions)
 - [`frameworks`](./frameworks.md#module-frameworks)
 - [`frameworks.cairo`](./frameworks.cairo.md#module-frameworkscairo)
@@ -38,6 +40,7 @@
 - [`client.UsersClient`](./client.md#class-usersclient): Client to interact with `users` endpoint.
 - [`client.VersionJobsClient`](./client.md#class-versionjobsclient): Client to interact with `jobs` endpoint.
 - [`client.VersionsClient`](./client.md#class-versionsclient): Client to interact with `versions` endpoint.
+- [`client.WorkspaceClient`](./client.md#class-workspaceclient): Client to interact with `workspaces` endpoint.
 - [`exceptions.PasswordError`](./exceptions.md#class-passworderror)
 - [`echo.Echo`](./utils.echo.md#class-echo): Helper class to use when printin output of the CLI.
 - [`enums.Framework`](./utils.enums.md#class-framework)
@@ -52,6 +55,7 @@
 - [`callbacks.debug_callback`](./callbacks.md#function-debug_callback): If a call adds the `--debug` flag debugging mode is activated for external requests and API Clients.
 - [`callbacks.version_callback`](./callbacks.md#function-version_callback): Prints the current version when `--version` flag is added to a call.
 - [`cli.entrypoint`](./cli.md#function-entrypoint)
+- [`actions.new`](./commands.actions.md#function-new): This command will create a new action by generating a Python project.
 - [`deployments.deploy`](./commands.deployments.md#function-deploy)
 - [`deployments.get`](./commands.deployments.md#function-get)
 - [`deployments.list`](./commands.deployments.md#function-list)
@@ -76,6 +80,9 @@
 - [`versions.list`](./commands.versions.md#function-list)
 - [`versions.transpile`](./commands.versions.md#function-transpile)
 - [`versions.update`](./commands.versions.md#function-update)
+- [`workspaces.create`](./commands.workspaces.md#function-create): Command to create a Giza Workspace.
+- [`workspaces.delete`](./commands.workspaces.md#function-delete)
+- [`workspaces.get`](./commands.workspaces.md#function-get)
 - [`cairo.deploy`](./frameworks.cairo.md#function-deploy): Command to deploy a specific version of a model. This will create a deployment for the specified version and check the status, once it finishes if COMPLETED the deployment is ready to be used.
 - [`cairo.prove`](./frameworks.cairo.md#function-prove): Command to prove as spceific cairo program, previously converted to CASM.
 - [`cairo.transpile`](./frameworks.cairo.md#function-transpile): This function is responsible for transpiling a model. The overall objective is to prepare a model for use by converting it into a different format (transpiling).
