@@ -1,6 +1,6 @@
 # Installation
 
-* [🚀 Installation](Installation.md#-installation)
+* [Installation](Installation.md#-installation)
   * [Recommended installation with pipx](Installation.md#recommended-installation-with-pipx)
   * [Install from PyPi](Installation.md#install-from-pypi)
   * [Installing from source](Installation.md#installing-from-source)
@@ -46,13 +46,13 @@ pip install giza-cli
 Clone the repository and install it with `pip`:
 
 ```bash
-    git clone git@github.com:gizatechxyz/giza-cli.git
-    cd giza-cli
-    pip install .
+git clone git@github.com:gizatechxyz/giza-cli.git
+cd giza-cli
+pip install .
 ```
 
 Or install it directly from the repo:
 
 ```bash
-  pip install git+ssh://git@github.com/gizatechxyz/giza-cli.git
+pip install git+ssh://git@github.com/gizatechxyz/giza-cli.git
 ```

@@ -60,4 +60,4 @@ Giza Actions is the core component within the platform, Workspaces act as an int
 
 By integrating workspaces into our platform, we aim to simplify the user experience, offering a powerful yet intuitive solution for managing Giza Actions effectively.
 
-The Actions-SDK can be found at: <https://github.com/gizatechxyz/actions-sdk>
+The Actions-SDK can be found at: <https://actions.gizatech.xyz/welcome/giza-actions-sdk>
