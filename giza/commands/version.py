@@ -1,12 +1,11 @@
 import requests
 import semver
-import typer
 
 from giza import __version__
 from giza.utils.echo import Echo
 
 
-def check_version(ctx: typer.Context):
+def check_version():
     """
     Check if there is a new version available of the cli in pypi to suggest upgrade
     """
