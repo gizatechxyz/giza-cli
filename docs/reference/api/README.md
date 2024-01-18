@@ -42,7 +42,7 @@
 - [`client.VersionsClient`](./client.md#class-versionsclient): Client to interact with `versions` endpoint.
 - [`client.WorkspaceClient`](./client.md#class-workspaceclient): Client to interact with `workspaces` endpoint.
 - [`exceptions.PasswordError`](./exceptions.md#class-passworderror)
-- [`echo.Echo`](./utils.echo.md#class-echo): Helper class to use when printin output of the CLI.
+- [`echo.Echo`](./utils.echo.md#class-echo): Helper class to use when printing output of the CLI.
 - [`enums.Framework`](./utils.enums.md#class-framework)
 - [`enums.JobKind`](./utils.enums.md#class-jobkind)
 - [`enums.JobSize`](./utils.enums.md#class-jobsize)

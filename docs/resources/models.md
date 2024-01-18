@@ -103,7 +103,7 @@ Transpiling a model in Giza can be done in three ways, each designed to provide 
 
 3. **Using a previous model:** If you have a previously created model, you can transpile it by indicating the model-id in the `giza transpile --model-id ...` or `giza versions transpile --model-id` command. This method is useful when you want to create a new version of an existing model.
 
-*Note: remember to use the `--framework` flag to indicate which one to use. It defaultss to Cairo*
+*Note: remember to use the `--framework` flag to indicate which one to use. It defaults to Cairo*
 
 Remember, the choice of method depends on your specific needs and workflow. Giza provides these options to ensure that you can work with your models in the most efficient way possible.
 

@@ -28,11 +28,11 @@ This will create an *inactive* user in Giza, to activate it you need to verify y
 
 If there is an error or you want to have more information about what it's going on there is a `--debug` flag that will add more information about the error. This will print outgoing requests to the API, debug logs and python traceback about what happened.
 
-⚠️**Note**: be aware that the debug option will print everything that its going to the API, in this case the password will be printed as plain text in the terminal, if you are using the debug option to fill a issue make sure to remove the credentials.
+⚠️**Note**: be aware that the debug option will print everything that its going to the API, in this case the password will be printed as plain text in the terminal, if you are using the debug option to fill an issue make sure to remove the credentials.
 
 ### Login
 
-Log into Giza platfrom and retieve a JWT for authentication. This JWT will be stored to authenticate you later until the token expires.
+Log into Giza platfrom and retrieve a JWT for authentication. This JWT will be stored to authenticate you later until the token expires.
 
 **You need te have an active account to log in**
 

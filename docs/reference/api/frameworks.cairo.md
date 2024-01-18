@@ -27,7 +27,7 @@ prove(
 ) → None
 ```
 
-Command to prove as spceific cairo program, previously converted to CASM. This will create a proving job and check the status, once it finishes if COMPLETED the proof is downloaded at the output path The daily jobs allowed are rate limited by the backend. 
+Command to prove as specific cairo program, previously converted to CASM. This will create a proving job and check the status, once it finishes if COMPLETED the proof is downloaded at the output path The daily jobs allowed are rate limited by the backend. 
 
 
 
