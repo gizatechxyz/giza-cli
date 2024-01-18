@@ -20,7 +20,7 @@ For now it provides the following capabilities:
 * Proof generation for multiple frameworks, like Cairo or EZKL
 * Deployment of models to the Giza Platform for verifiable inferences
 * Workspace management to help you with Giza Actions
-* Actions jumostart with `new` command to help you get started with your actions
+* Actions jumpstart with `new` command to help you get started with your actions
 
 In the future each new resource added to Giza will have its corresponding capability in the CLI.
 
