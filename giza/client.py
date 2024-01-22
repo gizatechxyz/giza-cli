@@ -474,7 +474,7 @@ class DeploymentsClient(ApiClient):
             ),
             headers=headers,
             params=deployment_create.dict(),
-            files={"casm": f} if f is not None else None,
+            files={"sierra": f} if f is not None else None,
         )
         self._echo_debug(str(response))
 

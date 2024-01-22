@@ -123,7 +123,7 @@ def deploy(
     Command to deploy a specific version of a model. This will create a deployment for the specified version and check the status, once it finishes if COMPLETED the deployment is ready to be used.
 
     Args:
-        data: main CASM file
+        data: main SIERRA file
         model_id: model id to deploy
         version_id: version id to deploy
         size: Size of the service, allowed values are S, M, L and XL. Defaults to S.
@@ -149,7 +149,7 @@ def deploy(
         spinner = Spinner(name="aesthetic", text="Creating deployment!")
 
         with Live(renderable=spinner):
-            with open(data) as casm:
+            with open(data) as sierra:
                 deployment = client.create(
                     model_id,
                     version_id,
@@ -158,7 +158,7 @@ def deploy(
                         model_id=model_id,
                         version_id=version_id,
                     ),
-                    casm,
+                    sierra,
                 )
 
     except ValidationError as e:
