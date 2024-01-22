@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 
 import typer
 
@@ -10,7 +10,7 @@ app = typer.Typer()
 
 
 def prove(
-    data: str = typer.Argument(None),
+    data: List[str] = typer.Argument(None),
     model_id: Optional[int] = typer.Option(None, "--model-id", "-m"),
     version_id: Optional[int] = typer.Option(None, "--version-id", "-v"),
     size: JobSize = typer.Option(JobSize.S, "--size", "-s"),
@@ -22,7 +22,7 @@ def prove(
         cairo.prove(data=data, size=size, output_path=output_path, debug=debug)
     elif framework == Framework.EZKL:
         ezkl.prove(
-            input_data=data,
+            input_data=data[0],
             model_id=model_id,
             version_id=version_id,
             size=size,
