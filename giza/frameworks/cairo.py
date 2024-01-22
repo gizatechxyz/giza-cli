@@ -35,7 +35,7 @@ app = typer.Typer()
 
 
 def prove(
-    data: str,
+    data: list[str],
     debug: Optional[bool],
     size: JobSize = JobSize.S,
     framework: Framework = Framework.CAIRO,
@@ -58,8 +58,11 @@ def prove(
     """
     try:
         client = JobsClient(API_HOST)
-        with open(data) as casm:
-            job: Job = client.create(JobCreate(size=size, framework=framework), casm)
+        trace_path, memory_path = data
+        with open(trace_path, "rb") as trace, open(memory_path, "rb") as memory:
+            job: Job = client.create(
+                JobCreate(size=size, framework=framework), trace, memory
+            )
         echo(f"Proving job created with name '{job.job_name}' and id -> {job.id} ✅")
         with Live() as live:
             while True:

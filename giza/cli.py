@@ -121,7 +121,7 @@ app.command(
 
     Depending on the framework, this command will do different things:
 
-        * For Cairo, it will generate a proof using a `CASM.JSON` as the representation to create the proof for.
+        * For Cairo, it will generate a proof using a trace and a memory file in that order.
         * For EZKL, it will generate a proof using the provided input, all the trusted setup will be retrieve during the job.
 
     This command will create a job with the specified size, but the amount of jobs will be rate limited by the backend.

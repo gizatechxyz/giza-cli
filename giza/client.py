@@ -736,7 +736,12 @@ class JobsClient(ApiClient):
         return Job(**response.json())
 
     @auth
-    def create(self, job_create: JobCreate, f: BufferedReader) -> Job:
+    def create(
+        self,
+        job_create: JobCreate,
+        trace: BufferedReader,
+        memory: Optional[BufferedReader] = None,
+    ) -> Job:
         """
         Create a new job.
 
@@ -752,11 +757,15 @@ class JobsClient(ApiClient):
         """
         headers = copy.deepcopy(self.default_headers)
         headers.update(self._get_auth_header())
+
+        files = {"trace_or_proof": trace} if trace is not None else None
+        if trace is not None and memory is not None:
+            files["memory"] = memory
         response = self.session.post(
             f"{self.url}/{self.JOBS_ENDPOINT}",
             headers=headers,
             params=job_create.dict(),
-            files={"file": f} if f is not None else None,
+            files=files,
         )
         self._echo_debug(str(response))
 
