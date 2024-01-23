@@ -352,8 +352,12 @@ def verify(
     """
     echo = Echo()
     if not model_id or not version_id:
-        echo.error("Both model id and version id must be provided.")
-        sys.exit(1)
+        if proof_id:
+            echo.error("Model id and version id must be provided along with proof id.")
+            sys.exit(1)
+        echo.warning(
+            "Model id and version id are not provided and proof won't be linked."
+        )
     if proof_id and proof:
         echo.error("You can only use either proof_id or proof, but not both.")
         sys.exit(1)
