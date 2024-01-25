@@ -29,7 +29,14 @@ from giza.schemas.models import ModelCreate
 from giza.schemas.proofs import Proof
 from giza.schemas.versions import VersionCreate, VersionUpdate
 from giza.utils import Echo, echo, get_response_info
-from giza.utils.enums import Framework, JobSize, JobStatus, ServiceSize, VersionStatus
+from giza.utils.enums import (
+    Framework,
+    JobKind,
+    JobSize,
+    JobStatus,
+    ServiceSize,
+    VersionStatus,
+)
 
 app = typer.Typer()
 
@@ -328,3 +335,98 @@ def transpile(
 
     zip_file.extractall(output_path)
     echo(f"Transpilation saved at: {output_path}")
+
+
+def verify(
+    proof_id: Optional[int],
+    model_id: Optional[int],
+    version_id: Optional[int],
+    proof: Optional[str] = None,
+    debug: Optional[bool] = False,
+    size: JobSize = JobSize.S,
+):
+    """
+    Create a verification job.
+    This command will create a verification job with the provided proof id.
+    The job size, model id, and version id can be optionally specified.
+    """
+    echo = Echo()
+    if not model_id or not version_id:
+        if proof_id:
+            echo.error("Model id and version id must be provided along with proof id.")
+            sys.exit(1)
+        echo.warning(
+            "Model id and version id are not provided and proof won't be linked."
+        )
+    if proof_id and proof:
+        echo.error("You can only use either proof_id or proof, but not both.")
+        sys.exit(1)
+    try:
+        job: Job
+        client = JobsClient(API_HOST)
+        if proof_id:
+            job = client.create(
+                JobCreate(
+                    size=size,
+                    framework=Framework.CAIRO,
+                    kind=JobKind.VERIFY,
+                    model_id=model_id,
+                    version_id=version_id,
+                    proof_id=proof_id,
+                ),
+                None,
+            )
+        elif proof:
+            with open(proof) as data:
+                job = client.create(
+                    JobCreate(
+                        size=size,
+                        framework=Framework.CAIRO,
+                        kind=JobKind.VERIFY,
+                        model_id=model_id,
+                        version_id=version_id,
+                    ),
+                    data,
+                )
+        echo(
+            f"Verification job created with name '{job.job_name}' and id -> {job.id} ✅"
+        )
+        with Live() as live:
+            while True:
+                current_job: Job = client.get(job.id, params={"kind": JobKind.VERIFY})
+                if current_job.status == JobStatus.COMPLETED:
+                    live.update(echo.format_message("Verification job is successful ✅"))
+                    break
+                elif current_job.status == JobStatus.FAILED:
+                    live.update(
+                        echo.format_error(
+                            f"Verification Job with name '{current_job.job_name}' and id {current_job.id} failed"
+                        )
+                    )
+                    sys.exit(1)
+                else:
+                    live.update(
+                        echo.format_message(
+                            f"Job status is '{current_job.status}', elapsed {current_job.elapsed_time}s"
+                        )
+                    )
+                    time.sleep(20)
+    except ValidationError as e:
+        echo.error("Job validation error")
+        echo.error("Review the provided information")
+        if debug:
+            raise e
+        echo.error(str(e))
+        sys.exit(1)
+    except HTTPError as e:
+        info = get_response_info(e.response)
+        echo.error("⛔️Could not create the job")
+        echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
+        echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
+        echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
+        echo.error(
+            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
+        ) if info.get("request_id") else None
+        if debug:
+            raise e
+        sys.exit(1)
