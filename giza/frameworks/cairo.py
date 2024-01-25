@@ -156,7 +156,7 @@ def deploy(
         spinner = Spinner(name="aesthetic", text="Creating deployment!")
 
         with Live(renderable=spinner):
-            with open(data) as sierra:
+            with open(data, "rb") as sierra:
                 deployment = client.create(
                     model_id,
                     version_id,
