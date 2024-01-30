@@ -377,7 +377,7 @@ def verify(
                 None,
             )
         elif proof:
-            with open(proof) as data:
+            with open(proof, "rb") as data:
                 job = client.create(
                     JobCreate(
                         size=size,
