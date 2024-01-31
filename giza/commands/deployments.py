@@ -21,10 +21,13 @@ app = typer.Typer()
 def deploy(
     data: str = typer.Argument(None),
     model_id: int = typer.Option(
-        None, help="The ID of the model where a deployment will be created"
+        None,
+        "--model-id",
+        "-m",
+        help="The ID of the model where a deployment will be created",
     ),
     version_id: int = typer.Option(
-        None, help="The ID of the version that will be deployed"
+        None, "--version-id", "-v", help="The ID of the version that will be deployed"
     ),
     size: ServiceSize = typer.Option(ServiceSize.S, "--size", "-s"),
     framework: Framework = typer.Option(Framework.CAIRO, "--framework", "-f"),
@@ -74,8 +77,10 @@ app.command(
     """,
 )
 def list(
-    model_id: int = typer.Option(None, help="The ID of the model"),
-    version_id: int = typer.Option(None, help="The ID of the version"),
+    model_id: int = typer.Option(None, "--model-id", "-m", help="The ID of the model"),
+    version_id: int = typer.Option(
+        None, "--version-id", "-v", help="The ID of the version"
+    ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     echo("Listing deployments ✅ ")
@@ -114,9 +119,13 @@ def list(
     """,
 )
 def get(
-    model_id: int = typer.Option(None, help="The ID of the model"),
-    version_id: int = typer.Option(None, help="The ID of the version"),
-    deployment_id: int = typer.Option(None, help="The ID of the version"),
+    model_id: int = typer.Option(None, "--model-id", "-m", help="The ID of the model"),
+    version_id: int = typer.Option(
+        None, "--version-id", "-v", help="The ID of the version"
+    ),
+    deployment_id: int = typer.Option(
+        None, "--deployment-id", "-d", help="The ID of the version"
+    ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     echo(f"Getting deployment {deployment_id} ✅ ")
@@ -155,9 +164,13 @@ def get(
     """,
 )
 def list_proofs(
-    model_id: int = typer.Option(None, help="The ID of the model"),
-    version_id: int = typer.Option(None, help="The ID of the version"),
-    deployment_id: int = typer.Option(None, help="The ID of the deployment"),
+    model_id: int = typer.Option(None, "--model-id", "-m", help="The ID of the model"),
+    version_id: int = typer.Option(
+        None, "--version-id", "-v", help="The ID of the version"
+    ),
+    deployment_id: int = typer.Option(
+        None, "--deployment-id", "-d", help="The ID of the version"
+    ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     echo(f"Getting proofs from deployment {deployment_id} ✅ ")
@@ -196,10 +209,16 @@ def list_proofs(
     """,
 )
 def get_proof(
-    model_id: int = typer.Option(None, help="The ID of the model"),
-    version_id: int = typer.Option(None, help="The ID of the version"),
-    deployment_id: int = typer.Option(None, help="The ID of the deployment"),
-    proof_id: str = typer.Option(None, help="The ID or request id of the proof"),
+    model_id: int = typer.Option(None, "--model-id", "-m", help="The ID of the model"),
+    version_id: int = typer.Option(
+        None, "--version-id", "-v", help="The ID of the version"
+    ),
+    deployment_id: int = typer.Option(
+        None, "--deployment-id", "-d", help="The ID of the version"
+    ),
+    proof_id: str = typer.Option(
+        None, "--proof-id", "-p", help="The ID or request id of the proof"
+    ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     echo(f"Getting proof from deployment {deployment_id} ✅ ")
@@ -238,12 +257,21 @@ def get_proof(
     """,
 )
 def download_proof(
-    model_id: int = typer.Option(None, help="The ID of the model"),
-    version_id: int = typer.Option(None, help="The ID of the version"),
-    deployment_id: int = typer.Option(None, help="The ID of the deployment"),
-    proof_id: str = typer.Option(None, help="The ID or request id of the proof"),
+    model_id: int = typer.Option(None, "--model-id", "-m", help="The ID of the model"),
+    version_id: int = typer.Option(
+        None, "--version-id", "-v", help="The ID of the version"
+    ),
+    deployment_id: int = typer.Option(
+        None, "--deployment-id", "-d", help="The ID of the version"
+    ),
+    proof_id: str = typer.Option(
+        None, "--proof-id", "-p", help="The ID or request id of the proof"
+    ),
     output_path: str = typer.Option(
-        "zk.proof", help="The path where the proof will be stored"
+        "zk.proof",
+        "--output-path",
+        "-o",
+        help="The path where the proof will be stored",
     ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
