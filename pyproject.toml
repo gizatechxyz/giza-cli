@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "giza-cli"
-version = "0.8.2"
+version = "0.9.0"
 description = "CLI for interacting with Giza"
 authors = ["Gonzalo Mellizo-Soto <gonzalo@gizatech.xyz>"]
 readme = "README.md"
@@ -60,3 +60,19 @@ ignore = [
     "B008",  # do not perform function calls in argument defaults
     "C901",  # too complex
 ]
+
+[tool.poetry_bumpversion.file."giza/__init__.py"]
+
+[tool.poetry_bumpversion.file."docs/README.md"]
+
+[tool.poetry_bumpversion.file."examples/mnist/requirements.txt"]
+search = 'giza-cli=={current_version}'
+replace = 'giza-cli=={new_version}'
+
+[tool.poetry_bumpversion.file."docs/examples/full_transpilation.md"]
+search = 'giza-cli=={current_version}'
+replace = 'giza-cli=={new_version}'
+
+[tool.poetry_bumpversion.file."examples/mnist/mnist_pytorch.ipynb"]
+search = 'giza-cli=={current_version}'
+replace = 'giza-cli=={new_version}'

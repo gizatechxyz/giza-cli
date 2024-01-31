@@ -11,3 +11,7 @@ class Proof(BaseModel):
     cairo_execution_time: Optional[float] = None
     metrics: Optional[dict] = None
     created_date: datetime.datetime
+
+
+class ProofList(BaseModel):
+    __root__: list[Proof]

@@ -17,7 +17,7 @@ from giza.schemas.deployments import Deployment, DeploymentCreate, DeploymentsLi
 from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.message import Msg
 from giza.schemas.models import Model, ModelCreate, ModelList, ModelUpdate
-from giza.schemas.proofs import Proof
+from giza.schemas.proofs import Proof, ProofList
 from giza.schemas.token import TokenResponse
 from giza.schemas.versions import Version, VersionCreate, VersionList, VersionUpdate
 from giza.schemas.workspaces import Workspace
@@ -511,6 +511,115 @@ class DeploymentsClient(ApiClient):
         return DeploymentsList(
             __root__=[Deployment(**deployment) for deployment in response.json()]
         )
+
+    @auth
+    def list_proofs(
+        self, model_id: int, version_id: int, deployment_id: int
+    ) -> ProofList:
+        """
+        List proofs.
+
+        Returns:
+            A list of proofs created by the user
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            os.path.join(
+                self.url,
+                self.MODELS_ENDPOINT,
+                str(model_id),
+                self.VERSIONS_ENDPOINT,
+                str(version_id),
+                self.DEPLOYMENTS_ENDPOINT,
+                str(deployment_id),
+                "proofs",
+            ),
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return ProofList(__root__=[Proof(**proof) for proof in response.json()])
+
+    @auth
+    def get_proof(
+        self, model_id: int, version_id: int, deployment_id: int, proof_id: int
+    ) -> Proof:
+        """
+        Return information about a specific proof.
+        `proof_if` is the identifier of the proof that can be a integer or the request id.
+
+        Returns:
+            A proof created by the user
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            os.path.join(
+                self.url,
+                self.MODELS_ENDPOINT,
+                str(model_id),
+                self.VERSIONS_ENDPOINT,
+                str(version_id),
+                self.DEPLOYMENTS_ENDPOINT,
+                str(deployment_id),
+                "proofs",
+                str(proof_id),
+            ),
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return Proof(**response.json())
+
+    @auth
+    def download_proof(
+        self, model_id: int, version_id: int, deployment_id: int, proof_id: int
+    ) -> bytes:
+        """
+        Download a proof.
+
+        Args:
+            proof_id: Proof identifier
+
+        Returns:
+            The proof binary file
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            os.path.join(
+                self.url,
+                self.MODELS_ENDPOINT,
+                str(model_id),
+                self.VERSIONS_ENDPOINT,
+                str(version_id),
+                self.DEPLOYMENTS_ENDPOINT,
+                str(deployment_id),
+                "proofs",
+                f"{proof_id}:download",
+            ),
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        url = response.json()["download_url"]
+
+        download_response = self.session.get(url)
+
+        self._echo_debug(str(download_response))
+        download_response.raise_for_status()
+
+        return download_response.content
 
     @auth
     def get(self, model_id: int, version_id: int, deployment_id: int) -> Deployment:
