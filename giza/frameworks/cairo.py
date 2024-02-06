@@ -263,6 +263,7 @@ def transpile(
                 model = models_client.get_by_name(model_name)
                 if model is not None:
                     echo("Model already exists, using existing model ✅ ")
+                    echo(f"Model found with id -> {model.id}! ✅")
                 else:
                     model_create = ModelCreate(name=model_name, description=model_desc)
                     model = models_client.create(model_create)
