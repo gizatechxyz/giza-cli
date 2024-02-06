@@ -18,5 +18,5 @@ class ModelUpdate(BaseModel):
     description: str
 
 
-class ModelList(BaseModel):
+class ModelList(RootModel):
     root: list[Model]
