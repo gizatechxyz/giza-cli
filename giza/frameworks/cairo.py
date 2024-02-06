@@ -315,7 +315,11 @@ def transpile(
                     )
                     break
                 elif version.status == VersionStatus.PARTIALLY_SUPPORTED:
-                    echo.warning("🔎 Transpilation is partially supported!")
+                    echo.warning(
+                        "🔎 Transpilation is partially supported."
+                        "Some operators are not yet supported in the Transpiler/Orion."
+                        "Please check the compatibility list in Orion. Any contribution is Greatly appreciated!"
+                    )
                     echo(f"{version.message}")
                     break
                 elif version.status == VersionStatus.FAILED:
