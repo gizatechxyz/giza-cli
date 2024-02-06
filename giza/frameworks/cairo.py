@@ -120,9 +120,9 @@ def prove(
 
 
 def deploy(
-    data: str,
     model_id: int,
     version_id: int,
+    data: Optional[str] = None,
     size: ServiceSize = ServiceSize.S,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> str:
@@ -156,7 +156,7 @@ def deploy(
         spinner = Spinner(name="aesthetic", text="Creating deployment!")
 
         with Live(renderable=spinner):
-            with open(data, "rb") as sierra:
+            if data is None:
                 deployment = client.create(
                     model_id,
                     version_id,
@@ -165,8 +165,20 @@ def deploy(
                         model_id=model_id,
                         version_id=version_id,
                     ),
-                    sierra,
+                    None,
                 )
+            else:
+                with open(data, "rb") as sierra:
+                    deployment = client.create(
+                        model_id,
+                        version_id,
+                        DeploymentCreate(
+                            size=size,
+                            model_id=model_id,
+                            version_id=version_id,
+                        ),
+                        sierra,
+                    )
 
     except ValidationError as e:
         echo.error("Deployment validation error")
@@ -271,6 +283,7 @@ def transpile(
             version, upload_url = client.create(
                 model.id, version_create, model_path.split("/")[-1]
             )
+            echo(f"Version Created with id -> {version.version}! ✅")
             progress.update(version_task, completed=True, visible=False)
             echo("Sending model for transpilation ✅ ")
             with open(model_path, "rb") as f:
@@ -288,6 +301,7 @@ def transpile(
                 if version.status not in (
                     VersionStatus.COMPLETED,
                     VersionStatus.FAILED,
+                    VersionStatus.PARTIALLY_SUPPORTED,
                 ):
                     spent = time.time() - start_time
                     echo.debug(
@@ -296,13 +310,18 @@ def transpile(
                     time.sleep(10)
                 elif version.status == VersionStatus.COMPLETED:
                     echo.debug("Transpilation is ready, downloading! ✅")
-                    cairo_model = client.download(model.id, version.version)
+                    echo(
+                        "Transpilation is fully compatible. Version compiled and Sierra is saved at Giza ✅"
+                    )
+                    break
+                elif version.status == VersionStatus.PARTIALLY_SUPPORTED:
+                    echo.warning("🔎 Transpilation is partially supported!")
+                    echo(f"{version.message}")
                     break
                 elif version.status == VersionStatus.FAILED:
                     echo.error("⛔️ Transpilation failed! ⛔️")
                     echo.error(f"⛔️ Reason -> {version.message} ⛔️")
                     sys.exit(1)
-
     except ValidationError as e:
         echo.error("Version validation error")
         echo.error("Review the provided information")
@@ -325,6 +344,7 @@ def transpile(
 
     echo("Transpilation recieved! ✅")
     try:
+        cairo_model = client.download(model.id, version.version)
         zip_file = zipfile.ZipFile(BytesIO(cairo_model))
     except zipfile.BadZipFile as zip_error:
         echo.error("Something went wrong with the transpiled file")
