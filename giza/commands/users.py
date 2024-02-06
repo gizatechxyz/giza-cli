@@ -2,7 +2,8 @@ import sys
 from typing import Optional
 
 import typer
-from pydantic import EmailError, EmailStr, SecretStr, ValidationError
+from email_validator import EmailNotValidError, validate_email
+from pydantic import EmailStr, SecretStr, ValidationError
 from requests import HTTPError
 from rich import print_json
 
@@ -223,8 +224,8 @@ def resend_email(debug: Optional[bool] = DEBUG_OPTION) -> None:
     echo("Resending verification email ✅ ")
     try:
         client = UsersClient(API_HOST)
-        client.resend_email(EmailStr.validate(email))
-    except (ValidationError, EmailError) as e:
+        client.resend_email(validate_email(email).normalized)
+    except (ValidationError, EmailNotValidError) as e:
         echo.error("⛔️Could not resend the email⛔️")
         echo.error("Review the provided information")
         if debug:

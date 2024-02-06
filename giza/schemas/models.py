@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, RootModel
 
 
 class Model(BaseModel):
@@ -19,4 +19,4 @@ class ModelUpdate(BaseModel):
 
 
 class ModelList(BaseModel):
-    __root__: list[Model]
+    root: list[Model]

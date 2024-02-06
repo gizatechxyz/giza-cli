@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, RootModel
 
 from giza.utils.enums import ServiceSize
 
@@ -28,5 +28,5 @@ class Deployment(BaseModel):
         orm_mode = True
 
 
-class DeploymentsList(BaseModel):
-    __root__: list[Deployment]
+class DeploymentsList(RootModel):
+    root: list[Deployment]
