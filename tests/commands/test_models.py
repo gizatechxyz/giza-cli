@@ -41,7 +41,7 @@ def test_models_get_invalid_id():
 # Test successful model listing
 def test_models_list():
     models = ModelList(
-        __root__=[
+        root=[
             Model(
                 id=1,
                 name="test_model",

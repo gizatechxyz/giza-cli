@@ -215,8 +215,8 @@ def test_models_client_list(tmpdir):
         models = client.list()
 
     mock_request.assert_called_once()
-    assert isinstance(models.__root__[0], Model)
-    assert models.__root__[0].name == model_data["name"]
+    assert isinstance(models.root[0], Model)
+    assert models.root[0].name == model_data["name"]
 
 
 def test_models_client_get_non_existent(tmpdir):
@@ -282,7 +282,7 @@ def test_versions_client_list(tmpdir):
         result = client.list(model_id=1)
 
     mock_request.assert_called()
-    assert version == result.__root__[0]
+    assert version == result.root[0]
     assert isinstance(result, VersionList)
 
 

@@ -2,7 +2,7 @@ import sys
 from typing import Optional
 
 import typer
-from email_validator import EmailNotValidError, validate_email
+from email_validator import EmailNotValidError, EmailSyntaxError, validate_email
 from pydantic import EmailStr, SecretStr, ValidationError
 from requests import HTTPError
 from rich import print_json
@@ -60,11 +60,11 @@ def create(debug: Optional[bool] = DEBUG_OPTION) -> None:
     echo("Creating user in Giza ✅ ")
     try:
         user_create = users.UserCreate(
-            username=user, password=SecretStr(password), email=EmailStr(email)
+            username=user, password=SecretStr(password), email=email
         )
         client = UsersClient(API_HOST)
         client.create(user_create)
-    except ValidationError as e:
+    except (ValidationError, EmailNotValidError) as e:
         echo.error("⛔️Could not create the user⛔️")
         echo.error("Review the provided information")
         if debug:

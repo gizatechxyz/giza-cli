@@ -83,7 +83,7 @@ def test_versions_get_invalid_id():
 # Test successful version listing
 def test_versions_list():
     versions = VersionList(
-        __root__=[
+        root=[
             Version(
                 version=1,
                 size=1,
@@ -124,7 +124,7 @@ def test_versions_transpile_successful(tmpdir):
         return tmp.getvalue()
 
     models = ModelList(
-        __root__=[
+        root=[
             Model(
                 id=1,
                 name="test_model",
@@ -196,7 +196,7 @@ def test_versions_transpile_bad_zip(tmpdir):
         return b"some bytes"
 
     models = ModelList(
-        __root__=[
+        root=[
             Model(
                 id=1,
                 name="test_model",

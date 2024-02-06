@@ -71,7 +71,7 @@ def test_deploy_with_unsupported_framework():
 
 def test_list_deployments():
     deployments_list = DeploymentsList(
-        __root__=[
+        root=[
             Deployment(
                 id=1,
                 status="COMPLETED",

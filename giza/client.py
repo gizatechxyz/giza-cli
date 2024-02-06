@@ -509,7 +509,7 @@ class DeploymentsClient(ApiClient):
         response.raise_for_status()
 
         return DeploymentsList(
-            __root__=[Deployment(**deployment) for deployment in response.json()]
+            root=[Deployment(**deployment) for deployment in response.json()]
         )
 
     @auth
@@ -542,7 +542,7 @@ class DeploymentsClient(ApiClient):
 
         response.raise_for_status()
 
-        return ProofList(__root__=[Proof(**proof) for proof in response.json()])
+        return ProofList(root=[Proof(**proof) for proof in response.json()])
 
     @auth
     def get_proof(
@@ -737,7 +737,7 @@ class ModelsClient(ApiClient):
 
         response.raise_for_status()
 
-        return ModelList(__root__=[Model(**model) for model in response.json()])
+        return ModelList(root=[Model(**model) for model in response.json()])
 
     def get_by_name(self, model_name: str, **kwargs) -> Union[Model, None]:
         """
@@ -755,7 +755,7 @@ class ModelsClient(ApiClient):
         except HTTPError as e:
             self._echo_debug(f"Could not retrieve model by name: {str(e)}")
             return None
-        return model.__root__[0]
+        return model.root[0]
 
     @auth
     def create(self, model_create: ModelCreate) -> Model:
@@ -1313,7 +1313,7 @@ class VersionsClient(ApiClient):
 
         response.raise_for_status()
 
-        return VersionList(__root__=[Version(**version) for version in response.json()])
+        return VersionList(root=[Version(**version) for version in response.json()])
 
     @auth
     def update(

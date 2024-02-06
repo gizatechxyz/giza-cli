@@ -4,8 +4,8 @@ from pydantic import BaseModel, EmailStr, SecretStr, validator
 
 
 class UserBase(BaseModel):
-    username: Optional[str] = None
-    email: Optional[EmailStr] = None
+    username: Optional[str]
+    email: Optional[EmailStr]
 
 
 class UserCreate(UserBase):
@@ -27,7 +27,7 @@ class UserCreate(UserBase):
         Returns:
             str: return the provided value if not empty
         """
-        if s == "":
+        if s == "" or s is None:
             raise ValueError
         return s
 
