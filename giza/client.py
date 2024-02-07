@@ -464,13 +464,15 @@ class DeploymentsClient(ApiClient):
         headers.update(self._get_auth_header())
 
         response = self.session.post(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.DEPLOYMENTS_ENDPOINT,
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.DEPLOYMENTS_ENDPOINT,
+                ]
             ),
             headers=headers,
             params=deployment_create.dict(),
@@ -494,13 +496,15 @@ class DeploymentsClient(ApiClient):
         headers.update(self._get_auth_header())
 
         response = self.session.get(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.DEPLOYMENTS_ENDPOINT,
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.DEPLOYMENTS_ENDPOINT,
+                ]
             ),
             headers=headers,
         )
@@ -526,15 +530,17 @@ class DeploymentsClient(ApiClient):
         headers.update(self._get_auth_header())
 
         response = self.session.get(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.DEPLOYMENTS_ENDPOINT,
-                str(deployment_id),
-                "proofs",
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.DEPLOYMENTS_ENDPOINT,
+                    str(deployment_id),
+                    "proofs",
+                ]
             ),
             headers=headers,
         )
@@ -559,16 +565,18 @@ class DeploymentsClient(ApiClient):
         headers.update(self._get_auth_header())
 
         response = self.session.get(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.DEPLOYMENTS_ENDPOINT,
-                str(deployment_id),
-                "proofs",
-                str(proof_id),
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.DEPLOYMENTS_ENDPOINT,
+                    str(deployment_id),
+                    "proofs",
+                    str(proof_id),
+                ]
             ),
             headers=headers,
         )
@@ -595,16 +603,18 @@ class DeploymentsClient(ApiClient):
         headers.update(self._get_auth_header())
 
         response = self.session.get(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.DEPLOYMENTS_ENDPOINT,
-                str(deployment_id),
-                "proofs",
-                f"{proof_id}:download",
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.DEPLOYMENTS_ENDPOINT,
+                    str(deployment_id),
+                    "proofs",
+                    f"{proof_id}:download",
+                ]
             ),
             headers=headers,
         )
@@ -636,14 +646,16 @@ class DeploymentsClient(ApiClient):
         headers.update(self._get_auth_header())
 
         response = self.session.get(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.DEPLOYMENTS_ENDPOINT,
-                str(deployment_id),
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.DEPLOYMENTS_ENDPOINT,
+                    str(deployment_id),
+                ]
             ),
             headers=headers,
         )
@@ -928,14 +940,16 @@ class VersionJobsClient(ApiClient):
         headers.update(self._get_auth_header())
 
         response = self.session.get(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.JOBS_ENDPOINT,
-                str(job_id),
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.JOBS_ENDPOINT,
+                    str(job_id),
+                ]
             ),
             headers=headers,
         )
@@ -965,13 +979,15 @@ class VersionJobsClient(ApiClient):
         headers = copy.deepcopy(self.default_headers)
         headers.update(self._get_auth_header())
         response = self.session.post(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.JOBS_ENDPOINT,
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.JOBS_ENDPOINT,
+                ]
             ),
             headers=headers,
             params=job_create.dict(),
@@ -995,13 +1011,15 @@ class VersionJobsClient(ApiClient):
         headers.update(self._get_auth_header())
 
         response = self.session.get(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.JOBS_ENDPOINT,
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.JOBS_ENDPOINT,
+                ]
             ),
             headers=headers,
         )
