@@ -1,43 +1,116 @@
----
-description: Giza CLI 0.9.0
----
+# Giza Command Line Interface
 
-# Giza CLI
+[![GitHub Workflow Status](https://github.com/gizatechxyz/giza-cli/actions/workflows/onpush.yml/badge.svg)](https://github.com/gizatechxyz/giza-cli/actions/workflows/onpush.yml)
+[![Project license](https://img.shields.io/github/license/gizatechxyz/orion.svg?style=flat-square)](LICENSE)
+[![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/gizatechxyz/orion/issues?q=is%3Aissue+is%3Aopen)
+[![Join the community](https://dcbadge.vercel.app/api/server/FR3Cd88x6r?style=flat-square)](https://discord.gg/FR3Cd88x6r)
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+
+```text
+  _______  __   ________      ___           ______  __       __
+ /  _____||  | |       /     /   \         /      ||  |     |  |
+|  |  __  |  | `---/  /     /  ^  \       |  ,----'|  |     |  |
+|  | |_ | |  |    /  /     /  /_\  \      |  |     |  |     |  |
+|  |__| | |  |   /  /----./  _____  \     |  `----.|  `----.|  |
+ \______| |__|  /________/__/     \__\     \______||_______||__|
+
+```
 
 Welcome to Giza CLI!
 
 This CLI provides the utilities to interact with Giza using the terminal.
 
-## 🤔 What capabilities does the CLI offer?
+**Disclaimer**: this is still in an experimental stage so the functionality is subject to change.
 
-The CLI will serve as the main entrypoint for Giza Platform for developers. It aims to provide a tool to ease the managing of resources that exists in Giza Platform.
+- [Giza Command Line Interface](#giza-command-line-interface)
+  - [🚀 Installation](#-installation)
+    - [Recommended installation with pipx](#recommended-installation-with-pipx)
+    - [Install from PyPi](#install-from-pypi)
+    - [Installing from source](#installing-from-source)
+  - [📚 Documentation](#-documentation)
+  - [🌟 What's new](#-whats-new)
+  - [🤝 Join the community!](#-join-the-community)
+  - [Contributors ✨](#contributors-)
+  - [License](#license)
 
-For now it provides the following capabilities:
+## 🚀 Installation
 
-* User related utilities, like `create`, `login` (JWT Authentication) and `create_api_key` (API Key Authentication)
-* Model transpilation with `transpile` using multiple frameworks, like Cairo or EZKL
-* Model versioning
-* Proof generation for multiple frameworks, like Orion Cairo or EZKL
-* Deployment of models to the Giza Platform for verifiable inferences
-* Workspace management to help you with Giza Actions
-* Actions jumpstart with `new` command to help you get started with your actions
+### Recommended installation with pipx
 
-In the future each new resource added to Giza will have its corresponding capability in the CLI.
+[pipx](https://pypa.github.io/pipx/) allows to install the dependency in an isolated environment. With this we can make sure that it does not conflict with any of our installed dependencies.
 
-## ✨ What's new?
+```bash
+pipx install giza-cli
+```
+
+### Install from PyPi
+
+For the latest release:
+
+```bash
+pip install giza-cli
+```
+
+### Installing from source
+
+Clone the repository and install it with `pip`:
+
+```bash
+    git clone git@github.com:gizatechxyz/giza-cli.git
+    cd giza-cli
+    pip install .
+```
+
+Or install it directly from the repo:
+
+```bash
+  pip install git+ssh://git@github.com/gizatechxyz/giza-cli.git
+```
+
+## 📚 Documentation
+
+You can check our official docs [here](https://cli.gizatech.xyz).
+
+- **Examples** includes examples on how to use the CLI functionalities.
+
+- **Resources** brings the documentation of the different resources and actions that can be done with the CLI.
+
+- 🧠 **Reference** for the API reference and internals of the CLI.
+
+## 🌟 What's new
 
 For a detailed list of changes, please refer to the [CHANGELOG](CHANGELOG.md) file.
 
-## 💖 Join the community!
+## 🤝 Join the community!
 
 Join the community and help build a safer and transparent AI in our [Discord](https://discord.gg/Kt24CsMb5k)!
 
-## ✍️ Authors & contributors
+## Contributors ✨
 
-For a full list of all authors and contributors, see [the contributors page](https://github.com/gizatechxyz/giza-cli/graphs/contributors).
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://es.linkedin.com/in/gonzalo-mellizo-soto-diaz-590260108"><img src="https://avatars.githubusercontent.com/u/18899187?v=4?s=100" width="100px;" alt="Gonzalo Mellizo"/><br /><sub><b>Gonzalo Mellizo</b></sub></a><br /><a href="https://github.com/gizatechxyz/giza-cli/commits?author=Gonmeso" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/omahs"><img src="https://avatars.githubusercontent.com/u/73983677?v=4?s=100" width="100px;" alt="omahs"/><br /><sub><b>omahs</b></sub></a><br /><a href="https://github.com/gizatechxyz/giza-cli/commits?author=omahs" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/franalgaba"><img src="https://avatars.githubusercontent.com/u/24293857?v=4?s=100" width="100px;" alt="Fran Algaba"/><br /><sub><b>Fran Algaba</b></sub></a><br /><a href="https://github.com/gizatechxyz/giza-cli/commits?author=franalgaba" title="Documentation">📖</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
 ## License
 
-This project is licensed under the **MIT license**.
-
-See [LICENSE](LICENSE/) for more information.
+[MIT](https://choosealicense.com/licenses/mit/)
