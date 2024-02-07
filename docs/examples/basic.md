@@ -1,4 +1,4 @@
-# Basic CLI Example
+# Basic Cairo CLI Example
 
 For this example we will create a user, retrieve information from it and transpile a model.
 
@@ -59,6 +59,19 @@ Now that we are authenticated we can connect with Giza!
 }
 ```
 
+## Create API Key
+
+You can also create an API key for the current user. This API key will be stored and will be used to authenticate the user in the future.
+
+```console
+> giza users create-api-key
+[giza][2024-01-17 15:27:27.936] Creating API Key ✅ 
+[giza][2024-01-17 15:27:53.605] API Key written to: /Users/gizabrain/.giza/.api_key.json
+[giza][2024-01-17 15:27:53.606] Successfully created API Key. It will be used for future requests ✅ 
+```
+
+**NOTE: The usage of API key is less secure than JWT, so use it with caution.**
+
 ## Transpiling a Model
 
 Now that we have our `onnx` model, it's time to transpile it into a format that's compatible with `giza`. Transpilation is a process where we convert the model from one format to another without changing its underlying functionality. In this case, we're converting our `onnx` model into a `cairo` model. This is a crucial step as it allows us to leverage the power of `giza` and its ecosystem.
@@ -90,21 +103,13 @@ Now let's check the result:
 > tree cairo_model
 
 cairo_model
-├── cairo_project.cairo
-├── scarb.toml
-└── src
-    ├── conv1
-    │   └── Conv_quant.cairo
-    ├── conv1.cairo
-    ├── conv2
-    │   └── Conv_quant.cairo
-    ├── conv2.cairo
-    ├── fc1
-    │   └── Gemm_MatMul_quant.cairo
-    ├── fc1.cairo
-    ├── fc2
-    │   └── Gemm_MatMul_quant.cairo
-    ├── fc2.cairo
-    ├── graph.cairo
-    └── lib.cairo
+├── inference
+│   ├── Scarb.toml
+│   └── src
+│       └── lib.cairo
+└── initializers
+    ├── node_l1
+    │   ├── Scarb.toml
+    │   └── src
+    │       └── lib.cairo
 ```

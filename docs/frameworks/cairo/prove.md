@@ -1,18 +1,59 @@
 # Prove
 
-Time to create a Proof of our Cairo program!
+Giza provides two methods for proving Orion Cairo programs: through the CLI or directly after running inference on the Giza Platform. Below are detailed instructions for both methods
 
-Once we have our `json` we can use the `prove` command to create our proof!
+## Option 1: Prove a Model After Running Inference
 
-Basically, this command will create a proving job at Giza and once the job is completed we will download the created proof.
+**Deploying Your Model**
 
-```console
-> giza prove orion_runner.casm.json --size M
-[giza][2023-08-04 11:30:36.892] Proving job created with name 'proof-job-20230804-2d3d857a' and id -> 1 ✅
-[giza][2023-08-04 11:37:41.848] Proving job is successful ✅  # This output will be updated live!
-[giza][2023-08-04 11:37:42.097] Proof Cairo VM execution time -> 5.2519965
-[giza][2023-08-04 11:37:42.099] Proof proving time -> 310.86398
-[giza][2023-08-04 11:37:43.007] Proof saved at: zk.proof
+After deploying your model on the Giza Platform, you will receive a URL for your deployed model. Refer to the [Deployments section](../../resources/deployments.md) for more details on deploying models.
+
+**Running Inference**
+
+To run inference, use the `/cairo_run` endpoint of your deployed model's URL. For example:
+
+```
+https://deployment-gizabrain-38-1-53427f44-dagsgas-ew.a.run.app/cairo_run
 ```
 
-As we can see the job takes some time, and because of this we are actively waiting for the job to be completed, once it's done all information and the proof are retrieved.
+This action will execute the inference, generate Trace and Memory files on the platform, and initiate a proving job. The inference process will return the output result along with a request ID.
+
+**Checking Proof Status**
+
+To check the status of your proof, use the following command:
+
+```
+giza deployments get-proof --model-id <MODEL_ID> --version-id <VERSION_ID> --deployment-id <DEPLOYMENT_ID> --proof-id <REQUEST_ID>
+```
+
+**Downloading Your Proof**
+
+Once the proof is ready, you can download it using:
+
+```
+giza deployments download-proof --model-id <MODEL_ID> --version-id <VERSION_ID> --deployment-id <DEPLOYMENT_ID> --proof-id <REQUEST_ID> --output-path <OUTPUT_PATH>
+```
+
+{% hint style="info" %}
+You can find an extensive example in [Giza Action tutorial](https://actions.gizatech.xyz/tutorials/build-a-verifiable-neural-network-with-giza-actions#run-and-prove)
+{% endhint %}
+
+## Option 2: Proving a Model Directly from the CLI
+
+Alternatively, you can prove a model directly using the CLI without deploying the model for inference. This method requires providing Trace and Memory files, which can only be obtained by running [CairoVM](https://github.com/lambdaclass/cairo-vm) in proof mode.
+
+**Running the Prove Command**
+
+Execute the following command to prove your model:
+
+```
+giza prove --trace <TRACE_PATH> --memory <MEMORY_PATH> --output-path <OUTPUT_PATH>
+```
+
+{% hint style="info" %}
+This option is less preferred due to the necessity of dealing with CairoVM.
+{% endhint %}
+
+{% hint style="danger" %}
+If you opt for this method, ensure you use the following commit of CairoVM: `1a78237`.
+{% endhint %}

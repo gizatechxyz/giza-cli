@@ -17,7 +17,7 @@ For now it provides the following capabilities:
 * User related utilities, like `create`, `login` (JWT Authentication) and `create_api_key` (API Key Authentication)
 * Model transpilation with `transpile` using multiple frameworks, like Cairo or EZKL
 * Model versioning
-* Proof generation for multiple frameworks, like Cairo or EZKL
+* Proof generation for multiple frameworks, like Orion Cairo or EZKL
 * Deployment of models to the Giza Platform for verifiable inferences
 * Workspace management to help you with Giza Actions
 * Actions jumpstart with `new` command to help you get started with your actions
@@ -26,7 +26,7 @@ In the future each new resource added to Giza will have its corresponding capabi
 
 ## ✨ What's new?
 
-For a detailed list of changes, please refer to the [CHANGELOG](https://github.com/gizatechxyz/giza-cli/blob/main/CHANGELOG.md) file.
+For a detailed list of changes, please refer to the [CHANGELOG](../CHANGELOG.md) file.
 
 ## 💖 Join the community!
 
@@ -40,4 +40,4 @@ For a full list of all authors and contributors, see [the contributors page](htt
 
 This project is licensed under the **MIT license**.
 
-See [LICENSE](https://github.com/gizatechxyz/giza-cli/blob/main/LICENSE/README.md) for more information.
+See [LICENSE](../LICENSE/) for more information.
