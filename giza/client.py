@@ -1222,13 +1222,16 @@ class VersionsClient(ApiClient):
         return Version(**response.json()), upload_url
 
     @auth
-    def download(self, model_id: int, version_id: int) -> bytes:
+    def download(
+        self, model_id: int, version_id: int, params: Dict
+    ) -> Dict[str, bytes]:
         """
         Download a version.
 
         Args:
             model_id: Model identifier
             version_id: Version identifier
+            params: Additional parameters to pass to the request
 
         Returns:
             The version binary file
@@ -1239,21 +1242,34 @@ class VersionsClient(ApiClient):
         response = self.session.get(
             f"{self._get_version_url(model_id)}/{version_id}:download",
             headers=headers,
+            params=params,
         )
 
         self._echo_debug(str(response))
         response.raise_for_status()
 
-        url = response.json()["download_url"]
+        urls = response.json()
+        downloads = {}
 
-        download_response = self.session.get(
-            url, headers={"Content-Type": "application/octet-stream"}
-        )
+        if params["download_model"] and "download_url" in urls:
+            model_url = urls["download_url"]
+            download_response = self.session.get(
+                model_url,
+            )
 
-        self._echo_debug(str(download_response))
-        download_response.raise_for_status()
+            self._echo_debug(str(download_response))
+            download_response.raise_for_status()
+            downloads["model"] = download_response.content
 
-        return download_response.content
+        if params["download_sierra"] and "sierra_url" in urls:
+            sierra_url = urls["sierra_url"]
+            sierra_response = self.session.get(sierra_url)
+
+            sierra_response.raise_for_status()
+            self._echo_debug(str(sierra_response))
+            downloads["inference.sierra"] = sierra_response.content
+
+        return downloads
 
     @auth
     def download_original(self, model_id: int, version_id: int) -> bytes:
