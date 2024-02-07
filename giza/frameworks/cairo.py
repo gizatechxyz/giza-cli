@@ -120,9 +120,9 @@ def prove(
 
 
 def deploy(
-    data: str,
     model_id: int,
     version_id: int,
+    data: Optional[str] = None,
     size: ServiceSize = ServiceSize.S,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> str:
@@ -150,13 +150,14 @@ def deploy(
             echo.info(
                 f"Deployment for model id {model_id} and version id {version_id} already exists! ✅"
             )
+            echo.info(f"Deployment id -> {deployments[0]['id']} ✅")
             echo.info(f'You can start doing inferences at: {deployments[0]["uri"]} 🚀')
             sys.exit(1)
 
         spinner = Spinner(name="aesthetic", text="Creating deployment!")
 
         with Live(renderable=spinner):
-            with open(data, "rb") as sierra:
+            if data is None:
                 deployment = client.create(
                     model_id,
                     version_id,
@@ -165,8 +166,20 @@ def deploy(
                         model_id=model_id,
                         version_id=version_id,
                     ),
-                    sierra,
+                    None,
                 )
+            else:
+                with open(data, "rb") as sierra:
+                    deployment = client.create(
+                        model_id,
+                        version_id,
+                        DeploymentCreate(
+                            size=size,
+                            model_id=model_id,
+                            version_id=version_id,
+                        ),
+                        sierra,
+                    )
 
     except ValidationError as e:
         echo.error("Deployment validation error")
@@ -188,6 +201,7 @@ def deploy(
             raise e
         sys.exit(1)
     echo("Deployment is successful ✅")
+    echo(f"Deployment created with id -> {deployment.id} ✅")
     echo(f"Deployment created with endpoint URL: {deployment.uri} 🎉")
     return deployment
 
@@ -251,6 +265,7 @@ def transpile(
                 model = models_client.get_by_name(model_name)
                 if model is not None:
                     echo("Model already exists, using existing model ✅ ")
+                    echo(f"Model found with id -> {model.id}! ✅")
                 else:
                     model_create = ModelCreate(name=model_name, description=model_desc)
                     model = models_client.create(model_create)
@@ -271,6 +286,7 @@ def transpile(
             version, upload_url = client.create(
                 model.id, version_create, model_path.split("/")[-1]
             )
+            echo(f"Version Created with id -> {version.version}! ✅")
             progress.update(version_task, completed=True, visible=False)
             echo("Sending model for transpilation ✅ ")
             with open(model_path, "rb") as f:
@@ -288,6 +304,7 @@ def transpile(
                 if version.status not in (
                     VersionStatus.COMPLETED,
                     VersionStatus.FAILED,
+                    VersionStatus.PARTIALLY_SUPPORTED,
                 ):
                     spent = time.time() - start_time
                     echo.debug(
@@ -296,13 +313,24 @@ def transpile(
                     time.sleep(10)
                 elif version.status == VersionStatus.COMPLETED:
                     echo.debug("Transpilation is ready, downloading! ✅")
-                    cairo_model = client.download(model.id, version.version)
+                    echo(
+                        "Transpilation is fully compatible. Version compiled and Sierra is saved at Giza ✅"
+                    )
+                    break
+                elif version.status == VersionStatus.PARTIALLY_SUPPORTED:
+                    echo.warning(
+                        "🔎 Transpilation is partially supported. "
+                        "Some operators are not yet supported in the Transpiler/Orion"
+                    )
+                    echo.warning(
+                        "Please check the compatibility list in Orion: "
+                        "https://cli.gizatech.xyz/frameworks/cairo/transpile#supported-operators"
+                    )
                     break
                 elif version.status == VersionStatus.FAILED:
                     echo.error("⛔️ Transpilation failed! ⛔️")
                     echo.error(f"⛔️ Reason -> {version.message} ⛔️")
                     sys.exit(1)
-
     except ValidationError as e:
         echo.error("Version validation error")
         echo.error("Review the provided information")
@@ -325,6 +353,7 @@ def transpile(
 
     echo("Transpilation recieved! ✅")
     try:
+        cairo_model = client.download(model.id, version.version)
         zip_file = zipfile.ZipFile(BytesIO(cairo_model))
     except zipfile.BadZipFile as zip_error:
         echo.error("Something went wrong with the transpiled file")
