@@ -80,18 +80,19 @@ But don't worry, `giza` makes this process a breeze with a simple command! Let's
 
 ```console
 > giza transpile awesome_model.onnx --output-path cairo_model
-
-[giza][2023-09-13 12:56:43.725] No model id provided, checking if model exists ✅ 
-[giza][2023-09-13 12:56:43.726] Model name is: awesome_model
-[giza][2023-09-13 12:56:43.978] Model Created with id -> 25! ✅
-[giza][2023-09-13 12:56:44.568] Sending model for transpilation ✅ 
-[giza][2023-09-13 12:56:55.577] Transpilation recieved! ✅
-[giza][2023-09-13 12:56:55.583] Transpilation saved at: cairo_model
+[giza][2024-02-07 16:31:20.844] No model id provided, checking if model exists ✅
+[giza][2024-02-07 16:31:20.845] Model name is: awesome_model
+[giza][2024-02-07 16:31:21.599] Model Created with id -> 1! ✅
+[giza][2024-02-07 16:31:22.436] Version Created with id -> 1! ✅
+[giza][2024-02-07 16:31:22.437] Sending model for transpilation ✅
+[giza][2024-02-07 16:32:13.511] Transpilation is fully compatible. Version compiled and Sierra is saved at Giza ✅
+[giza][2024-02-07 16:32:13.516] Transpilation recieved! ✅
+[giza][2024-02-07 16:32:14.349] Transpilation saved at: cairo_model
 ```
 
-As you can see from the console output, if the model does not previously exist, `giza` will automatically create one for you. It assigns a unique id to the new model, in this case, the id is 25. This is indicated by the line `[giza][2023-09-13 12:56:43.978] Model Created with id -> 25! ✅`.
+As you can see from the console output, if the model does not previously exist, `giza` will automatically create one for you. It assigns a unique id to the new model, in this case, the id is 25. This is indicated by the line `[giza][2024-02-07 16:31:21.599] Model Created with id -> 1! ✅`.
 
-After the model is created, `giza` will create a new version for it and send it for transpilation. This is indicated by the line `[giza][2023-09-13 12:56:44.568] Sending model for transpilation ✅`. The transpiled model is then saved at the specified output path.
+After the model is created, `giza` will create a new version for it `[giza][2024-02-07 16:31:22.436] Version Created with id -> 1! ✅` and send it for transpilation. This is indicated by the line `[giza][2024-02-07 16:31:22.437] Sending model for transpilation ✅`. The transpiled model is then saved at the specified output path.
 
 This feature of `giza` makes it easy to manage and version your models. You don't have to worry about manually creating a new model or version, `giza` handles it for you.
 

@@ -6,15 +6,19 @@ The transpilation of an ONNX model to a Cairo model is powered by [✨Orion✨](
 
 The transpilation process begins by reading the model from the specified path. The model is then sent for transpilation. By default, the output of this process is saved in the `cairo_model/` folder. However, you can specify a different output path using the `--output-path` option.
 
+{% code overflow="wrap" %}
 ```console
 > giza transpile awesome_model.onnx --output-path my_awesome_model
-[giza][2023-09-13 12:56:43.725] No model id provided, checking if model exists ✅ 
-[giza][2023-09-13 12:56:43.726] Model name is: awesome_model
-[giza][2023-09-13 12:56:43.978] Model Created with id -> 1! ✅
-[giza][2023-09-13 12:56:44.568] Sending model for transpilation ✅ 
-[giza][2023-09-13 12:56:55.577] Transpilation recieved! ✅
-[giza][2023-09-13 12:56:55.583] Transpilation saved at: cairo_model
+[giza][2024-02-07 16:31:20.844] No model id provided, checking if model exists ✅
+[giza][2024-02-07 16:31:20.845] Model name is: awesome_model
+[giza][2024-02-07 16:31:21.599] Model Created with id -> 1! ✅
+[giza][2024-02-07 16:31:22.436] Version Created with id -> 1! ✅
+[giza][2024-02-07 16:31:22.437] Sending model for transpilation ✅
+[giza][2024-02-07 16:32:13.511] Transpilation is fully compatible. Version compiled and Sierra is saved at Giza ✅
+[giza][2024-02-07 16:32:13.516] Transpilation recieved! ✅
+[giza][2024-02-07 16:32:14.349] Transpilation saved at: my_awesome_model
 ```
+{% endcode %}
 
 The result of the transpilation process is saved at the provided path, in this case, `my_awesome_model/`.
 
@@ -31,6 +35,25 @@ my_awesome_model
     │   └── src
     │       └── lib.cairo
 ```
+
+When we transpile a model we have two possibilities: a fully compatible model and a partially compatible one.&#x20;
+
+A model is fully compatible when all the operators that the model uses are supported by the Transpiler and Orion, if this happens the model is compiled after transpilation and we save the .sierra file on behalf of the user to use later for deployment ([deployment docs](../../resources/deployments.md)). This will be shown in the output of the transpile command:
+
+{% code overflow="wrap" %}
+```
+[giza][2024-02-07 16:32:13.511] Transpilation is fully compatible. Version compiled and Sierra is saved at Giza ✅
+```
+{% endcode %}
+
+If a model is partially supported, we will create a warning in the output stating that not all the operators are supported right now. If it is partially supported the Cairo code can still be modified for later compilation and deployment.&#x20;
+
+{% code overflow="wrap" %}
+```
+[WARN][2024-02-07 16:42:31.209] 🔎 Transpilation is partially supported. Some operators are not yet supported in the Transpiler/Orion
+[WARN][2024-02-07 16:42:31.211] Please check the compatibility list in Orion: https://cli.gizatech.xyz/frameworks/cairo/transpile#supported-operators
+```
+{% endcode %}
 
 ## Supported Operators
 
@@ -94,6 +117,7 @@ This method is useful when you want to specify particular options or parameters 
 ```console
 > giza transpile --model-id 2 awesome_model.onnx --output-path new_awesome_model
 [giza][2023-09-13 14:08:38.022] Model found with id -> 2! ✅
+[giza][2024-02-07 14:08:38.432] Version Created with id -> 1! ✅
 [giza][2023-09-13 14:08:38.712] Sending model for transpilation ✅ 
 [giza][2023-09-13 14:08:49.879] Transpilation recieved! ✅
 [giza][2023-09-13 14:08:49.885] Transpilation saved at: new_awesome_model
@@ -110,6 +134,7 @@ If you have a previously created model, you can transpile it by indicating the m
 # Using the previous model (id: 2) we can transpile a new model, which will create version 2 of the model.
 giza transpile --model-id 29 awesome_model.onnx --output-path new_awesome_model
 [giza][2023-09-13 14:11:30.015] Model found with id -> 2! ✅
+[giza][2024-02-07 14:11:30.225] Version Created with id -> 2! ✅
 [giza][2023-09-13 14:11:30.541] Sending model for transpilation ✅ 
 [giza][2023-09-13 14:11:41.601] Transpilation recieved! ✅
 [giza][2023-09-13 14:11:41.609] Transpilation saved at: new_awesome_model
