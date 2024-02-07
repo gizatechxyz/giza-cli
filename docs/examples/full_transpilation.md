@@ -21,7 +21,7 @@ pip install -r requirements.txt
 Or:
 
 ```bash
-pip install giza-cli==0.9.0 onnx==1.14.1 torch==2.1.0 torchvision==0.16.0
+pip install giza-cli==0.9.1 onnx==1.14.1 torch==2.1.0 torchvision==0.16.0
 ```
 
 We will use the libraries for the following purposes:
