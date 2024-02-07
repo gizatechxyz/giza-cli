@@ -75,7 +75,7 @@ class Echo:
         """
         yellow = typer.colors.YELLOW
         return self.format_message(
-            rf"[{yellow}]{message}[/{yellow}]", "WARNING", f"{yellow}"
+            rf"[{yellow}]{message}[/{yellow}]", "WARN", f"{yellow}"
         )
 
     def echo(self, message: str, formatted: str) -> None:

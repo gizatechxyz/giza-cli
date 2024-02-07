@@ -150,6 +150,7 @@ def deploy(
             echo.info(
                 f"Deployment for model id {model_id} and version id {version_id} already exists! ✅"
             )
+            echo.info(f"Deployment id -> {deployments[0]['id']} ✅")
             echo.info(f'You can start doing inferences at: {deployments[0]["uri"]} 🚀')
             sys.exit(1)
 
@@ -200,6 +201,7 @@ def deploy(
             raise e
         sys.exit(1)
     echo("Deployment is successful ✅")
+    echo(f"Deployment created with id -> {deployment.id} ✅")
     echo(f"Deployment created with endpoint URL: {deployment.uri} 🎉")
     return deployment
 
@@ -317,11 +319,13 @@ def transpile(
                     break
                 elif version.status == VersionStatus.PARTIALLY_SUPPORTED:
                     echo.warning(
-                        "🔎 Transpilation is partially supported."
-                        "Some operators are not yet supported in the Transpiler/Orion."
-                        "Please check the compatibility list in Orion. Any contribution is Greatly appreciated!"
+                        "🔎 Transpilation is partially supported. "
+                        "Some operators are not yet supported in the Transpiler/Orion"
                     )
-                    echo(f"{version.message}")
+                    echo.warning(
+                        "Please check the compatibility list in Orion: "
+                        "https://cli.gizatech.xyz/frameworks/cairo/transpile#supported-operators"
+                    )
                     break
                 elif version.status == VersionStatus.FAILED:
                     echo.error("⛔️ Transpilation failed! ⛔️")
