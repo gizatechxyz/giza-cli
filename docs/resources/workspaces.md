@@ -22,7 +22,7 @@ The workspace creation process can take up to 10 minutes as we are creating isol
 
 Once created, the workspace will be available for use. The workspace URL will be printed in the console, and it can be used to access the workspace.
 
-![workspace](img/workspace.png)
+![workspace](../.gitbook/assets/workspace.png)
 
 Now you can start using the workspace to run actions!
 
@@ -60,4 +60,4 @@ Giza Actions is the core component within the platform, Workspaces act as an int
 
 By integrating workspaces into our platform, we aim to simplify the user experience, offering a powerful yet intuitive solution for managing Giza Actions effectively.
 
-The Actions-SDK can be found at: <https://actions.gizatech.xyz/welcome/giza-actions-sdk>
+The Actions-SDK can be found at: [https://actions.gizatech.xyz/welcome/giza-actions-sdk](https://actions.gizatech.xyz/welcome/giza-actions-sdk)

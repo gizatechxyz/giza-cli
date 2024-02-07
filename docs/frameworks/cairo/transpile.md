@@ -19,46 +19,67 @@ The transpilation process begins by reading the model from the specified path. T
 The result of the transpilation process is saved at the provided path, in this case, `my_awesome_model/`.
 
 ```console
-> tree my_awesome_model
-
+> tree my_awesome_model/
 my_awesome_model
-├── cairo_project.cairo
-├── scarb.toml
-└── src
-    ├── conv1
-    │   └── Conv_quant.cairo
-    ├── conv1.cairo
-    ├── conv2
-    │   └── Conv_quant.cairo
-    ├── conv2.cairo
-    ├── fc1
-    │   └── Gemm_MatMul_quant.cairo
-    ├── fc1.cairo
-    ├── fc2
-    │   └── Gemm_MatMul_quant.cairo
-    ├── fc2.cairo
-    ├── graph.cairo
-    └── lib.cairo
+├── inference
+│   ├── Scarb.toml
+│   └── src
+│       └── lib.cairo
+└── initializers
+    ├── node_l1
+    │   ├── Scarb.toml
+    │   └── src
+    │       └── lib.cairo
 ```
 
-## How do we transpile a model
+## Supported Operators
+
+| Operator |      Implemented     |
+| :------: | :------------------: |
+|    Abs   | :white\_check\_mark: |
+|   Acos   | :white\_check\_mark: |
+|   Acosh  | :white\_check\_mark: |
+|    Add   | :white\_check\_mark: |
+|    And   | :white\_check\_mark: |
+|    Div   | :white\_check\_mark: |
+|    Mul   | :white\_check\_mark: |
+|    Sub   | :white\_check\_mark: |
+|  Argmax  | :white\_check\_mark: |
+|  Argmin  | :white\_check\_mark: |
+|   Asin   | :white\_check\_mark: |
+|   Asinh  | :white\_check\_mark: |
+|   Atan   | :white\_check\_mark: |
+|   Relu   | :white\_check\_mark: |
+| Constant | :white\_check\_mark: |
+|  MatMul  | :white\_check\_mark: |
+|   Gemm   | :white\_check\_mark: |
+
+## How do we transpile a model?
 
 There are three main methods for transpiling a model:
 
 ### **Method 1: Using the `giza transpile` command**
 
-- This is the simplest method and is recommended for most users.
-- When you run this command, Giza handles everything for you.
-- It first checks if a model with the specified name already exists. If not, it creates a new model and then transpiles it. 
-- The output of this process is saved in the `cairo_model/` folder by default, but you can specify a different output path using the `--output-path` option.
-- This is the strategy that we followed in the example before.
+```
+ giza transpile awesome_model.onnx --output-path my_awesome_model
+```
+
+This is the simplest method and is recommended for most users.\
+When you run this command, Giza handles everything for you:
+
+* It first checks if a model with the specified name already exists. If not, it creates a new model and then transpiles it.
+* The output of this process is saved in the `cairo_model/` folder by default, but you can specify a different output path using the `--output-path` option.
+
+This is the strategy that we followed in the example before.
 
 ### **Method 2: Manually creating a model and then transpiling it**
 
-- This method gives you more control over the process.
-- First, you create a model manually using the `giza models create` command.
-- After the model is created, you can transpile it using the `giza transpile --model-id ...` or `giza versions transpile --model-id` command.
-- This method is useful when you want to specify particular options or parameters during the model creation and transpilation process.
+This method gives you more control over the process.
+
+1. First, you create a model manually using the `giza models create` command.
+2. After the model is created, you can transpile it using the `giza transpile --model-id ...`&#x20;
+
+This method is useful when you want to specify particular options or parameters during the model creation and transpilation process.
 
 ```console
 > giza models create --name awesome_model --description "A Model for testing different models"
@@ -80,9 +101,10 @@ There are three main methods for transpiling a model:
 
 ### **Method 3: Using a previous model**
 
-- If you have a previously created model, you can transpile it by indicating the model-id in the `giza transpile --model-id ...` or `giza versions transpile --model-id` command.
-- This method is useful when you want to create a new version of an existing model.
-- The output of the transpilation process is saved in the same location as the original model.
+If you have a previously created model, you can transpile it by indicating the model-id in the `giza transpile --model-id ...` or `giza versions transpile --model-id` command.
+
+* This method is useful when you want to create a new version of an existing model.
+* The output of the transpilation process is saved in the same location as the original model.
 
 ```console
 # Using the previous model (id: 2) we can transpile a new model, which will create version 2 of the model.
@@ -93,7 +115,7 @@ giza transpile --model-id 29 awesome_model.onnx --output-path new_awesome_model
 [giza][2023-09-13 14:11:41.609] Transpilation saved at: new_awesome_model
 ```
 
-## What is happening with the models and versions
+## What is happening with the models and versions?
 
 In Giza, a model is essentially a container for versions. Each version represents a transpilation of a machine learning model at a specific point in time. This allows you to keep track of different versions of your model as it evolves and improves over time.
 

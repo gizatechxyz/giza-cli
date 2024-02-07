@@ -61,9 +61,11 @@ Here's how you can do it:
 
 ## Transpile a Model Version
 
-**Note:** This has been explained previously in the transpile documentation ([cairo](../frameworks/cairo/transpile.md) and [ezkl](../frameworks/ezkl/transpile.md)).
+{% hint style="info" %}
+**Note:** This is explained extensively in the transpile documentation ([Orion Cairo](../frameworks/cairo/transpile.md) and [EZKL](../frameworks/ezkl/transpile.md)).
+{% endhint %}
 
-Transpiling a model version in Giza is a crucial step in the model deployment process. Transpilation is the process of converting your machine learning model into a format that can be executed on Giza. This process involves converting the model into a series of Cairo instructions or performing the setup using `ezkl`.
+Transpiling a model version in Giza is a crucial step in the model deployment process. Transpilation is the process of converting your machine learning model into a format that can be executed on Giza. Depending the ZKML framework chosen, this process involves converting the model into a series of Cairo instructions or performing the setup using EZKL.
 
 When you transpile a model, you're essentially creating a new version of that model. Each version represents a specific iteration of your machine learning model, allowing you to track and manage the evolution of your models effectively.
 
@@ -79,13 +81,15 @@ Here's how you can transpile a model version:
 [giza][2023-09-13 12:56:55.583] Transpilation saved at: cairo_model
 ```
 
-Once the transpilation process is complete, a new version of the model is created in Giza. The version will be downloaded and saved at the specified output path, but you can also execute later the `download` command to download it again.
+Once the transpilation process is complete, a new version of the model is created in Giza. The version will be downloaded and saved at the specified output path, but you can also execute later with the `download` command to download it again.
 
-## Download a Successfully Transpiled Version
+## Download a Transpiled Version
 
-Once a model has been successfully transpiled, it's not necessary to go through the transpilation process again. The transpiled version is stored and can be downloaded anytime you need it. This is done using the download command in the CLI. This command specifically requires the model_id and version_id to accurately identify and download the correct transpiled version. This feature saves time and computational resources, making the management of your models more efficient.
+Once a model has been successfully transpiled, it's not necessary to go through the transpilation process again. The transpiled version is stored and can be downloaded anytime you need it. This is done using the `download` command in the CLI. This command specifically requires the `model_id` and `version_id` to accurately identify and download the correct transpiled version. This feature saves time and computational resources, making the management of your models more efficient.
 
-*Note: currently is only available for the Cairo framework*
+{% hint style="warning" %}
+The \`download\` feature is currently only available for the Orion Cairo framework.
+{% endhint %}
 
 ```console
 > giza versions download --model-id 1 --version-id 1 --output-path path
@@ -96,19 +100,17 @@ Once a model has been successfully transpiled, it's not necessary to go through 
 Let's check the downloaded version:
 
 ```console
-> tree path/
-path/
-├── cairo_project.toml
-├── scarb.toml
-└── src
-    ├── graph.cairo
-    ├── lib.cairo
-    ├── weights
-    │   ├── conv1_Conv_quant.cairo
-    │   ├── conv2_Conv_quant.cairo
-    │   ├── fc1_Gemm_MatMul_quant.cairo
-    │   └── fc2_Gemm_MatMul_quant.cairo
-    └── weights.cairo
+> tree cairo_model/
+cairo_model
+├── inference
+│   ├── Scarb.toml
+│   └── src
+│       └── lib.cairo
+└── initializers
+    ├── node_l1
+    │   ├── Scarb.toml
+    │   └── src
+    │       └── lib.cairo
 ```
 
 For more information on how to transpile a model, refer to the transpile documentation ([cairo](../frameworks/cairo/transpile.md) and [ezkl](../frameworks/ezkl/transpile.md)).

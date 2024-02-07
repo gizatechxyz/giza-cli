@@ -4,12 +4,12 @@ Deployments in our platform provide a mechanism for creating services that accep
 
 ## Deploying a model
 
-To deploy a model, you must first have a version of that model. If you have not yet created a version, please refer to the [versions](../resources/versions.md) documentation.
+To deploy a model, you must first have a version of that model. If you have not yet created a version, please refer to the [versions](versions.md) documentation.
 
-To create a new service, users can employ the `deploy`` command. This command facilitates the deployment of a machine learning service ready to accept predictions at the "/cairo_run" endpoint, providing a straightforward method for deploying and utilizing machine learning capabilities.
+To create a new service, users can employ the `deploy` command. This command facilitates the deployment of a machine learning service ready to accept predictions at the `/cairo_run` endpoint, providing a straightforward method for deploying and utilizing machine learning capabilities.
 
 ```console
-> giza deployments deploy --model-id 1 --version-id 1 model.casm.json
+> giza deployments deploy --model-id 1 --version-id 1 model.sierra
 ▰▰▰▰▰▱▱ Creating deployment!
 [giza][2024-01-17 17:18:17.055] Deployment is successful ✅
 [giza][2024-01-17 17:18:17.056] Deployment created with endpoint URL: https://deployment-gizabrain-38-1-53427f44-dagsgas-ew.a.run.app 🎉

@@ -3,8 +3,8 @@
 ## 🚀 Welcome
 
 * [Giza CLI](README.md)
-* [Installation](welcome/Installation.md)
-* [Authentication](welcome/Authentication.md)
+* [Installation](welcome/installation.md)
+* [Authentication](welcome/authentication.md)
 * [Frameworks](welcome/frameworks.md)
 * [Actions](welcome/actions.md)
 
@@ -18,11 +18,11 @@
 
 ## 📚 Frameworks
 
-* [Cairo](frameworks/cairo.md)
+* [Cairo](frameworks/cairo/README.md)
   * [Transpile](frameworks/cairo/transpile.md)
   * [Prove](frameworks/cairo/prove.md)
-
-* [EZKL](frameworks/ezkl.md)
+  * [Verify](frameworks/cairo/verify.md)
+* [EZKL](frameworks/ezkl/README.md)
   * [Transpile](frameworks/ezkl/transpile.md)
   * [Prove](frameworks/ezkl/prove.md)
   * [Verify](frameworks/ezkl/verify.md)
@@ -30,9 +30,7 @@
 ## 📖 Examples
 
 * [Basic Cairo CLI Example](examples/basic.md)
-* [Full Cairo Transpilation](examples/full_transpilation.md)
-* [Create a Cairo Proof](examples/create_proof.md)
-* [Reset Your Password](examples/reset_password.md)
+* [Reset Your Password](examples/reset\_password.md)
 
 ## 🧱 Reference
 
@@ -44,7 +42,7 @@
   * [commands.deploy](reference/api/commands.deploy.md)
   * [commands.models](reference/api/commands.models.md)
   * [commands.prove](reference/api/commands.prove.md)
-  * [commands.reset_password](reference/api/commands.reset_password.md)
+  * [commands.reset\_password](reference/api/commands.reset\_password.md)
   * [commands.transpile](reference/api/commands.transpile.md)
   * [commands.users](reference/api/commands.users.md)
   * [commands.version](reference/api/commands.version.md)

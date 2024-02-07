@@ -2,9 +2,9 @@
 
 Giza operates on multiple frameworks simultaneously. This allows you to switch between frameworks as needed, providing flexibility and control over your development process.
 
-## Cairo
+## Orion Cairo
 
-Cairo is a framework for creating and executing programs that use zero-knowledge proofs to verify computations off-chain. It is designed to be highly expressive, allowing developers to write programs that are both complex and efficient.
+_Cairo_ is A [STARK](https://starkware.co/stark/)-based Turing-complete language for writing provable programs. It is designed to be highly expressive, allowing developers to write programs that are both complex and efficient. [Orion](https://orion.gizatech.xyz/welcome/readme) is an open-source, framework dedicated to Provable Machine Learning writing in Cairo. It provides essential components and a new ONNX runtime for building verifiable Machine Learning models using STARKs.&#x20;
 
 ## EZKL
 
@@ -34,4 +34,4 @@ The `transpile` command in EZKL is essentially the same as the `setup()` command
 
 This allows you to switch between frameworks as needed, providing flexibility and control over your development process.
 
-For more information about the available commands for each framework, please refer to the [Cairo](/docs/frameworks/cairo.md) and [EZKL](/docs/frameworks/ezkl.md) documentation.
+For more information about the available commands for each framework, please refer to the [Cairo](../frameworks/cairo/) and [EZKL](../frameworks/ezkl/) documentation.
