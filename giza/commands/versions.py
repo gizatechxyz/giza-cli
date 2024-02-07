@@ -1,6 +1,5 @@
 import sys
 import zipfile
-from io import BytesIO
 from typing import Dict, Optional
 
 import typer

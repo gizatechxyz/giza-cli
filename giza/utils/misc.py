@@ -2,7 +2,7 @@ import os
 import re
 import zipfile
 from io import BytesIO
-from typing import Dict, Optional
+from typing import Optional
 
 from giza.exceptions import PasswordError
 
