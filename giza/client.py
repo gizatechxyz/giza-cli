@@ -672,7 +672,9 @@ class TranspileClient(ApiClient):
     Client to interact with `users` endpoint.
     """
 
-    TRANSPILE_ENDPOINT = "transpile"
+    MODELS_ENDPOINT = "models"
+    VERSIONS_ENDPOINT = "versions"
+    TRANSPILE_ENDPOINT = "transpilations"
 
     @auth
     def transpile(self, f: BinaryIO) -> Response:
@@ -696,6 +698,40 @@ class TranspileClient(ApiClient):
 
         response.raise_for_status()
         return response
+
+    @auth
+    def update_transpilation(self, model_id: int, version_id: int, f: BinaryIO) -> None:
+        """
+        Make a call to the API transpile endpoint with the model as a file.
+
+        Args:
+            f (BinaryIO): model to send for transpilation
+
+        Returns:
+            Response: raw response from the server with the transpiled model as a zip
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            f"{self.url}/{self.MODELS_ENDPOINT}/{model_id}/{self.VERSIONS_ENDPOINT}/{version_id}/transpilations/upload_url",
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+        upload_url = response.json()["upload_url"]
+        response = self.session.put(
+            upload_url,
+            data=f,
+        )
+        response = self.session.put(
+            f"{self.url}/{self.MODELS_ENDPOINT}/{model_id}/{self.VERSIONS_ENDPOINT}/{version_id}/transpilations",
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
 
 
 class ModelsClient(ApiClient):

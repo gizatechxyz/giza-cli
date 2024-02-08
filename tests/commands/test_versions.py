@@ -55,7 +55,7 @@ def test_versions_get():
 # Test version retrieval that throws an HTTPError
 def test_versions_get_http_error():
     with patch.object(VersionsClient, "get", side_effect=HTTPError), patch(
-        "giza.commands.versions.get_response_info", return_value={}
+        "giza.utils.exception_handling.get_response_info", return_value={}
     ):
         result = invoke_cli_runner(
             ["versions", "get", "--model-id", "1", "--version-id", "1"],
@@ -70,7 +70,7 @@ def test_versions_get_http_error():
 def test_versions_get_invalid_id():
     with patch.object(
         VersionsClient, "get", side_effect=ValidationError(errors=[], model=Version)
-    ), patch("giza.commands.versions.get_response_info", return_value={}):
+    ), patch("giza.utils.exception_handling.get_response_info", return_value={}):
         result = invoke_cli_runner(
             ["versions", "get", "--model-id", "1", "--version-id", "1"],
             expected_error=True,
@@ -105,7 +105,7 @@ def test_versions_list():
 # Test version listing with server error
 def test_versions_list_server_error():
     with patch.object(VersionsClient, "list", side_effect=HTTPError), patch(
-        "giza.commands.versions.get_response_info", return_value={}
+        "giza.utils.exception_handling.get_response_info", return_value={}
     ):
         result = invoke_cli_runner(
             ["versions", "list", "--model-id", "1"], expected_error=True
@@ -177,7 +177,7 @@ def test_versions_transpile_successful(tmpdir):
 def test_versions_transpile_http_error(tmpdir):
     with patch(
         "giza.frameworks.cairo.ModelsClient.get_by_name", side_effect=HTTPError
-    ), patch("giza.frameworks.cairo.get_response_info", return_value={}), patch(
+    ), patch("giza.utils.exception_handling.get_response_info", return_value={}), patch(
         "giza.frameworks.cairo.Path"
     ), patch.object(
         VersionsClient, "_load_credentials_file"
@@ -289,7 +289,7 @@ def test_versions_download_successful(tmpdir):
 # Test version download with server error
 def test_versions_download_server_error():
     with patch.object(VersionsClient, "get", side_effect=HTTPError), patch(
-        "giza.commands.versions.get_response_info", return_value={}
+        "giza.utils.exception_handling.get_response_info", return_value={}
     ):
         result = invoke_cli_runner(
             [
@@ -347,7 +347,7 @@ def test_versions_download_file(tmpdir):
 # Test version download with missing model_id and version_id
 def test_versions_download_missing_ids():
     with patch.object(VersionsClient, "get", side_effect=HTTPError), patch(
-        "giza.commands.versions.get_response_info", return_value={}
+        "giza.utils.exception_handling.get_response_info", return_value={}
     ):
         result = invoke_cli_runner(
             [
@@ -379,6 +379,8 @@ def test_versions_update_successful():
         VersionsClient, "upload_cairo", return_value=updated_version
     ), patch("giza.commands.versions.scarb_build"), patch(
         "giza.commands.versions.zip_folder"
+    ), patch(
+        "giza.commands.versions.update_sierra"
     ):
         result = invoke_cli_runner(
             [
@@ -410,11 +412,13 @@ def test_versions_update_server_error():
     with patch.object(
         VersionsClient, "upload_cairo", side_effect=HTTPError
     ), patch.object(VersionsClient, "get", return_value=version), patch(
-        "giza.commands.versions.get_response_info", return_value={}
+        "giza.utils.exception_handling.get_response_info", return_value={}
     ), patch(
         "giza.commands.versions.scarb_build"
     ), patch(
         "giza.commands.versions.zip_folder"
+    ), patch(
+        "giza.commands.versions.update_sierra",
     ):
         result = invoke_cli_runner(
             [
@@ -436,7 +440,7 @@ def test_versions_update_server_error():
 
 def test_versions_update_missing_ids():
     with patch.object(VersionsClient, "update", side_effect=HTTPError), patch(
-        "giza.commands.versions.get_response_info", return_value={}
+        "giza.utils.exception_handling.get_response_info", return_value={}
     ):
         result = invoke_cli_runner(
             [

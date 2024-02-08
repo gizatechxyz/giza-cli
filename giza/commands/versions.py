@@ -1,3 +1,4 @@
+import glob
 import os
 import sys
 import zipfile
@@ -8,7 +9,7 @@ import typer
 from rich import print_json
 
 from giza import API_HOST
-from giza.client import VersionsClient
+from giza.client import TranspileClient, VersionsClient
 from giza.frameworks import cairo, ezkl
 from giza.options import DEBUG_OPTION
 from giza.schemas.versions import Version, VersionList
@@ -18,6 +19,15 @@ from giza.utils.exception_handling import ExceptionHandler
 from giza.utils.misc import download_model_or_sierra, scarb_build, zip_folder
 
 app = typer.Typer()
+
+
+def update_sierra(model_id: int, version_id: int, model_path: str):
+    sierra_path = glob.glob(
+        os.path.join(model_path, "inference", "**/*.sierra"), recursive=True
+    )[0]
+    with open(sierra_path, "rb") as f:
+        TranspileClient(API_HOST).update_transpilation(model_id, version_id, f)
+        echo("Sierra updated ✅ ")
 
 
 @app.command(
@@ -165,6 +175,7 @@ def update(
             and model_path is not None
         ):
             scarb_build(os.path.join(model_path, "inference"))
+            update_sierra(model_id, version_id, model_path)
             with TemporaryDirectory() as tmp_dir:
                 zip_path = zip_folder(model_path, tmp_dir)
                 version = client.upload_cairo(model_id, version_id, zip_path)
