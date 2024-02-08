@@ -23,6 +23,7 @@ from giza.schemas.versions import Version, VersionCreate, VersionList, VersionUp
 from giza.schemas.workspaces import Workspace
 from giza.utils import echo
 from giza.utils.decorators import auth
+from giza.utils.enums import VersionStatus
 
 DEFAULT_API_VERSION = "v1"
 GIZA_TOKEN_VARIABLE = "GIZA_TOKEN"
@@ -1183,6 +1184,41 @@ class VersionsClient(ApiClient):
         response.raise_for_status()
 
         return Version(**response.json())
+
+    @auth
+    def upload_cairo(self, model_id: int, version_id: int, file_path: str) -> str:
+        """
+        Get the Cairo model URL.
+
+        Args:
+            model_id: Model identifier
+            version_id: Version identifier
+
+        Returns:
+            The Cairo model URL
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            f"{self._get_version_url(model_id)}/{version_id}:cairo_url",
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        response = self.session.put(
+            response.json()["upload_url"],
+            data=open(file_path, "rb"),
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        return self.update(
+            model_id, version_id, VersionUpdate(status=VersionStatus.COMPLETED)
+        )
 
     @auth
     def create(
