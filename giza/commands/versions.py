@@ -274,7 +274,7 @@ def download(
         if version.status != VersionStatus.COMPLETED:
             raise ValueError(f"Model version status is not completed {version.status}")
 
-        echo("Transpilation is ready, downloading! ✅")
+        echo("Data is ready, downloading! ✅")
         downloads: Dict[str, bytes] = client.download(
             model_id,
             version.version,
@@ -287,7 +287,7 @@ def download(
                 download_model_or_sierra(content, output_path, name)
             except zipfile.BadZipFile as zip_error:
                 raise ValueError(
-                    "Something went wrong with the transpiled file", zip_error.args[0]
+                    "Something went wrong with the download", zip_error.args[0]
                 ) from None
             echo(f"{name} saved at: {output_path}")
     except ValueError as e:
