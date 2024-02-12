@@ -121,7 +121,7 @@ def test_versions_transpile_successful(tmpdir):
         tmp = BytesIO()
         with zipfile.ZipFile(tmp, mode="w", compression=zipfile.ZIP_DEFLATED) as f:
             f.writestr("file1.txt", "hi")
-        return tmp.getvalue()
+        return {"model": tmp.getvalue()}
 
     models = ModelList(
         __root__=[
@@ -168,7 +168,8 @@ def test_versions_transpile_successful(tmpdir):
     # Called twice, once to open the model and second to write the zip
     mock_open.assert_called()
     assert "Reading model from path" in result.stdout
-    assert "Transpilation recieved" in result.stdout
+    assert "Downloading model" in result.stdout
+    assert "model saved at" in result.stdout
     assert result.exit_code == 0
 
 
@@ -190,10 +191,10 @@ def test_versions_transpile_http_error(tmpdir):
     assert result.exit_code == 1
 
 
-# Test version transpilation with bad zip file
-def test_versions_transpile_bad_zip(tmpdir):
+# Test version transpilation with file
+def test_versions_transpile_file(tmpdir):
     def return_content():
-        return b"some bytes"
+        return {"model": b"some bytes"}
 
     models = ModelList(
         __root__=[
@@ -240,9 +241,9 @@ def test_versions_transpile_bad_zip(tmpdir):
 
     # Called twice, once to open the model and second to write the zip
     mock_open.assert_called()
-    assert "Something went wrong" in result.stdout
-    assert "Error ->" in result.stdout
-    assert result.exit_code == 1
+    assert "Transpilation is fully compatible" in result.stdout
+    assert "Downloading model" in result.stdout
+    assert result.exit_code == 0
 
 
 # Test successful version download
@@ -260,7 +261,7 @@ def test_versions_download_successful(tmpdir):
         tmp = BytesIO()
         with zipfile.ZipFile(tmp, mode="w", compression=zipfile.ZIP_DEFLATED) as f:
             f.writestr("file1.txt", "hi")
-        return tmp.getvalue()
+        return {"model": tmp.getvalue()}
 
     with patch.object(VersionsClient, "get", return_value=version), patch.object(
         VersionsClient, "download", return_value=return_content()
@@ -281,7 +282,7 @@ def test_versions_download_successful(tmpdir):
         )
 
     mock_open.assert_called()
-    assert "Transpilation is ready, downloading!" in result.stdout
+    assert "Data is ready, downloading!" in result.stdout
     assert result.exit_code == 0
 
 
@@ -308,8 +309,8 @@ def test_versions_download_server_error():
     assert "Error at download" in result.stdout
 
 
-# Test version download with bad zip file
-def test_versions_download_bad_zip(tmpdir):
+# Test version download but a file, imitating a sierra file
+def test_versions_download_file(tmpdir):
     version = Version(
         version=1,
         size=1,
@@ -320,7 +321,7 @@ def test_versions_download_bad_zip(tmpdir):
     )
 
     def return_content():
-        return b"some bytes"
+        return {"model": b"some bytes"}
 
     with patch.object(VersionsClient, "get", return_value=version), patch.object(
         VersionsClient, "download", return_value=return_content()
@@ -339,8 +340,8 @@ def test_versions_download_bad_zip(tmpdir):
             expected_error=True,
         )
 
-    assert "Something went wrong with the transpiled file" in result.stdout
-    assert result.exit_code == 1
+    assert "saved at" in result.stdout
+    assert result.exit_code == 0
 
 
 # Test version download with missing model_id and version_id

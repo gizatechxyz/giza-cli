@@ -2,7 +2,6 @@ import json
 import sys
 import time
 import zipfile
-from io import BytesIO
 from pathlib import Path
 from typing import Optional
 
@@ -37,6 +36,7 @@ from giza.utils.enums import (
     ServiceSize,
     VersionStatus,
 )
+from giza.utils.misc import download_model_or_sierra
 
 app = typer.Typer()
 
@@ -212,6 +212,8 @@ def transpile(
     desc: str,
     model_desc: str,
     output_path: str,
+    download_model: bool,
+    download_sierra: bool,
     debug: Optional[bool],
 ) -> None:
     """
@@ -232,6 +234,8 @@ def transpile(
         desc (int, optional): Description of the version. Defaults to None.
         model_desc (int, optional): Description of the Model to create if model_id is not provided. Defaults to None.
         output_path (str, optional): The path where the cairo model will be saved. Defaults to "cairo_model".
+        download_model (bool): A flag used to determine whether to download the model or not.
+        download_sierra (bool): A flag used to determine whether to download the sierra or not.
         debug (bool, optional): A flag used to determine whether to raise exceptions or not. Defaults to DEBUG_OPTION.
 
     Raises:
@@ -351,19 +355,23 @@ def transpile(
             raise e
         sys.exit(1)
 
-    echo("Transpilation recieved! ✅")
     try:
-        cairo_model = client.download(model.id, version.version)
-        zip_file = zipfile.ZipFile(BytesIO(cairo_model))
+        if download_model or download_sierra:
+            params = {
+                "download_model": download_model,
+                "download_sierra": download_sierra,
+            }
+            downloads = client.download(model.id, version.version, params)
+            for name, content in downloads.items():
+                echo(f"Downloading {name} ✅")
+                download_model_or_sierra(content, output_path, name)
+                echo(f"{name} saved at: {output_path}")
     except zipfile.BadZipFile as zip_error:
         echo.error("Something went wrong with the transpiled file")
         echo.error(f"Error -> {zip_error.args[0]}")
         if debug:
             raise zip_error
         sys.exit(1)
-
-    zip_file.extractall(output_path)
-    echo(f"Transpilation saved at: {output_path}")
 
 
 def verify(

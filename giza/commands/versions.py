@@ -1,7 +1,6 @@
 import sys
 import zipfile
-from io import BytesIO
-from typing import Optional
+from typing import Dict, Optional
 
 import typer
 from pydantic import ValidationError
@@ -15,6 +14,7 @@ from giza.options import DEBUG_OPTION
 from giza.schemas.versions import Version, VersionList
 from giza.utils import echo, get_response_info
 from giza.utils.enums import Framework, VersionStatus
+from giza.utils.misc import download_model_or_sierra
 
 app = typer.Typer()
 
@@ -84,6 +84,16 @@ def transpile(
         "-i",
         help="The input data to use for the transpilation",
     ),
+    download_model: bool = typer.Option(
+        True,
+        "--download-model",
+        help="Download the transpiled model after the transpilation is completed. CAIRO only.",
+    ),
+    download_sierra: bool = typer.Option(
+        False,
+        "--download-sierra",
+        help="Download the siera file is the modle is fully compatible. CAIRO only.",
+    ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     if framework == Framework.CAIRO:
@@ -93,6 +103,8 @@ def transpile(
             desc=desc,
             model_desc=model_desc,
             output_path=output_path,
+            download_model=download_model,
+            download_sierra=download_sierra,
             debug=debug,
         )
     elif framework == Framework.EZKL:
@@ -233,6 +245,16 @@ def download(
     output_path: str = typer.Option(
         "cairo_model", "--output-path", "-o", help="Path to output the cairo model"
     ),
+    download_model: bool = typer.Option(
+        False,
+        "--download-model",
+        help="Download the transpiled model after the transpilation is completed. CAIRO only.",
+    ),
+    download_sierra: bool = typer.Option(
+        False,
+        "--download-sierra",
+        help="Download the siera file is the modle is fully compatible. CAIRO only.",
+    ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     """
@@ -252,19 +274,22 @@ def download(
         if version.status != VersionStatus.COMPLETED:
             raise ValueError(f"Model version status is not completed {version.status}")
 
-        echo("Transpilation is ready, downloading! ✅")
-        cairo_model = client.download(model_id, version.version)
+        echo("Data is ready, downloading! ✅")
+        downloads: Dict[str, bytes] = client.download(
+            model_id,
+            version.version,
+            {"download_model": download_model, "download_sierra": download_sierra},
+        )
 
-        try:
-            zip_file = zipfile.ZipFile(BytesIO(cairo_model))
-        except zipfile.BadZipFile as zip_error:
-            raise ValueError(
-                "Something went wrong with the transpiled file", zip_error.args[0]
-            ) from None
-
-        zip_file.extractall(output_path)
-        echo(f"Transpilation saved at: {output_path}")
-
+        for name, content in downloads.items():
+            try:
+                echo(f"Downloading {name} ✅")
+                download_model_or_sierra(content, output_path, name)
+            except zipfile.BadZipFile as zip_error:
+                raise ValueError(
+                    "Something went wrong with the download", zip_error.args[0]
+                ) from None
+            echo(f"{name} saved at: {output_path}")
     except ValueError as e:
         echo.error(e.args[0])
         if debug:
