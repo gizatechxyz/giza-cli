@@ -1,10 +1,12 @@
 import os
 import re
+import subprocess
 import zipfile
 from io import BytesIO
 from typing import Optional
 
-from giza.exceptions import PasswordError
+from giza.exceptions import PasswordError, ScarbBuildError, ScarbNotFound
+from giza.utils import echo
 
 
 def _check_password_strength(password: str) -> None:
@@ -45,3 +47,56 @@ def download_model_or_sierra(
     else:
         zip_file = zipfile.ZipFile(f)
         zip_file.extractall(output_path)
+
+
+def zip_folder(source_folder: str, dst_folder: str) -> str:
+    """
+    Zip the folder to a specific location.
+
+    Args:
+        source_folder (str): path to the folder
+        dst_folder (str): destination folder
+
+    Returns:
+        str: path to the zip file
+    """
+    zip_file_path = os.path.join(dst_folder, "model.zip")
+    if os.path.exists(zip_file_path):
+        os.remove(zip_file_path)
+    elif not os.path.exists(dst_folder):
+        os.makedirs(dst_folder)
+    with zipfile.ZipFile(zip_file_path, "w", zipfile.ZIP_DEFLATED) as zipf:
+        for root, _, files in os.walk(source_folder):
+            for file_ in files:
+                if "target" not in root:
+                    zipf.write(os.path.join(root, file_))
+    return zip_file_path
+
+
+def scarb_build(folder) -> None:
+    """
+    Build the scarb model.
+
+    Args:
+        folder (str): path to the folder
+    """
+    try:
+        subprocess.run(["scarb", "--version"], check=True)
+    except subprocess.CalledProcessError as e:
+        echo.error("Scarb not found in the system")
+        raise ScarbNotFound("Scarb not found in the system") from e
+    echo("Scarb is installed, proceeding with the build.")
+
+    try:
+        subprocess.run(
+            [
+                "scarb",
+                "build",
+            ],
+            check=True,
+            cwd=folder,
+        )
+    except subprocess.CalledProcessError as e:
+        echo.error("Compilation failed")
+        raise ScarbBuildError("Compilation failed") from e
+    echo("Compilation successful")

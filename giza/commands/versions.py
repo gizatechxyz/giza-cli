@@ -1,22 +1,33 @@
+import glob
+import os
 import sys
 import zipfile
+from tempfile import TemporaryDirectory
 from typing import Dict, Optional
 
 import typer
-from pydantic import ValidationError
-from requests import HTTPError
 from rich import print_json
 
 from giza import API_HOST
-from giza.client import VersionsClient
+from giza.client import TranspileClient, VersionsClient
 from giza.frameworks import cairo, ezkl
 from giza.options import DEBUG_OPTION
 from giza.schemas.versions import Version, VersionList
-from giza.utils import echo, get_response_info
+from giza.utils import echo
 from giza.utils.enums import Framework, VersionStatus
-from giza.utils.misc import download_model_or_sierra
+from giza.utils.exception_handling import ExceptionHandler
+from giza.utils.misc import download_model_or_sierra, scarb_build, zip_folder
 
 app = typer.Typer()
+
+
+def update_sierra(model_id: int, version_id: int, model_path: str):
+    sierra_path = glob.glob(
+        os.path.join(model_path, "inference", "**/*.sierra"), recursive=True
+    )[0]
+    with open(sierra_path, "rb") as f:
+        TranspileClient(API_HOST).update_transpilation(model_id, version_id, f)
+        echo("Sierra updated ✅ ")
 
 
 @app.command(
@@ -31,34 +42,15 @@ app = typer.Typer()
 def get(
     model_id: int = typer.Option(None, help="The ID of the model"),
     version_id: int = typer.Option(None, help="The ID of the version"),
-    debug: Optional[bool] = DEBUG_OPTION,
+    debug: bool = DEBUG_OPTION,
 ) -> None:
     if any([model_id is None, version_id is None]):
         echo.error("⛔️Model ID and version ID are required⛔️")
         sys.exit(1)
     echo("Retrieving version information ✅ ")
-    try:
+    with ExceptionHandler(debug=debug):
         client = VersionsClient(API_HOST)
         version: Version = client.get(model_id, version_id)
-    except ValidationError as e:
-        echo.error("Version validation error")
-        echo.error("Review the provided information")
-        if debug:
-            raise e
-        echo.error(str(e))
-        sys.exit(1)
-    except HTTPError as e:
-        info = get_response_info(e.response)
-        echo.error("⛔️Could not retrieve version information")
-        echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
-        echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
-        echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
-        echo.error(
-            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
-        ) if info.get("request_id") else None
-        if debug:
-            raise e
-        sys.exit(1)
     print_json(version.json())
 
 
@@ -145,48 +137,49 @@ app.command(
 
 
 @app.command(
-    short_help="🔄 Update the description of a version.",
-    help="""🔄 Update the description of a version.
+    short_help="🔄 Update version data or a partially supported version",
+    help="""🔄 Update version data or a partially supported vers.
 
-    This command needs a model id and version id to update the description of a version.
+    This command aims to update version data or if a model is partially supported,
+    it will try to update the model to a fully supported version if a cairo model path is provided.
+
+    It will retrigger compilation of the model and if the model is fully supported, it will update the version to completed.
     """,
 )
 def update(
-    model_id: int = typer.Option(None, help="The ID of the model"),
-    version_id: int = typer.Option(None, help="The ID of the version"),
-    description: str = typer.Option(
-        None, "--description", "-d", help="New description for the version"
+    model_id: int = typer.Option(None, "--model-id", "-m", help="The ID of the model"),
+    version_id: int = typer.Option(
+        None, "--version-id", "-v", help="The ID of the version"
     ),
-    debug: Optional[bool] = DEBUG_OPTION,
+    model_path: str = typer.Option(
+        None, "--model-path", "-M", help="Path of the model to update"
+    ),
+    debug: bool = DEBUG_OPTION,
 ) -> None:
-    if any([model_id is None, version_id is None, description is None]):
-        echo.error(
-            "⛔️Model ID, version ID and description are required to update the version⛔️"
-        )
+    if any([model_id is None, version_id is None]):
+        echo.error("⛔️Model ID and version ID are required to update the version⛔️")
         sys.exit(1)
-    echo("Updating version description ✅ ")
-    try:
+    echo("Checking version ✅ ")
+    with ExceptionHandler(debug=debug):
         client = VersionsClient(API_HOST)
-        version = client.update(model_id, version_id, description)
-    except ValidationError as e:
-        echo.error("Version validation error")
-        echo.error("Review the provided information")
-        if debug:
-            raise e
-        echo.error(str(e))
-        sys.exit(1)
-    except HTTPError as e:
-        info = get_response_info(e.response)
-        echo.error("⛔️Could not update version")
-        echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
-        echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
-        echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
-        echo.error(
-            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
-        ) if info.get("request_id") else None
-        if debug:
-            raise e
-        sys.exit(1)
+        version = client.get(model_id, version_id)
+
+        if (
+            version.status != VersionStatus.PARTIALLY_SUPPORTED
+            and model_path is not None
+        ):
+            echo.error("⛔️Version has a different status than PARTIALLY_SUPPORTED⛔️")
+            sys.exit(1)
+        elif (
+            version.status == VersionStatus.PARTIALLY_SUPPORTED
+            and model_path is not None
+        ):
+            scarb_build(os.path.join(model_path, "inference"))
+            update_sierra(model_id, version_id, model_path)
+            with TemporaryDirectory() as tmp_dir:
+                zip_path = zip_folder(model_path, tmp_dir)
+                version = client.upload_cairo(model_id, version_id, zip_path)
+        echo("Version updated ✅ ")
     print_json(version.json())
 
 
@@ -199,34 +192,15 @@ def update(
 )
 def list(
     model_id: int = typer.Option(None, help="The ID of the model"),
-    debug: Optional[bool] = DEBUG_OPTION,
+    debug: bool = DEBUG_OPTION,
 ) -> None:
     if model_id is None:
         echo.error("⛔️Model ID is required⛔️")
         sys.exit(1)
     echo("Listing versions for the model ✅ ")
-    try:
+    with ExceptionHandler(debug=debug):
         client = VersionsClient(API_HOST)
         versions: VersionList = client.list(model_id)
-    except ValidationError as e:
-        echo.error("Version validation error")
-        echo.error("Review the provided information")
-        if debug:
-            raise e
-        echo.error(str(e))
-        sys.exit(1)
-    except HTTPError as e:
-        info = get_response_info(e.response)
-        echo.error("⛔️Could not list versions for the model")
-        echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
-        echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
-        echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
-        echo.error(
-            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
-        ) if info.get("request_id") else None
-        if debug:
-            raise e
-        sys.exit(1)
     print_json(versions.json())
 
 
@@ -255,7 +229,7 @@ def download(
         "--download-sierra",
         help="Download the siera file is the modle is fully compatible. CAIRO only.",
     ),
-    debug: Optional[bool] = DEBUG_OPTION,
+    debug: bool = DEBUG_OPTION,
 ) -> None:
     """
     Retrieve information about the current user and print it as json to stdout.
@@ -264,7 +238,7 @@ def download(
         debug (Optional[bool], optional): Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False)
     """
 
-    try:
+    with ExceptionHandler(debug=debug):
         if any([model_id is None, version_id is None]):
             raise ValueError("⛔️Model ID and version ID are required⛔️")
 
@@ -290,23 +264,6 @@ def download(
                     "Something went wrong with the download", zip_error.args[0]
                 ) from None
             echo(f"{name} saved at: {output_path}")
-    except ValueError as e:
-        echo.error(e.args[0])
-        if debug:
-            raise e
-        sys.exit(1)
-    except HTTPError as e:
-        info = get_response_info(e.response)
-        echo.error("⛔️Error at download")
-        echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
-        echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
-        echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
-        echo.error(
-            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
-        ) if info.get("request_id") else None
-        if debug:
-            raise e
-        sys.exit(1)
 
 
 @app.command(
@@ -322,7 +279,7 @@ def download_original(
     output_path: str = typer.Option(
         "model.onnx", "--output-path", "-o", help="Path to output the ONNX model"
     ),
-    debug: Optional[bool] = DEBUG_OPTION,
+    debug: bool = DEBUG_OPTION,
 ) -> None:
     """
     Retrieve information about the current user and print it as json to stdout.
@@ -331,7 +288,7 @@ def download_original(
         debug (Optional[bool], optional): Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False)
     """
 
-    try:
+    with ExceptionHandler(debug=debug):
         if any([model_id is None, version_id is None]):
             raise ValueError("⛔️Model ID and version ID are required⛔️")
 
@@ -348,21 +305,3 @@ def download_original(
             f.write(onnx_model)
 
         echo(f"ONNX model saved at: {output_path}")
-
-    except ValueError as e:
-        echo.error(e.args[0])
-        if debug:
-            raise e
-        sys.exit(1)
-    except HTTPError as e:
-        info = get_response_info(e.response)
-        echo.error("⛔️Error at download")
-        echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
-        echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
-        echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
-        echo.error(
-            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
-        ) if info.get("request_id") else None
-        if debug:
-            raise e
-        sys.exit(1)
