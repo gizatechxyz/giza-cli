@@ -140,6 +140,131 @@ giza transpile --model-id 29 awesome_model.onnx --output-path new_awesome_model
 [giza][2023-09-13 14:11:41.609] Transpilation saved at: new_awesome_model
 ```
 
+## Transpilation Results
+
+When a version is transpiled the version can be in the following statuses:
+
+* `FAILED`: the transpilation of the model failed
+* COMPLETED: the version transpilation is completed and the version is FULLY compatible. This means that the version operators all are supported during transpilation and Orion, and the model has been compiled to sierra and saved in the platform. The model can be directly deployed without the need to provide a sierra file. This model is "frozen" so it will not allow for code or model updates and if any changes are done to the model a new version should be created.
+* `PARTIALLY_SUPPORTED`: not all the operators are supported in the transpilation but they might be supported in Orion, so a partially working code will be returned, allowing for modifications of the code to update the version into a fully compatible one. Once this version is updated we will compile the version and if it is successful the new code and the sierra will be uploaded to Giza, the status will be updated to `COMPLETED` and the version will be frozen not allowing any more modifications.
+
+{% hint style="warning" %}
+We try to support all the available operators on Orion but there might be a little lag between Orion's implementation and transpilation availability
+{% endhint %}
+
+## How to update a transpilation
+
+If your model version is in a `PARTIALLY_SUPPORTED` status, you can work towards achieving a `COMPLETED` status by updating the transpilation. The update process involves modifying the unsupported operators and compiling the model. Here's how to update a transpilation, from creation to fully supported:
+
+1. Transpile the model with `giza transpile`
+2. Modify your cairo model to address the unsupported operators.
+3. Execute the giza version update command. This command needs `scarb` to be installed ([docs](https://docs.swmansion.com/scarb/)), compilation will be attempted and if successful code and sierra file will be updated in Giza.
+
+#### Example: Updating a Version
+
+Say you have an `awesome_model.onnx` that is `PARTIALLY_SUPPORTED`:
+
+<pre class="language-console" data-overflow="wrap"><code class="lang-console"><strong>❯ giza transpile awesome_model.onnx
+</strong>[giza][2024-02-12 13:19:55.957] No model id provided, checking if model exists ✅ 
+[giza][2024-02-12 13:19:55.958] Model name is: awesome_model
+[giza][2024-02-12 13:19:56.207] Model Created with id -> 1! ✅
+[giza][2024-02-12 13:19:56.710] Version Created with id -> 1! ✅
+[giza][2024-02-12 13:19:56.711] Sending model for transpilation ✅ 
+[WARN][2024-02-12 13:20:07.207] 🔎 Transpilation is partially supported. Some operators are not yet supported in the Transpiler/Orion
+[WARN][2024-02-12 13:20:07.209] Please check the compatibility list in Orion: https://cli.gizatech.xyz/frameworks/cairo/transpile#supported-operators
+[giza][2024-02-12 13:20:07.773] Downloading model ✅
+[giza][2024-02-12 13:20:07.783] model saved at: cairo_model
+</code></pre>
+
+This version has some operators that are not available in the transpilation, but they might be supported in Orion. When a model is not fully compatible, in the `inference/lib.cairo` a comment will be shown:
+
+{% code overflow="wrap" %}
+```
+let node_8 = // Operator LogSoftmax is not yet supported by the Giza transpiler. If Orion supports it, consider manual implementation.;
+```
+{% endcode %}
+
+Let's say that `LogSoftMax` is the unsupported operator, if we check the Orion Documentation, we can see that it [is supported](https://orion.gizatech.xyz/framework/operators/neural-network/nn.logsoftmax). Now we could add the necessary code  to add our operator (including imports):
+
+```
+let node_8 = NNTrait::logsoftmax(node_7_output_0, 1);
+```
+
+{% hint style="warning" %}
+LogSoftMax serves as an example and does not mean that it is not currently supported
+{% endhint %}
+
+After the manual implementation, we can trigger the update with the `update` command:
+
+{% code overflow="wrap" %}
+```
+❯ giza versions update --model-id 1 --version-id 1 --model-path cairo_model
+[giza][2024-02-12 13:35:28.993] Checking version ✅ 
+scarb 2.4.3 (5dbab1f31 2024-01-04)
+cairo: 2.4.3 (https://crates.io/crates/cairo-lang-compiler/2.4.3)
+sierra: 1.4.0
+
+[giza][2024-02-12 13:35:29.138] Scarb is installed, proceeding with the build.
+   Compiling inference v0.1.0 (/Users/gizabrain/cairo_model/inference/Scarb.toml)
+error: Unexpected argument type. Expected: "@orion::operators::tensor::core::Tensor::<?13>", found: "orion::operators::tensor::core::Tensor::<orion::numbers::fixed_point::implementations::fp16x16::core::FP16x16>".
+ --> /Users/gizabrain/cairo_model/inference/src/lib.cairo:15:34
+let node_8 = NNTrait::logsoftmax(node_7_output, 1);
+                                 ^********************^
+
+
+error: could not compile `inference` due to previous error
+[ERROR][2024-02-12 13:35:34.847] Compilation failed
+[ERROR][2024-02-12 13:35:34.848] ⛔️Error building the scarb model⛔️
+[ERROR][2024-02-12 13:35:34.848] ⛔️Version could not be updated⛔️
+[ERROR][2024-02-12 13:35:34.849] Check scarb documentation https://docs.swmansion.com/scarb/
+```
+{% endcode %}
+
+Here's what is going on:
+
+* We want to update the first version of the first model with our new code, the code is at `--model-path cairo_model`&#x20;
+* The CLI checks if `scarb` is available in the system
+* `scarb build` is attempted
+* We still have some errors that we have to fix
+
+In this case, we purposely forgot to add the `@`to showcase a common scenario:
+
+```
+let node_8 = NNTrait::logsoftmax(@node_7_output, 1);
+```
+
+Once everything is fixed we can attempt the update again:
+
+```
+❯ giza versions update --model-id 1 --version-id 1 --model-path cairo_model
+[giza][2024-02-12 13:43:25.913] Checking version ✅ 
+scarb 2.4.3 (5dbab1f31 2024-01-04)
+cairo: 2.4.3 (https://crates.io/crates/cairo-lang-compiler/2.4.3)
+sierra: 1.4.0
+
+[giza][2024-02-12 13:43:26.064] Scarb is installed, proceeding with the build.
+   Compiling inference v0.1.0 (/Users/gizabrain/cairo_model/inference/Scarb.toml)
+    Finished release target(s) in 6 seconds
+[giza][2024-02-12 13:43:32.326] Compilation successful
+[giza][2024-02-12 13:43:33.708] Sierra updated ✅ 
+[giza][2024-02-12 13:43:34.962] Version updated ✅ 
+{
+  "version": 1,
+  "size": 8858,
+  "status": "COMPLETED",
+  "message": null,
+  "description": "Initial version",
+  "created_date": "2024-02-12T12:19:56.324501",
+  "last_update": "2024-02-12T12:43:34.906667"
+}
+```
+
+The version has been updated successfully! Now we have a fully compatible model that generated a sierra and can be easily deployed! Now the version will be frozen so it won't allow for any more updates.
+
+{% hint style="info" %}
+When we refer to a version of a model, we refer to the code/artifact of a specific model at a specific point in time. The model is frozen for tracking purposes.&#x20;
+{% endhint %}
+
 ## What is happening with the models and versions?
 
 In Giza, a model is essentially a container for versions. Each version represents a transpilation of a machine learning model at a specific point in time. This allows you to keep track of different versions of your model as it evolves and improves over time.
