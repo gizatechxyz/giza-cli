@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from giza.utils.enums import ServiceSize
+from giza.utils.enums import Framework, ServiceSize
 
 
 class DeploymentCreate(BaseModel):
@@ -13,6 +13,7 @@ class DeploymentCreate(BaseModel):
     status: Optional[str] = None
     size: ServiceSize
     service_name: Optional[str] = None
+    framework: Framework
 
 
 class Deployment(BaseModel):
