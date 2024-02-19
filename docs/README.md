@@ -1,5 +1,5 @@
 ---
-description: Giza CLI 0.11.0
+description: Giza CLI 0.12.0
 ---
 
 # Giza CLI
