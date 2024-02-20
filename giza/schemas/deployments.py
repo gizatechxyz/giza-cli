@@ -13,7 +13,7 @@ class DeploymentCreate(BaseModel):
     status: Optional[str] = None
     size: ServiceSize
     service_name: Optional[str] = None
-    framework: Framework
+    framework: Framework = Framework.CAIRO
 
 
 class Deployment(BaseModel):
