@@ -20,10 +20,12 @@
 
 * [Cairo](frameworks/cairo/README.md)
   * [Transpile](frameworks/cairo/transpile.md)
+  * [Deploy](frameworks/cairo/deploy.md)
   * [Prove](frameworks/cairo/prove.md)
   * [Verify](frameworks/cairo/verify.md)
 * [EZKL](frameworks/ezkl/README.md)
   * [Transpile](frameworks/ezkl/transpile.md)
+  * [Deploy](frameworks/ezkl/deploy.md)
   * [Prove](frameworks/ezkl/prove.md)
   * [Verify](frameworks/ezkl/verify.md)
 

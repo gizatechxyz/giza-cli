@@ -7,6 +7,7 @@ In the realm of Giza, Cairo serves as the backbone for generating provable machi
 ## Cairo Framework Features
 
 1. Transpilation Process: Dive into Giza's streamlined process to seamlessly convert ONNX machine learning models into Cairo code. This transformation ensures optimal compatibility and functionality within the Cairo ecosystem, leveraging the power of [✨Orion✨](https://github.com/gizatechxyz/orion). More on this in the [transpile documentation for cairo](transpile.md).
-2. Creating Verifiable Proofs: Use the transpile model to generate the `casm.json` file to create a proof and validate the correctness and reliability of your transformed models. Discover how Giza harnesses Cairo's robust features to create evidence ensuring the credibility of your machine learning outputs. More on this in the [prove documentation for cairo](prove.md).
+2. Creating Verifiable Proofs: Use the transpile model to generate the trace and memory files to create a proof and validate the correctness and reliability of your transformed models. Discover how Giza harnesses Cairo's robust features to create evidence ensuring the credibility of your machine learning outputs. More on this in the [prove documentation for cairo](prove.md).
+3. Deploying verifiable models: deploy a verifiable model ready to accept requests and abstract you from creating the proofs. Offering the model as an easy available API to ease integration and usage. For further information look at the [deploy documentation for cairo](deploy.md).
 
 [Cairo official documentation](https://docs.cairo-lang.org/)
