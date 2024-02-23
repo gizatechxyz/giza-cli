@@ -3,8 +3,8 @@
 ## 🚀 Welcome
 
 * [Giza CLI](README.md)
-* [Installation](welcome/installation.md)
-* [Authentication](welcome/authentication.md)
+* [Installation](welcome/Installation.md)
+* [Authentication](welcome/Authentication.md)
 * [Frameworks](welcome/frameworks.md)
 * [Actions](welcome/actions.md)
 
@@ -18,14 +18,12 @@
 
 ## 📚 Frameworks
 
-* [Cairo](frameworks/cairo/README.md)
+* [Cairo](frameworks/cairo.md)
   * [Transpile](frameworks/cairo/transpile.md)
-  * [Deploy](frameworks/cairo/deploy.md)
   * [Prove](frameworks/cairo/prove.md)
   * [Verify](frameworks/cairo/verify.md)
-* [EZKL](frameworks/ezkl/README.md)
+* [EZKL](frameworks/ezkl.md)
   * [Transpile](frameworks/ezkl/transpile.md)
-  * [Deploy](frameworks/ezkl/deploy.md)
   * [Prove](frameworks/ezkl/prove.md)
   * [Verify](frameworks/ezkl/verify.md)
 
