@@ -34,4 +34,4 @@ The `transpile` command in EZKL is essentially the same as the `setup()` command
 
 This allows you to switch between frameworks as needed, providing flexibility and control over your development process.
 
-For more information about the available commands for each framework, please refer to the [Cairo](../frameworks/cairo.md) and [EZKL](../frameworks/ezkl.md) documentation.
+For more information about the available commands for each framework, please refer to the [Cairo](../frameworks/cairo/) and [EZKL](../frameworks/ezkl/) documentation.
