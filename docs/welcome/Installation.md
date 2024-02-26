@@ -1,10 +1,5 @@
 # Installation
 
-* [Installation](Installation.md#-installation)
-  * [Recommended installation with pipx](Installation.md#recommended-installation-with-pipx)
-  * [Install from PyPi](Installation.md#install-from-pypi)
-  * [Installing from source](Installation.md#installing-from-source)
-
 ## Handling Python versions with Pyenv
 
 As we are using Python 3.11, it's recommended to use [Pyenv](https://github.com/pyenv/pyenv) to manage your Python versions. Here are the steps to install Pyenv and set Python 3.11 as your local version:
