@@ -253,6 +253,7 @@ def test_versions_client_get(tmpdir):
         status=VersionStatus.STARTING,
         created_date="2021-08-31T15:00:00.000000",
         last_update="2021-08-31T15:00:00.000000",
+        framework=Framework.CAIRO,
     )
     response = ResponseStub(version.dict(), 200)
     with patch("pathlib.Path.home", return_value=tmpdir), patch(
@@ -272,6 +273,7 @@ def test_versions_client_list(tmpdir):
         description="test_version",
         status=VersionStatus.COMPLETED,
         created_date="2021-08-31T15:00:00.000000",
+        framework=Framework.CAIRO,
         last_update="2021-08-31T15:00:00.000000",
     )
     response = ResponseStub([version.dict()], 200)
@@ -294,6 +296,7 @@ def test_versions_client_create(tmpdir):
         status=VersionStatus.STARTING,
         created_date="2021-08-31T15:00:00.000000",
         last_update="2021-08-31T15:00:00.000000",
+        framework=Framework.CAIRO,
     )
     response = ResponseStub(
         version.dict(), 201, headers={MODEL_URL_HEADER.lower(): "url"}

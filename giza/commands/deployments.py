@@ -194,7 +194,7 @@ def list_proofs(
         if debug:
             raise e
         sys.exit(1)
-    print_json(proofs.json())
+    print_json(proofs.json(exclude_unset=True))
 
 
 @app.command(
@@ -242,7 +242,7 @@ def get_proof(
         if debug:
             raise e
         sys.exit(1)
-    print_json(proof.json())
+    print_json(proof.json(exclude_unset=True))
 
 
 @app.command(
