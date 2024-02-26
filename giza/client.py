@@ -23,6 +23,7 @@ from giza.schemas.versions import Version, VersionCreate, VersionList, VersionUp
 from giza.schemas.workspaces import Workspace
 from giza.utils import echo
 from giza.utils.decorators import auth
+from giza.utils.enums import VersionStatus
 
 DEFAULT_API_VERSION = "v1"
 GIZA_TOKEN_VARIABLE = "GIZA_TOKEN"
@@ -464,13 +465,15 @@ class DeploymentsClient(ApiClient):
         headers.update(self._get_auth_header())
 
         response = self.session.post(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.DEPLOYMENTS_ENDPOINT,
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.DEPLOYMENTS_ENDPOINT,
+                ]
             ),
             headers=headers,
             params=deployment_create.dict(),
@@ -494,13 +497,15 @@ class DeploymentsClient(ApiClient):
         headers.update(self._get_auth_header())
 
         response = self.session.get(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.DEPLOYMENTS_ENDPOINT,
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.DEPLOYMENTS_ENDPOINT,
+                ]
             ),
             headers=headers,
         )
@@ -526,15 +531,17 @@ class DeploymentsClient(ApiClient):
         headers.update(self._get_auth_header())
 
         response = self.session.get(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.DEPLOYMENTS_ENDPOINT,
-                str(deployment_id),
-                "proofs",
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.DEPLOYMENTS_ENDPOINT,
+                    str(deployment_id),
+                    "proofs",
+                ]
             ),
             headers=headers,
         )
@@ -559,16 +566,18 @@ class DeploymentsClient(ApiClient):
         headers.update(self._get_auth_header())
 
         response = self.session.get(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.DEPLOYMENTS_ENDPOINT,
-                str(deployment_id),
-                "proofs",
-                str(proof_id),
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.DEPLOYMENTS_ENDPOINT,
+                    str(deployment_id),
+                    "proofs",
+                    str(proof_id),
+                ]
             ),
             headers=headers,
         )
@@ -595,16 +604,18 @@ class DeploymentsClient(ApiClient):
         headers.update(self._get_auth_header())
 
         response = self.session.get(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.DEPLOYMENTS_ENDPOINT,
-                str(deployment_id),
-                "proofs",
-                f"{proof_id}:download",
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.DEPLOYMENTS_ENDPOINT,
+                    str(deployment_id),
+                    "proofs",
+                    f"{proof_id}:download",
+                ]
             ),
             headers=headers,
         )
@@ -636,14 +647,16 @@ class DeploymentsClient(ApiClient):
         headers.update(self._get_auth_header())
 
         response = self.session.get(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.DEPLOYMENTS_ENDPOINT,
-                str(deployment_id),
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.DEPLOYMENTS_ENDPOINT,
+                    str(deployment_id),
+                ]
             ),
             headers=headers,
         )
@@ -659,7 +672,9 @@ class TranspileClient(ApiClient):
     Client to interact with `users` endpoint.
     """
 
-    TRANSPILE_ENDPOINT = "transpile"
+    MODELS_ENDPOINT = "models"
+    VERSIONS_ENDPOINT = "versions"
+    TRANSPILE_ENDPOINT = "transpilations"
 
     @auth
     def transpile(self, f: BinaryIO) -> Response:
@@ -683,6 +698,40 @@ class TranspileClient(ApiClient):
 
         response.raise_for_status()
         return response
+
+    @auth
+    def update_transpilation(self, model_id: int, version_id: int, f: BinaryIO) -> None:
+        """
+        Make a call to the API transpile endpoint with the model as a file.
+
+        Args:
+            f (BinaryIO): model to send for transpilation
+
+        Returns:
+            Response: raw response from the server with the transpiled model as a zip
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            f"{self.url}/{self.MODELS_ENDPOINT}/{model_id}/{self.VERSIONS_ENDPOINT}/{version_id}/transpilations/upload_url",
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+        upload_url = response.json()["upload_url"]
+        response = self.session.put(
+            upload_url,
+            data=f,
+        )
+        response = self.session.put(
+            f"{self.url}/{self.MODELS_ENDPOINT}/{model_id}/{self.VERSIONS_ENDPOINT}/{version_id}/transpilations",
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
 
 
 class ModelsClient(ApiClient):
@@ -928,14 +977,16 @@ class VersionJobsClient(ApiClient):
         headers.update(self._get_auth_header())
 
         response = self.session.get(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.JOBS_ENDPOINT,
-                str(job_id),
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.JOBS_ENDPOINT,
+                    str(job_id),
+                ]
             ),
             headers=headers,
         )
@@ -965,13 +1016,15 @@ class VersionJobsClient(ApiClient):
         headers = copy.deepcopy(self.default_headers)
         headers.update(self._get_auth_header())
         response = self.session.post(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.JOBS_ENDPOINT,
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.JOBS_ENDPOINT,
+                ]
             ),
             headers=headers,
             params=job_create.dict(),
@@ -995,13 +1048,15 @@ class VersionJobsClient(ApiClient):
         headers.update(self._get_auth_header())
 
         response = self.session.get(
-            os.path.join(
-                self.url,
-                self.MODELS_ENDPOINT,
-                str(model_id),
-                self.VERSIONS_ENDPOINT,
-                str(version_id),
-                self.JOBS_ENDPOINT,
+            "/".join(
+                [
+                    self.url,
+                    self.MODELS_ENDPOINT,
+                    str(model_id),
+                    self.VERSIONS_ENDPOINT,
+                    str(version_id),
+                    self.JOBS_ENDPOINT,
+                ]
             ),
             headers=headers,
         )
@@ -1167,6 +1222,41 @@ class VersionsClient(ApiClient):
         return Version(**response.json())
 
     @auth
+    def upload_cairo(self, model_id: int, version_id: int, file_path: str) -> str:
+        """
+        Get the Cairo model URL.
+
+        Args:
+            model_id: Model identifier
+            version_id: Version identifier
+
+        Returns:
+            The Cairo model URL
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            f"{self._get_version_url(model_id)}/{version_id}:cairo_url",
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        response = self.session.put(
+            response.json()["upload_url"],
+            data=open(file_path, "rb"),
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        return self.update(
+            model_id, version_id, VersionUpdate(status=VersionStatus.COMPLETED)
+        )
+
+    @auth
     def create(
         self,
         model_id: int,
@@ -1204,13 +1294,16 @@ class VersionsClient(ApiClient):
         return Version(**response.json()), upload_url
 
     @auth
-    def download(self, model_id: int, version_id: int) -> bytes:
+    def download(
+        self, model_id: int, version_id: int, params: Dict
+    ) -> Dict[str, bytes]:
         """
         Download a version.
 
         Args:
             model_id: Model identifier
             version_id: Version identifier
+            params: Additional parameters to pass to the request
 
         Returns:
             The version binary file
@@ -1221,21 +1314,34 @@ class VersionsClient(ApiClient):
         response = self.session.get(
             f"{self._get_version_url(model_id)}/{version_id}:download",
             headers=headers,
+            params=params,
         )
 
         self._echo_debug(str(response))
         response.raise_for_status()
 
-        url = response.json()["download_url"]
+        urls = response.json()
+        downloads = {}
 
-        download_response = self.session.get(
-            url, headers={"Content-Type": "application/octet-stream"}
-        )
+        if params["download_model"] and "download_url" in urls:
+            model_url = urls["download_url"]
+            download_response = self.session.get(
+                model_url,
+            )
 
-        self._echo_debug(str(download_response))
-        download_response.raise_for_status()
+            self._echo_debug(str(download_response))
+            download_response.raise_for_status()
+            downloads["model"] = download_response.content
 
-        return download_response.content
+        if params["download_sierra"] and "sierra_url" in urls:
+            sierra_url = urls["sierra_url"]
+            sierra_response = self.session.get(sierra_url)
+
+            sierra_response.raise_for_status()
+            self._echo_debug(str(sierra_response))
+            downloads["inference.sierra"] = sierra_response.content
+
+        return downloads
 
     @auth
     def download_original(self, model_id: int, version_id: int) -> bytes:

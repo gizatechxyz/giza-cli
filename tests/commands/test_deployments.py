@@ -3,6 +3,7 @@ from unittest.mock import patch
 from requests import HTTPError
 
 from giza.commands.deployments import DeploymentsClient, cairo
+from giza.frameworks import ezkl
 from giza.schemas.deployments import Deployment, DeploymentsList
 from tests.conftest import invoke_cli_runner
 
@@ -30,23 +31,61 @@ def test_deploy_with_cairo_framework():
 
 
 def test_deploy_with_ezkl_framework():
-    result = invoke_cli_runner(
-        [
-            "deployments",
-            "deploy",
-            "--model-id",
-            "1",
-            "--version-id",
-            "1",
-            "--framework",
-            "EZKL",
-            "--size",
-            "S",
-            "data_path",
-        ],
-        expected_error=True,
+    with patch.object(ezkl, "deploy") as mock_deploy:
+        result = invoke_cli_runner(
+            [
+                "deployments",
+                "deploy",
+                "--model-id",
+                "1",
+                "--version-id",
+                "1",
+                "--framework",
+                "EZKL",
+                "--size",
+                "S",
+                "data_path",
+            ],
+        )
+    mock_deploy.assert_called_once()
+    assert result.exit_code == 0
+
+
+def test_deploy_ezkl_existing_deployment():
+    deploy_list = DeploymentsList(
+        __root__=[
+            Deployment(
+                id=1,
+                status="COMPLETED",
+                uri="https://giza-api.com/deployments/1",
+                size="S",
+                service_name="giza-deployment-1",
+                model_id=1,
+                version_id=1,
+            ),
+        ]
     )
-    assert "EZKL deployment is not yet supported" in str(result.exception)
+    with patch.object(
+        DeploymentsClient, "list", return_value=deploy_list
+    ) as mock_deploy:
+        result = invoke_cli_runner(
+            [
+                "deployments",
+                "deploy",
+                "--model-id",
+                "1",
+                "--version-id",
+                "1",
+                "--framework",
+                "EZKL",
+                "--size",
+                "S",
+                "data_path",
+            ],
+            expected_error=True,
+        )
+    mock_deploy.assert_called_once()
+    assert "already exists" in result.stdout
 
 
 def test_deploy_with_unsupported_framework():

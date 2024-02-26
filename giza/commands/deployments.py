@@ -8,7 +8,7 @@ from rich import print_json
 
 from giza import API_HOST
 from giza.client import DeploymentsClient
-from giza.frameworks import cairo
+from giza.frameworks import cairo, ezkl
 from giza.options import DEBUG_OPTION
 from giza.schemas.deployments import DeploymentsList
 from giza.schemas.proofs import Proof, ProofList
@@ -38,9 +38,7 @@ def deploy(
             data=data, model_id=model_id, version_id=version_id, size=size, debug=debug
         )
     elif framework == Framework.EZKL:
-        raise NotImplementedError(
-            "EZKL deployment is not yet supported, please use Cairo instead"
-        )
+        ezkl.deploy(model_id=model_id, version_id=version_id, size=size, debug=debug)
     else:
         raise typer.BadParameter(
             f"Framework {framework} is not supported, please use one of the following: {Framework.CAIRO}, {Framework.EZKL}"
@@ -196,7 +194,7 @@ def list_proofs(
         if debug:
             raise e
         sys.exit(1)
-    print_json(proofs.json())
+    print_json(proofs.json(exclude_unset=True))
 
 
 @app.command(
@@ -244,7 +242,7 @@ def get_proof(
         if debug:
             raise e
         sys.exit(1)
-    print_json(proof.json())
+    print_json(proof.json(exclude_unset=True))
 
 
 @app.command(

@@ -133,3 +133,4 @@ smart_contracts/
 .DS_Store
 
 .ruff_cache/
+cairo_model/

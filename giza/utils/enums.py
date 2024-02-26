@@ -7,6 +7,7 @@ class VersionStatus(StrEnum):
     STARTING: str = "STARTING"
     UPLOADED: str = "UPLOADED"
     PROCESSING: str = "PROCESSING"
+    PARTIALLY_SUPPORTED: str = "PARTIALLY_SUPPORTED"
 
 
 class JobStatus(StrEnum):

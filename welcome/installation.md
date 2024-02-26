@@ -1,5 +1,10 @@
 # Installation
 
+* [Installation](installation.md#-installation)
+  * [Recommended installation with pipx](installation.md#recommended-installation-with-pipx)
+  * [Install from PyPi](installation.md#install-from-pypi)
+  * [Installing from source](installation.md#installing-from-source)
+
 ## Handling Python versions with Pyenv
 
 As we are using Python 3.11, it's recommended to use [Pyenv](https://github.com/pyenv/pyenv) to manage your Python versions. Here are the steps to install Pyenv and set Python 3.11 as your local version:
@@ -50,4 +55,3 @@ Or install it directly from the repo:
 ```bash
 pip install git+ssh://git@github.com/gizatechxyz/giza-cli.git
 ```
-

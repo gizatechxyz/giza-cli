@@ -2,7 +2,6 @@ import json
 import sys
 import time
 import zipfile
-from io import BytesIO
 from pathlib import Path
 from typing import Optional
 
@@ -37,6 +36,7 @@ from giza.utils.enums import (
     ServiceSize,
     VersionStatus,
 )
+from giza.utils.misc import download_model_or_sierra
 
 app = typer.Typer()
 
@@ -120,9 +120,9 @@ def prove(
 
 
 def deploy(
-    data: str,
     model_id: int,
     version_id: int,
+    data: Optional[str] = None,
     size: ServiceSize = ServiceSize.S,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> str:
@@ -150,13 +150,14 @@ def deploy(
             echo.info(
                 f"Deployment for model id {model_id} and version id {version_id} already exists! ✅"
             )
+            echo.info(f"Deployment id -> {deployments[0]['id']} ✅")
             echo.info(f'You can start doing inferences at: {deployments[0]["uri"]} 🚀')
             sys.exit(1)
 
         spinner = Spinner(name="aesthetic", text="Creating deployment!")
 
         with Live(renderable=spinner):
-            with open(data, "rb") as sierra:
+            if data is None:
                 deployment = client.create(
                     model_id,
                     version_id,
@@ -165,8 +166,20 @@ def deploy(
                         model_id=model_id,
                         version_id=version_id,
                     ),
-                    sierra,
+                    None,
                 )
+            else:
+                with open(data, "rb") as sierra:
+                    deployment = client.create(
+                        model_id,
+                        version_id,
+                        DeploymentCreate(
+                            size=size,
+                            model_id=model_id,
+                            version_id=version_id,
+                        ),
+                        sierra,
+                    )
 
     except ValidationError as e:
         echo.error("Deployment validation error")
@@ -188,6 +201,7 @@ def deploy(
             raise e
         sys.exit(1)
     echo("Deployment is successful ✅")
+    echo(f"Deployment created with id -> {deployment.id} ✅")
     echo(f"Deployment created with endpoint URL: {deployment.uri} 🎉")
     return deployment
 
@@ -198,6 +212,8 @@ def transpile(
     desc: str,
     model_desc: str,
     output_path: str,
+    download_model: bool,
+    download_sierra: bool,
     debug: Optional[bool],
 ) -> None:
     """
@@ -218,6 +234,8 @@ def transpile(
         desc (int, optional): Description of the version. Defaults to None.
         model_desc (int, optional): Description of the Model to create if model_id is not provided. Defaults to None.
         output_path (str, optional): The path where the cairo model will be saved. Defaults to "cairo_model".
+        download_model (bool): A flag used to determine whether to download the model or not.
+        download_sierra (bool): A flag used to determine whether to download the sierra or not.
         debug (bool, optional): A flag used to determine whether to raise exceptions or not. Defaults to DEBUG_OPTION.
 
     Raises:
@@ -251,6 +269,7 @@ def transpile(
                 model = models_client.get_by_name(model_name)
                 if model is not None:
                     echo("Model already exists, using existing model ✅ ")
+                    echo(f"Model found with id -> {model.id}! ✅")
                 else:
                     model_create = ModelCreate(name=model_name, description=model_desc)
                     model = models_client.create(model_create)
@@ -271,6 +290,7 @@ def transpile(
             version, upload_url = client.create(
                 model.id, version_create, model_path.split("/")[-1]
             )
+            echo(f"Version Created with id -> {version.version}! ✅")
             progress.update(version_task, completed=True, visible=False)
             echo("Sending model for transpilation ✅ ")
             with open(model_path, "rb") as f:
@@ -288,6 +308,7 @@ def transpile(
                 if version.status not in (
                     VersionStatus.COMPLETED,
                     VersionStatus.FAILED,
+                    VersionStatus.PARTIALLY_SUPPORTED,
                 ):
                     spent = time.time() - start_time
                     echo.debug(
@@ -296,13 +317,24 @@ def transpile(
                     time.sleep(10)
                 elif version.status == VersionStatus.COMPLETED:
                     echo.debug("Transpilation is ready, downloading! ✅")
-                    cairo_model = client.download(model.id, version.version)
+                    echo(
+                        "Transpilation is fully compatible. Version compiled and Sierra is saved at Giza ✅"
+                    )
+                    break
+                elif version.status == VersionStatus.PARTIALLY_SUPPORTED:
+                    echo.warning(
+                        "🔎 Transpilation is partially supported. "
+                        "Some operators are not yet supported in the Transpiler/Orion"
+                    )
+                    echo.warning(
+                        "Please check the compatibility list in Orion: "
+                        "https://cli.gizatech.xyz/frameworks/cairo/transpile#supported-operators"
+                    )
                     break
                 elif version.status == VersionStatus.FAILED:
                     echo.error("⛔️ Transpilation failed! ⛔️")
                     echo.error(f"⛔️ Reason -> {version.message} ⛔️")
                     sys.exit(1)
-
     except ValidationError as e:
         echo.error("Version validation error")
         echo.error("Review the provided information")
@@ -323,18 +355,23 @@ def transpile(
             raise e
         sys.exit(1)
 
-    echo("Transpilation recieved! ✅")
     try:
-        zip_file = zipfile.ZipFile(BytesIO(cairo_model))
+        if download_model or download_sierra:
+            params = {
+                "download_model": download_model,
+                "download_sierra": download_sierra,
+            }
+            downloads = client.download(model.id, version.version, params)
+            for name, content in downloads.items():
+                echo(f"Downloading {name} ✅")
+                download_model_or_sierra(content, output_path, name)
+                echo(f"{name} saved at: {output_path}")
     except zipfile.BadZipFile as zip_error:
         echo.error("Something went wrong with the transpiled file")
         echo.error(f"Error -> {zip_error.args[0]}")
         if debug:
             raise zip_error
         sys.exit(1)
-
-    zip_file.extractall(output_path)
-    echo(f"Transpilation saved at: {output_path}")
 
 
 def verify(
