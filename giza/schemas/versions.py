@@ -25,6 +25,7 @@ class Version(BaseModel):
     description: Optional[str] = None
     created_date: datetime.datetime
     last_update: datetime.datetime
+    framework: Framework
 
 
 class VersionList(BaseModel):

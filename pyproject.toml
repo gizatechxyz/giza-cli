@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "giza-cli"
-version = "0.12.1"
+version = "0.12.2"
 description = "CLI for interacting with Giza"
 authors = ["Gonzalo Mellizo-Soto <gonzalo@gizatech.xyz>"]
 readme = "README.md"
@@ -61,6 +61,7 @@ ignore = [
     "C901",  # too complex
 ]
 
+# Bumpversion configuration
 [tool.poetry_bumpversion.file."giza/__init__.py"]
 
 [tool.poetry_bumpversion.file."docs/README.md"]

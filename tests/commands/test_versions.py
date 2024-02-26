@@ -8,6 +8,7 @@ from requests.exceptions import HTTPError
 from giza.commands.versions import VersionsClient, VersionStatus
 from giza.schemas.models import Model, ModelList
 from giza.schemas.versions import Version, VersionList
+from giza.utils.enums import Framework
 from tests.conftest import invoke_cli_runner
 
 
@@ -41,6 +42,7 @@ def test_versions_get():
         status=VersionStatus.COMPLETED,
         created_date="2021-08-31T15:00:00.000000",
         last_update="2021-08-31T15:00:00.000000",
+        framework=Framework.CAIRO,
     )
     with patch.object(VersionsClient, "get", return_value=version) as mock_get:
         result = invoke_cli_runner(
@@ -91,6 +93,7 @@ def test_versions_list():
                 status=VersionStatus.COMPLETED,
                 created_date="2021-08-31T15:00:00.000000",
                 last_update="2021-08-31T15:00:00.000000",
+                framework=Framework.CAIRO,
             )
         ]
     )
@@ -142,6 +145,7 @@ def test_versions_transpile_successful(tmpdir):
         status=VersionStatus.COMPLETED,
         created_date="2021-08-31T15:00:00.000000",
         last_update="2021-08-31T15:00:00.000000",
+        framework=Framework.CAIRO,
     )
 
     with patch(
@@ -215,6 +219,7 @@ def test_versions_transpile_file(tmpdir):
         status=VersionStatus.COMPLETED,
         created_date="2021-08-31T15:00:00.000000",
         last_update="2021-08-31T15:00:00.000000",
+        framework=Framework.CAIRO,
     )
 
     with patch(
@@ -255,6 +260,7 @@ def test_versions_download_successful(tmpdir):
         status=VersionStatus.COMPLETED,
         created_date="2021-08-31T15:00:00.000000",
         last_update="2021-08-31T15:00:00.000000",
+        framework=Framework.CAIRO,
     )
 
     def return_content():
@@ -318,6 +324,7 @@ def test_versions_download_file(tmpdir):
         status=VersionStatus.COMPLETED,
         created_date="2021-08-31T15:00:00.000000",
         last_update="2021-08-31T15:00:00.000000",
+        framework=Framework.CAIRO,
     )
 
     def return_content():
@@ -371,6 +378,7 @@ def test_versions_update_successful():
         status=VersionStatus.PARTIALLY_SUPPORTED,
         created_date="2021-08-31T15:00:00.000000",
         last_update="2021-08-31T15:00:00.000000",
+        framework=Framework.CAIRO,
     )
     updated_version = version.copy()
     updated_version.status = VersionStatus.COMPLETED
@@ -408,6 +416,7 @@ def test_versions_update_server_error():
         status=VersionStatus.PARTIALLY_SUPPORTED,
         created_date="2021-08-31T15:00:00.000000",
         last_update="2021-08-31T15:00:00.000000",
+        framework=Framework.CAIRO,
     )
     with patch.object(
         VersionsClient, "upload_cairo", side_effect=HTTPError
