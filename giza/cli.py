@@ -4,8 +4,8 @@ import typer.rich_utils
 from rich.traceback import install
 
 from giza.commands.actions import app as actions_app
-from giza.commands.deployments import app as deployments_app
-from giza.commands.deployments import deploy
+from giza.commands.endpoints import app as deployments_app
+from giza.commands.endpoints import deploy
 from giza.commands.models import app as models_app
 from giza.commands.prove import prove
 from giza.commands.reset_password import request_reset_password_token, reset_password

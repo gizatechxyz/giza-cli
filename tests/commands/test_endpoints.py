@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 from requests import HTTPError
 
-from giza.commands.deployments import DeploymentsClient, cairo
+from giza.commands.endpoints import DeploymentsClient, cairo
 from giza.frameworks import ezkl
 from giza.schemas.deployments import Deployment, DeploymentsList
 from tests.conftest import invoke_cli_runner
@@ -12,7 +12,7 @@ def test_deploy_with_cairo_framework():
     with patch.object(cairo, "deploy") as mock_deploy:
         result = invoke_cli_runner(
             [
-                "deployments",
+                "endpoints",
                 "deploy",
                 "--model-id",
                 "1",
@@ -34,7 +34,7 @@ def test_deploy_with_ezkl_framework():
     with patch.object(ezkl, "deploy") as mock_deploy:
         result = invoke_cli_runner(
             [
-                "deployments",
+                "endpoints",
                 "deploy",
                 "--model-id",
                 "1",
@@ -70,7 +70,7 @@ def test_deploy_ezkl_existing_deployment():
     ) as mock_deploy:
         result = invoke_cli_runner(
             [
-                "deployments",
+                "endpoints",
                 "deploy",
                 "--model-id",
                 "1",
@@ -91,7 +91,7 @@ def test_deploy_ezkl_existing_deployment():
 def test_deploy_with_unsupported_framework():
     result = invoke_cli_runner(
         [
-            "deployments",
+            "endpoints",
             "deploy",
             "--model-id",
             "1",
@@ -135,7 +135,7 @@ def test_list_deployments():
         DeploymentsClient, "list", return_value=deployments_list
     ) as mock_list:
         result = invoke_cli_runner(
-            ["deployments", "list", "--model-id", "1", "--version-id", "1"],
+            ["endpoints", "list", "--model-id", "1", "--version-id", "1"],
         )
     mock_list.assert_called_once()
     assert result.exit_code == 0
@@ -146,7 +146,7 @@ def test_list_deployments():
 def test_list_deployments_http_error():
     with patch.object(DeploymentsClient, "list", side_effect=HTTPError):
         result = invoke_cli_runner(
-            ["deployments", "list", "--model-id", "1", "--version-id", "1"],
+            ["endpoints", "list", "--model-id", "1", "--version-id", "1"],
             expected_error=True,
         )
     assert result.exit_code == 1
@@ -168,7 +168,7 @@ def test_get_deployment():
     ) as mock_deployment:
         result = invoke_cli_runner(
             [
-                "deployments",
+                "endpoints",
                 "get",
                 "--model-id",
                 "1",
@@ -189,7 +189,7 @@ def test_get_deployment_http_error():
     ) as mock_deployment:
         result = invoke_cli_runner(
             [
-                "deployments",
+                "endpoints",
                 "get",
                 "--model-id",
                 "1",
