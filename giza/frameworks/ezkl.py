@@ -347,13 +347,13 @@ def deploy(
 
         if len(deployments) > 0:
             echo.info(
-                f"Deployment for model id {model_id} and version id {version_id} already exists! ✅"
+                f"Endpoint for model id {model_id} and version id {version_id} already exists! ✅"
             )
-            echo.info(f"Deployment id -> {deployments[0]['id']} ✅")
+            echo.info(f"Endpoint id -> {deployments[0]['id']} ✅")
             echo.info(f'You can start doing inferences at: {deployments[0]["uri"]} 🚀')
             sys.exit(1)
 
-        spinner = Spinner(name="aesthetic", text="Creating deployment!")
+        spinner = Spinner(name="aesthetic", text="Creating endpoint!")
 
         with Live(renderable=spinner):
             deployment = client.create(

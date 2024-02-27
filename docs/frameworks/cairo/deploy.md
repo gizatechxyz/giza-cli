@@ -2,24 +2,24 @@
 
 To deploy a model, you must first have a version of that model. If you have not yet created a version, please refer to the [versions](../../resources/versions.md) documentation.
 
-To create a new service, users can employ the `deploy` command. This command facilitates the deployment of a machine learning service ready to accept predictions at the `/cairo_run` endpoint, providing a straightforward method for deploying and using machine learning capabilities
+To create a new service, users can employ the `deploy` command. This command facilitates the deployment of a machine learning service ready to accept predictions at the `/cairo_run` endpoint, providing a straightforward method for deploying and using machine learning capabilities that can easily be consumed as and API endpoint.
 
 ```
-> giza deployments deploy --model-id 1 --version-id 1 model.sierra
-▰▰▰▰▰▱▱ Creating deployment!
-[giza][2024-02-07 12:31:02.498] Deployment is successful ✅
-[giza][2024-02-07 12:31:02.501] Deployment created with id -> 1 ✅
-[giza][2024-02-07 12:31:02.502] Deployment created with endpoint URL: https://deployment-gizabrain-38-1-53427f44-dagsgas-ew.a.run.app 🎉
+> giza endpoints deploy --model-id 1 --version-id 1 model.sierra
+▰▰▰▰▰▱▱ Creating endpoint!
+[giza][2024-02-07 12:31:02.498] Endpoint is successful ✅
+[giza][2024-02-07 12:31:02.501] Endpoint created with id -> 1 ✅
+[giza][2024-02-07 12:31:02.502] Endpoint created with endpoint URL: https://deployment-gizabrain-38-1-53427f44-dagsgas-ew.a.run.app 🎉
 ```
 
 If a model is fully compatible the sierra file is not needed and can be deployed without using it in the command:
 
 ```
-> giza deployments deploy --model-id 1 --version-id 1
-▰▰▰▰▰▱▱ Creating deployment!
-[giza][2024-02-07 12:31:02.498] Deployment is successful ✅
-[giza][2024-02-07 12:31:02.501] Deployment created with id -> 1 ✅
-[giza][2024-02-07 12:31:02.502] Deployment created with endpoint URL: https://deployment-gizabrain-38-1-53427f44-dagsgas-ew.a.run.app 🎉
+> giza endpoints deploy --model-id 1 --version-id 1
+▰▰▰▰▰▱▱ Creating endpoint!
+[giza][2024-02-07 12:31:02.498] Endpoint is successful ✅
+[giza][2024-02-07 12:31:02.501] Endpoint created with id -> 1 ✅
+[giza][2024-02-07 12:31:02.502] Endpoint created with endpoint URL: https://deployment-gizabrain-38-1-53427f44-dagsgas-ew.a.run.app 🎉
 ```
 
 {% hint style="danger" %}
@@ -57,10 +57,10 @@ Available sizes are `S`, `M`, `L,` and `XL`, each with different usage limits.
 
 ## Download the proof
 
-We can download the proof using the `download-proof` command available for the deployments:&#x20;
+We can download the proof using the `download-proof` command available for the endpoints:&#x20;
 
-<pre class="language-sh"><code class="lang-sh"><strong>❯ giza deployments download-proof --model-id 1 --version-id 1 --deployment-id 1 --proof-id "b14bfbcf250b404192765d9be0811c9b"
-</strong>[giza][2024-02-20 15:40:48.560] Getting proof from deployment 1 ✅
+<pre class="language-sh"><code class="lang-sh"><strong>❯ giza endpoints download-proof --model-id 1 --version-id 1 --endpoint-id 1 --proof-id "b14bfbcf250b404192765d9be0811c9b"
+</strong>[giza][2024-02-20 15:40:48.560] Getting proof from endpoint 1 ✅
 [giza][2024-02-20 15:40:49.288] Proof downloaded to zk.proof ✅
 </code></pre>
 

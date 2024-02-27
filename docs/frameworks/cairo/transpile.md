@@ -38,7 +38,7 @@ my_awesome_model
 
 When we transpile a model we have two possibilities: a fully compatible model and a partially compatible one.&#x20;
 
-A model is fully compatible when all the operators that the model uses are supported by the Transpiler and Orion, if this happens the model is compiled after transpilation and we save the .sierra file on behalf of the user to use later for deployment ([deployment docs](../../resources/deployments.md)). This will be shown in the output of the transpile command:
+A model is fully compatible when all the operators that the model uses are supported by the Transpiler and Orion, if this happens the model is compiled after transpilation and we save the .sierra file on behalf of the user to use later for deployment ([endpoint docs](../../resources/endpoints.md)). This will be shown in the output of the transpile command:
 
 {% code overflow="wrap" %}
 ```
@@ -46,7 +46,7 @@ A model is fully compatible when all the operators that the model uses are suppo
 ```
 {% endcode %}
 
-If a model is partially supported, we will create a warning in the output stating that not all the operators are supported right now. If it is partially supported the Cairo code can still be modified for later compilation and deployment.&#x20;
+If a model is partially supported, we will create a warning in the output stating that not all the operators are supported right now. If it is partially supported the Cairo code can still be modified for later compilation and endpoint.&#x20;
 
 {% code overflow="wrap" %}
 ```

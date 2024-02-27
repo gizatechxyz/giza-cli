@@ -2,15 +2,15 @@
 
 To deploy a model, you must first have a version of that model. If you have not yet created a version, please refer to the [versions](../../resources/versions.md) documentation.
 
-To create a new service, users can employ the `deploy` command. This command facilitates the deployment of a machine learning service ready to accept predictions at the `/predict` endpoint, providing a straightforward method for deploying and using machine learning capabilities. As we are using `EZKL` we need to add `--framework EZKL` (or `-f EZKL` for short) to the command:
+To create a new service, users can employ the `deploy` command. This command facilitates the deployment of a machine learning service ready to accept predictions at the `/predict` endpoint, providing a straightforward method for deploying and using machine learning capabilities as an API endpoint. As we are using `EZKL` we need to add `--framework EZKL` (or `-f EZKL` for short) to the command:
 
 {% code overflow="wrap" %}
 ```shell
-> giza deployments deploy --model-id 1 --version-id 1 --framework EZKL
-▰▰▰▰▰▱▱ Creating deployment!
-[giza][2024-02-07 12:31:02.498] Deployment is successful ✅
-[giza][2024-02-07 12:31:02.501] Deployment created with id -> 1 ✅
-[giza][2024-02-07 12:31:02.502] Deployment created with endpoint URL: https://deployment-gizabrain-38-1-53427f44-dagsgas-ew.a.run.app 🎉
+> giza endpoints deploy --model-id 1 --version-id 1 --framework EZKL
+▰▰▰▰▰▱▱ Creating endpoint!
+[giza][2024-02-07 12:31:02.498] Endpoint is successful ✅
+[giza][2024-02-07 12:31:02.501] Endpoint created with id -> 1 ✅
+[giza][2024-02-07 12:31:02.502] Endpoint created with endpoint URL: https://deployment-gizabrain-38-1-53427f44-dagsgas-ew.a.run.app 🎉
 ```
 {% endcode %}
 
@@ -75,10 +75,10 @@ Available sizes are `S`, `M`, `L,` and `XL`, each with different usage limits.
 
 ## Download the proof
 
-We can download the proof using the `download-proof` command available for the deployments:&#x20;
+We can download the proof using the `download-proof` command available for the endpoints:&#x20;
 
-<pre class="language-sh"><code class="lang-sh"><strong>❯ giza deployments download-proof --model-id 1 --version-id 1 --deployment-id 1 --proof-id "d0564505755944b8bef9292d980f3e27"
-</strong>[giza][2024-02-20 15:40:48.560] Getting proof from deployment 1 ✅
+<pre class="language-sh"><code class="lang-sh"><strong>❯ giza endpoints download-proof --model-id 1 --version-id 1 --endpoint-id 1 --proof-id "d0564505755944b8bef9292d980f3e27"
+</strong>[giza][2024-02-20 15:40:48.560] Getting proof from endpoint 1 ✅
 [giza][2024-02-20 15:40:49.288] Proof downloaded to zk.proof ✅
 </code></pre>
 

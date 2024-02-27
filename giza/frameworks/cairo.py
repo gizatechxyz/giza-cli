@@ -154,7 +154,7 @@ def deploy(
             echo.info(f'You can start doing inferences at: {deployments[0]["uri"]} 🚀')
             sys.exit(1)
 
-        spinner = Spinner(name="aesthetic", text="Creating deployment!")
+        spinner = Spinner(name="aesthetic", text="Creating endpoint!")
 
         with Live(renderable=spinner):
             if data is None:

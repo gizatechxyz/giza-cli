@@ -6,7 +6,7 @@ Giza provides two methods for proving Orion Cairo programs: through the CLI or d
 
 **Deploying Your Model**
 
-After deploying your model on the Giza Platform, you will receive a URL for your deployed model. Refer to the [Deployments section](../../resources/deployments.md) for more details on deploying models.
+After deploying your model on the Giza Platform, you will receive a URL for your deployed model. Refer to the [Endpoints section](../../resources/endpoints.md) for more details on deploying models.
 
 **Running Inference**
 
@@ -23,7 +23,7 @@ This action will execute the inference, generate Trace and Memory files on the p
 To check the status of your proof, use the following command:
 
 ```
-giza deployments get-proof --model-id <MODEL_ID> --version-id <VERSION_ID> --deployment-id <DEPLOYMENT_ID> --proof-id <REQUEST_ID>
+giza endpoints get-proof --model-id <MODEL_ID> --version-id <VERSION_ID> --endpoint-id <ENDPOINT_ID> --proof-id <REQUEST_ID>
 ```
 
 **Downloading Your Proof**
@@ -31,7 +31,7 @@ giza deployments get-proof --model-id <MODEL_ID> --version-id <VERSION_ID> --dep
 Once the proof is ready, you can download it using:
 
 ```
-giza deployments download-proof --model-id <MODEL_ID> --version-id <VERSION_ID> --deployment-id <DEPLOYMENT_ID> --proof-id <REQUEST_ID> --output-path <OUTPUT_PATH>
+giza endpoints download-proof --model-id <MODEL_ID> --version-id <VERSION_ID> --endpoint-id <ENDPOINT_ID> --proof-id <REQUEST_ID> --output-path <OUTPUT_PATH>
 ```
 
 {% hint style="info" %}
