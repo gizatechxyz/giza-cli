@@ -2,8 +2,8 @@ import sys
 from typing import Optional
 
 import typer
-from email_validator import EmailNotValidError, EmailSyntaxError, validate_email
-from pydantic import EmailStr, SecretStr, ValidationError
+from email_validator import EmailNotValidError, validate_email
+from pydantic import SecretStr, ValidationError
 from requests import HTTPError
 from rich import print_json
 
