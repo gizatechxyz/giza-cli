@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
 from pydantic import ValidationError
+from pydantic_core import InitErrorDetails
 from requests import HTTPError
 
 from giza.commands.models import ModelsClient
@@ -28,7 +29,7 @@ def test_models_get():
 # Test model retrieval with invalid model id
 def test_models_get_invalid_id():
     with patch.object(
-        ModelsClient, "get", side_effect=ValidationError(errors=[], model=Model)
+        ModelsClient, "get", side_effect=ValidationError.from_exception_data(line_errors=[InitErrorDetails(type="missing")], title="Resource validation error")
     ), patch("giza.commands.models.get_response_info", return_value={}):
         result = invoke_cli_runner(
             ["models", "get", "--model-id", "1"], expected_error=True

@@ -70,7 +70,7 @@ def test_users_create_empty_email():
 
     assert result.exit_code == 1
     assert "Review the provided information" in result.stdout
-    assert "value is not a valid email address" in result.stdout
+    assert "Input should be a valid string" in result.stdout
 
 
 def test_users_create_invalid_email():
@@ -203,7 +203,7 @@ def test_resend_email_invalid_email():
 
     assert result.exit_code == 1
     assert "Could not resend" in result.stdout
-    assert "value is not a valid email address" in result.stdout
+    assert "The email address is not valid." in result.stdout
 
 
 def test_resend_email_invalid_email_debug():

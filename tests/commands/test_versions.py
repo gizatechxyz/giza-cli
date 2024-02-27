@@ -2,7 +2,8 @@ import zipfile
 from io import BytesIO
 from unittest.mock import patch
 
-from pydantic.error_wrappers import ValidationError
+from pydantic import ValidationError
+from pydantic_core import InitErrorDetails
 from requests.exceptions import HTTPError
 
 from giza.commands.versions import VersionsClient, VersionStatus
@@ -71,7 +72,7 @@ def test_versions_get_http_error():
 # Test version retrieval with invalid version id
 def test_versions_get_invalid_id():
     with patch.object(
-        VersionsClient, "get", side_effect=ValidationError(errors=[], model=Version)
+        VersionsClient, "get", side_effect=ValidationError.from_exception_data(line_errors=[InitErrorDetails(type="missing")], title="Resource validation error")
     ), patch("giza.utils.exception_handling.get_response_info", return_value={}):
         result = invoke_cli_runner(
             ["versions", "get", "--model-id", "1", "--version-id", "1"],

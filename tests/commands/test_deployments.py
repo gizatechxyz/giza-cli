@@ -53,7 +53,7 @@ def test_deploy_with_ezkl_framework():
 
 def test_deploy_ezkl_existing_deployment():
     deploy_list = DeploymentsList(
-        __root__=[
+        root=[
             Deployment(
                 id=1,
                 status="COMPLETED",

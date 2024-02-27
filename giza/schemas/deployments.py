@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, RootModel
+from pydantic import ConfigDict, BaseModel, RootModel
 
 from giza.utils.enums import Framework, ServiceSize
 
@@ -24,9 +24,7 @@ class Deployment(BaseModel):
     service_name: Optional[str] = None
     model_id: Optional[int] = None
     version_id: Optional[int] = None
-
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class DeploymentsList(RootModel):
