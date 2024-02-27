@@ -15,7 +15,7 @@
 ## <kbd>function</kbd> `new`
 
 ```python
-new(project_name: str = <typer.models.ArgumentInfo object at 0x10499e0d0>)
+new(project_name: str = <typer.models.ArgumentInfo object at 0x105440390>)
 ```
 
 This command will create a new action by generating a Python project. 
