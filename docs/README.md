@@ -1,5 +1,5 @@
 ---
-description: Giza CLI 0.12.2
+description: Giza CLI 0.13.0
 ---
 
 # Giza CLI
@@ -18,7 +18,7 @@ For now it provides the following capabilities:
 * Model transpilation with `transpile` using multiple frameworks, like Cairo or EZKL
 * Model versioning
 * Proof generation for multiple frameworks, like Orion Cairo or EZKL
-* Deployment of models to the Giza Platform for verifiable inferences
+* Deployment of models to the Giza Platform as an endpoint for verifiable inferences
 * Workspace management to help you with Giza Actions
 * Actions jumpstart with `new` command to help you get started with your actions
 

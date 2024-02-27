@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from giza.utils.enums import Framework, ServiceSize
 
 
-class DeploymentCreate(BaseModel):
+class EndpointCreate(BaseModel):
     file: Optional[str] = None
     uri: Optional[str] = None
     model_id: Optional[int] = None
@@ -16,7 +16,7 @@ class DeploymentCreate(BaseModel):
     framework: Framework = Framework.CAIRO
 
 
-class Deployment(BaseModel):
+class Endpoint(BaseModel):
     id: int
     status: Optional[str] = None
     uri: Optional[str] = None
@@ -29,5 +29,5 @@ class Deployment(BaseModel):
         orm_mode = True
 
 
-class DeploymentsList(BaseModel):
-    __root__: list[Deployment]
+class EndpointsList(BaseModel):
+    __root__: list[Endpoint]

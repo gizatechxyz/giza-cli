@@ -7,10 +7,10 @@ from requests import HTTPError
 from rich import print_json
 
 from giza import API_HOST
-from giza.client import DeploymentsClient
+from giza.client import EndpointsClient
 from giza.frameworks import cairo, ezkl
 from giza.options import DEBUG_OPTION
-from giza.schemas.deployments import DeploymentsList
+from giza.schemas.endpoints import EndpointsList
 from giza.schemas.proofs import Proof, ProofList
 from giza.utils import echo, get_response_info
 from giza.utils.enums import Framework, ServiceSize
@@ -24,10 +24,13 @@ def deploy(
         None,
         "--model-id",
         "-m",
-        help="The ID of the model where a deployment will be created",
+        help="The ID of the model where an endpoint will be created",
     ),
     version_id: int = typer.Option(
-        None, "--version-id", "-v", help="The ID of the version that will be deployed"
+        None,
+        "--version-id",
+        "-v",
+        help="The ID of the version that will used in the endpoint",
     ),
     size: ServiceSize = typer.Option(ServiceSize.S, "--size", "-s"),
     framework: Framework = typer.Option(Framework.CAIRO, "--framework", "-f"),
@@ -46,20 +49,17 @@ def deploy(
 
 
 app.command(
-    short_help="🚀 Creates a deployment for the specified model version.",
-    help="""🚀 Creates a deployment for the specified model version.
+    short_help="🚀 Creates an endpoint for the specified model version.",
+    help="""🚀 Creates an endpoint for the specified model version.
 
-    This command has different behavior depending on the framework:
-
-        * For Cairo, it will create an inference endpoint of the deployment in Giza.
-        * For EZKL, not implemented yet.
+    This command will create an inference endpoint in Giza for the available frameworks.
 
     This command performs several operations:
 
-        * Creates a deployment for the specified version
+        * Creates an endpoint for the specified version
         * Uploads the specified version file
         * Polls the version until the status is either FAILED or COMPLETED
-        * If the status is COMPLETED, sends back the deployment url to make inference requests
+        * If the status is COMPLETED, sends back the endpoint url to make inference requests
 
     Error handling is also incorporated into this process.
     """,
@@ -67,11 +67,11 @@ app.command(
 
 
 @app.command(
-    short_help="📜 List the available deployments.",
-    help="""📜 Lists all the available deployments in Giza.
-    This command retrieves and displays a list of all deployments stored in the server.
-    Each deployment's information is printed in a json format for easy readability and further processing.
-    If there are no deployments available, an empty list is printed.
+    short_help="📜 List the available endpoints.",
+    help="""📜 Lists all the available endpoints in Giza.
+    This command retrieves and displays a list of all endpoints stored in the server.
+    Each endpoint information is printed in a json format for easy readability and further processing.
+    If there are no endpoints available, an empty list is printed.
     """,
 )
 def list(
@@ -81,12 +81,12 @@ def list(
     ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
-    echo("Listing deployments ✅ ")
+    echo("Listing endpoints ✅ ")
     try:
-        client = DeploymentsClient(API_HOST)
-        deployments: DeploymentsList = client.list(model_id, version_id)
+        client = EndpointsClient(API_HOST)
+        deployments: EndpointsList = client.list(model_id, version_id)
     except ValidationError as e:
-        echo.error("Deployment validation error")
+        echo.error("Endpoint validation error")
         echo.error("Review the provided information")
         if debug:
             raise e
@@ -94,7 +94,7 @@ def list(
         sys.exit(1)
     except HTTPError as e:
         info = get_response_info(e.response)
-        echo.error("⛔️Could not list deployments")
+        echo.error("⛔️Could not list endpoints")
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
@@ -109,11 +109,11 @@ def list(
 
 # giza/commands/deployments.py
 @app.command(
-    short_help="🎯 Get a deployment.",
-    help="""🎯 Get a specific deployment in Giza.
-    This command retrieves and displays a specific deployment stored in the server.
-    The deployment's information is printed in a json format for easy readability and further processing.
-    If the deployment is not available, an error message is printed.
+    short_help="🎯 Get an endpoint.",
+    help="""🎯 Get a specific endpoint in Giza.
+    This command retrieves and displays a specific endpoint stored in the server.
+    The endpoint information is printed in a json format for easy readability and further processing.
+    If the endpoint is not available, an error message is printed.
     """,
 )
 def get(
@@ -121,17 +121,22 @@ def get(
     version_id: int = typer.Option(
         None, "--version-id", "-v", help="The ID of the version"
     ),
-    deployment_id: int = typer.Option(
-        None, "--deployment-id", "-d", help="The ID of the version"
+    endpoint_id: int = typer.Option(
+        None,
+        "--deployment-id",
+        "-d",
+        "--endpoint-id",
+        "-e",
+        help="The ID of the endpoint",
     ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
-    echo(f"Getting deployment {deployment_id} ✅ ")
+    echo(f"Getting endpoint {endpoint_id} ✅ ")
     try:
-        client = DeploymentsClient(API_HOST)
-        deployment = client.get(model_id, version_id, deployment_id)
+        client = EndpointsClient(API_HOST)
+        deployment = client.get(model_id, version_id, endpoint_id)
     except ValidationError as e:
-        echo.error("Deployment validation error")
+        echo.error("Endpoint validation error")
         echo.error("Review the provided information")
         if debug:
             raise e
@@ -139,7 +144,7 @@ def get(
         sys.exit(1)
     except HTTPError as e:
         info = get_response_info(e.response)
-        echo.error(f"⛔️Could not get deployment {deployment_id}")
+        echo.error(f"⛔️Could not get endpoint {endpoint_id}")
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
@@ -154,11 +159,11 @@ def get(
 
 @app.command(
     name="list-proofs",
-    short_help="🔒 List proofs from a deployment.",
-    help="""🔒 List proofs from a deployment.
-    This command retrieves and displays the proofs generated by a specific deployment stored in the server.
+    short_help="🔒 List proofs from an endpoint.",
+    help="""🔒 List proofs from an endpoint.
+    This command retrieves and displays the proofs generated by a specific endpoint stored in the server.
     The proofs' information is printed in a json format for easy readability and further processing.
-    If the deployment is not available, an error message is printed.
+    If the endpoint is not available, an error message is printed.
     """,
 )
 def list_proofs(
@@ -166,17 +171,22 @@ def list_proofs(
     version_id: int = typer.Option(
         None, "--version-id", "-v", help="The ID of the version"
     ),
-    deployment_id: int = typer.Option(
-        None, "--deployment-id", "-d", help="The ID of the version"
+    endpoint_id: int = typer.Option(
+        None,
+        "--deployment-id",
+        "-d",
+        "--endpoint-id",
+        "-e",
+        help="The ID of the endpoint",
     ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
-    echo(f"Getting proofs from deployment {deployment_id} ✅ ")
+    echo(f"Getting proofs from endpoint {endpoint_id} ✅ ")
     try:
-        client = DeploymentsClient(API_HOST)
-        proofs: ProofList = client.list_proofs(model_id, version_id, deployment_id)
+        client = EndpointsClient(API_HOST)
+        proofs: ProofList = client.list_proofs(model_id, version_id, endpoint_id)
     except ValidationError as e:
-        echo.error("Could not retrieve proofs from deployment")
+        echo.error("Could not retrieve proofs from endpoint")
         echo.error("Review the provided information")
         if debug:
             raise e
@@ -184,7 +194,7 @@ def list_proofs(
         sys.exit(1)
     except HTTPError as e:
         info = get_response_info(e.response)
-        echo.error(f"⛔️Could not get deployment {deployment_id}")
+        echo.error(f"⛔️Could not get endpoint {endpoint_id}")
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
@@ -199,11 +209,11 @@ def list_proofs(
 
 @app.command(
     name="get-proof",
-    short_help="🔒 Retrieves information about a proof from a deployment.",
-    help="""🔒 Retrieves information about a proof from a deployment.
-    This command retrieves and displays the proof generated by a specific deployment stored in the server.
+    short_help="🔒 Retrieves information about a proof from an endpoint.",
+    help="""🔒 Retrieves information about a proof from an endpoint.
+    This command retrieves and displays the proof generated by a specific endpoint stored in the server.
     The proof information is printed in a json format for easy readability and further processing.
-    If the deployment is not available, an error message is printed.
+    If the endpoint is not available, an error message is printed.
     """,
 )
 def get_proof(
@@ -211,20 +221,25 @@ def get_proof(
     version_id: int = typer.Option(
         None, "--version-id", "-v", help="The ID of the version"
     ),
-    deployment_id: int = typer.Option(
-        None, "--deployment-id", "-d", help="The ID of the version"
+    endpoint_id: int = typer.Option(
+        None,
+        "--deployment-id",
+        "-d",
+        "--endpoint-id",
+        "-e",
+        help="The ID of the endpoint",
     ),
     proof_id: str = typer.Option(
         None, "--proof-id", "-p", help="The ID or request id of the proof"
     ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
-    echo(f"Getting proof from deployment {deployment_id} ✅ ")
+    echo(f"Getting proof from endpoint {endpoint_id} ✅ ")
     try:
-        client = DeploymentsClient(API_HOST)
-        proof: Proof = client.get_proof(model_id, version_id, deployment_id, proof_id)
+        client = EndpointsClient(API_HOST)
+        proof: Proof = client.get_proof(model_id, version_id, endpoint_id, proof_id)
     except ValidationError as e:
-        echo.error("Could not retrieve proof from deployment")
+        echo.error("Could not retrieve proof from endpoint")
         echo.error("Review the provided information")
         if debug:
             raise e
@@ -232,7 +247,7 @@ def get_proof(
         sys.exit(1)
     except HTTPError as e:
         info = get_response_info(e.response)
-        echo.error(f"⛔️Could not get deployment {deployment_id}")
+        echo.error(f"⛔️Could not get endpoint {endpoint_id}")
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
@@ -247,11 +262,11 @@ def get_proof(
 
 @app.command(
     name="download-proof",
-    short_help="🔒 Downloads a proof from a deployment to the specified path.",
-    help="""🔒 Downloads a proof from a deployment to the specified path.
-    This command retrieves the proof created in Giza from a specific deployment.
+    short_help="🔒 Downloads a proof from an endpoint to the specified path.",
+    help="""🔒 Downloads a proof from an endpoint to the specified path.
+    This command retrieves the proof created in Giza from a specific endpoint.
     The proof information is stored in the specified path, defaulting to the current path.
-    If the deployment is not available, an error message is printed.
+    If the endpoint is not available, an error message is printed.
     """,
 )
 def download_proof(
@@ -259,8 +274,13 @@ def download_proof(
     version_id: int = typer.Option(
         None, "--version-id", "-v", help="The ID of the version"
     ),
-    deployment_id: int = typer.Option(
-        None, "--deployment-id", "-d", help="The ID of the version"
+    endpoint_id: int = typer.Option(
+        None,
+        "--deployment-id",
+        "-d",
+        "--endpoint-id",
+        "-e",
+        help="The ID of the endpoint",
     ),
     proof_id: str = typer.Option(
         None, "--proof-id", "-p", help="The ID or request id of the proof"
@@ -273,16 +293,16 @@ def download_proof(
     ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
-    echo(f"Getting proof from deployment {deployment_id} ✅ ")
+    echo(f"Getting proof from endpoint {endpoint_id} ✅ ")
     try:
-        client = DeploymentsClient(API_HOST)
+        client = EndpointsClient(API_HOST)
         proof: bytes = client.download_proof(
-            model_id, version_id, deployment_id, proof_id
+            model_id, version_id, endpoint_id, proof_id
         )
         with open(output_path, "wb") as f:
             f.write(proof)
     except ValidationError as e:
-        echo.error("Could not retrieve proof from deployment")
+        echo.error("Could not retrieve proof from endpoint")
         echo.error("Review the provided information")
         if debug:
             raise e
@@ -290,7 +310,7 @@ def download_proof(
         sys.exit(1)
     except HTTPError as e:
         info = get_response_info(e.response)
-        echo.error(f"⛔️Could not get deployment {deployment_id}")
+        echo.error(f"⛔️Could not get endpoint {endpoint_id}")
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
