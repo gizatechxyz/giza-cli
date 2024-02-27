@@ -12,7 +12,7 @@ from rich.progress import Progress, Spinner, SpinnerColumn, TextColumn
 
 from giza import API_HOST
 from giza.client import (
-    DeploymentsClient,
+    EndpointsClient,
     JobsClient,
     ModelsClient,
     ProofsClient,
@@ -20,7 +20,7 @@ from giza.client import (
     VersionsClient,
 )
 from giza.options import DEBUG_OPTION
-from giza.schemas.deployments import DeploymentCreate, DeploymentsList
+from giza.schemas.deployments import EndpointCreate, EndpointsList
 from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.models import ModelCreate
 from giza.schemas.proofs import Proof
@@ -340,9 +340,9 @@ def deploy(
     """
     try:
         echo = Echo(debug=debug)
-        client = DeploymentsClient(API_HOST)
+        client = EndpointsClient(API_HOST)
 
-        deployments_list: DeploymentsList = client.list(model_id, version_id)
+        deployments_list: EndpointsList = client.list(model_id, version_id)
         deployments: dict = json.loads(deployments_list.json())
 
         if len(deployments) > 0:
@@ -359,7 +359,7 @@ def deploy(
             deployment = client.create(
                 model_id,
                 version_id,
-                DeploymentCreate(
+                EndpointCreate(
                     size=size,
                     model_id=model_id,
                     version_id=version_id,
@@ -368,7 +368,7 @@ def deploy(
                 None,
             )
     except ValidationError as e:
-        echo.error("Deployment validation error")
+        echo.error("Endpoint validation error")
         echo.error("Review the provided information")
         if debug:
             raise e
@@ -386,7 +386,7 @@ def deploy(
         if debug:
             raise e
         sys.exit(1)
-    echo("Deployment is successful ✅")
-    echo(f"Deployment created with id -> {deployment.id} ✅")
-    echo(f"Deployment created with endpoint URL: {deployment.uri} 🎉")
+    echo("Endpoint is successful ✅")
+    echo(f"Endpoint created with id -> {deployment.id} ✅")
+    echo(f"Endpoint created with endpoint URL: {deployment.uri} 🎉")
     return deployment

@@ -7,10 +7,10 @@ from requests import HTTPError
 from rich import print_json
 
 from giza import API_HOST
-from giza.client import DeploymentsClient
+from giza.client import EndpointsClient
 from giza.frameworks import cairo, ezkl
 from giza.options import DEBUG_OPTION
-from giza.schemas.deployments import DeploymentsList
+from giza.schemas.deployments import EndpointsList
 from giza.schemas.proofs import Proof, ProofList
 from giza.utils import echo, get_response_info
 from giza.utils.enums import Framework, ServiceSize
@@ -83,8 +83,8 @@ def list(
 ) -> None:
     echo("Listing endpoints ✅ ")
     try:
-        client = DeploymentsClient(API_HOST)
-        deployments: DeploymentsList = client.list(model_id, version_id)
+        client = EndpointsClient(API_HOST)
+        deployments: EndpointsList = client.list(model_id, version_id)
     except ValidationError as e:
         echo.error("Endpoint validation error")
         echo.error("Review the provided information")
@@ -121,7 +121,7 @@ def get(
     version_id: int = typer.Option(
         None, "--version-id", "-v", help="The ID of the version"
     ),
-    deployment_id: int = typer.Option(
+    endpoint_id: int = typer.Option(
         None,
         "--deployment-id",
         "-d",
@@ -131,10 +131,10 @@ def get(
     ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
-    echo(f"Getting endpoint {deployment_id} ✅ ")
+    echo(f"Getting endpoint {endpoint_id} ✅ ")
     try:
-        client = DeploymentsClient(API_HOST)
-        deployment = client.get(model_id, version_id, deployment_id)
+        client = EndpointsClient(API_HOST)
+        deployment = client.get(model_id, version_id, endpoint_id)
     except ValidationError as e:
         echo.error("Endpoint validation error")
         echo.error("Review the provided information")
@@ -144,7 +144,7 @@ def get(
         sys.exit(1)
     except HTTPError as e:
         info = get_response_info(e.response)
-        echo.error(f"⛔️Could not get endpoint {deployment_id}")
+        echo.error(f"⛔️Could not get endpoint {endpoint_id}")
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
@@ -171,7 +171,7 @@ def list_proofs(
     version_id: int = typer.Option(
         None, "--version-id", "-v", help="The ID of the version"
     ),
-    deployment_id: int = typer.Option(
+    endpoint_id: int = typer.Option(
         None,
         "--deployment-id",
         "-d",
@@ -181,10 +181,10 @@ def list_proofs(
     ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
-    echo(f"Getting proofs from endpoint {deployment_id} ✅ ")
+    echo(f"Getting proofs from endpoint {endpoint_id} ✅ ")
     try:
-        client = DeploymentsClient(API_HOST)
-        proofs: ProofList = client.list_proofs(model_id, version_id, deployment_id)
+        client = EndpointsClient(API_HOST)
+        proofs: ProofList = client.list_proofs(model_id, version_id, endpoint_id)
     except ValidationError as e:
         echo.error("Could not retrieve proofs from endpoint")
         echo.error("Review the provided information")
@@ -194,7 +194,7 @@ def list_proofs(
         sys.exit(1)
     except HTTPError as e:
         info = get_response_info(e.response)
-        echo.error(f"⛔️Could not get endpoint {deployment_id}")
+        echo.error(f"⛔️Could not get endpoint {endpoint_id}")
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
@@ -221,7 +221,7 @@ def get_proof(
     version_id: int = typer.Option(
         None, "--version-id", "-v", help="The ID of the version"
     ),
-    deployment_id: int = typer.Option(
+    endpoint_id: int = typer.Option(
         None,
         "--deployment-id",
         "-d",
@@ -234,10 +234,10 @@ def get_proof(
     ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
-    echo(f"Getting proof from endpoint {deployment_id} ✅ ")
+    echo(f"Getting proof from endpoint {endpoint_id} ✅ ")
     try:
-        client = DeploymentsClient(API_HOST)
-        proof: Proof = client.get_proof(model_id, version_id, deployment_id, proof_id)
+        client = EndpointsClient(API_HOST)
+        proof: Proof = client.get_proof(model_id, version_id, endpoint_id, proof_id)
     except ValidationError as e:
         echo.error("Could not retrieve proof from endpoint")
         echo.error("Review the provided information")
@@ -247,7 +247,7 @@ def get_proof(
         sys.exit(1)
     except HTTPError as e:
         info = get_response_info(e.response)
-        echo.error(f"⛔️Could not get endpoint {deployment_id}")
+        echo.error(f"⛔️Could not get endpoint {endpoint_id}")
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
@@ -274,7 +274,7 @@ def download_proof(
     version_id: int = typer.Option(
         None, "--version-id", "-v", help="The ID of the version"
     ),
-    deployment_id: int = typer.Option(
+    endpoint_id: int = typer.Option(
         None,
         "--deployment-id",
         "-d",
@@ -293,11 +293,11 @@ def download_proof(
     ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
-    echo(f"Getting proof from endpoint {deployment_id} ✅ ")
+    echo(f"Getting proof from endpoint {endpoint_id} ✅ ")
     try:
-        client = DeploymentsClient(API_HOST)
+        client = EndpointsClient(API_HOST)
         proof: bytes = client.download_proof(
-            model_id, version_id, deployment_id, proof_id
+            model_id, version_id, endpoint_id, proof_id
         )
         with open(output_path, "wb") as f:
             f.write(proof)
@@ -310,7 +310,7 @@ def download_proof(
         sys.exit(1)
     except HTTPError as e:
         info = get_response_info(e.response)
-        echo.error(f"⛔️Could not get endpoint {deployment_id}")
+        echo.error(f"⛔️Could not get endpoint {endpoint_id}")
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")

@@ -13,7 +13,7 @@ from requests import HTTPError, Response, Session
 from rich import print, print_json
 
 from giza.schemas import users
-from giza.schemas.deployments import Deployment, DeploymentCreate, DeploymentsList
+from giza.schemas.deployments import Endpoint, EndpointCreate, EndpointsList
 from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.message import Msg
 from giza.schemas.models import Model, ModelCreate, ModelList, ModelUpdate
@@ -435,12 +435,13 @@ class UsersClient(ApiClient):
         raise Exception("Could not reset the password")
 
 
-class DeploymentsClient(ApiClient):
+class EndpointsClient(ApiClient):
     """
-    Client to interact with `deployments` endpoint.
+    Client to interact with `endpoints` endpoint.
     """
 
-    DEPLOYMENTS_ENDPOINT = "deployments"
+    # Change once API is updated
+    ENDPOINTS = "deployments"
     MODELS_ENDPOINT = "models"
     VERSIONS_ENDPOINT = "versions"
 
@@ -449,14 +450,14 @@ class DeploymentsClient(ApiClient):
         self,
         model_id: int,
         version_id: int,
-        deployment_create: DeploymentCreate,
+        endpoint_create: EndpointCreate,
         f: BufferedReader,
-    ) -> Deployment:
+    ) -> Endpoint:
         """
         Create a new deployment.
 
         Args:
-            deployment_create: Deployment information to create
+            endpoint_create: Endpoint information to create
 
         Returns:
             The recently created deployment information
@@ -472,21 +473,21 @@ class DeploymentsClient(ApiClient):
                     str(model_id),
                     self.VERSIONS_ENDPOINT,
                     str(version_id),
-                    self.DEPLOYMENTS_ENDPOINT,
+                    self.ENDPOINTS,
                 ]
             ),
             headers=headers,
-            params=deployment_create.dict(),
+            params=endpoint_create.dict(),
             files={"sierra": f} if f is not None else None,
         )
         self._echo_debug(str(response))
 
         response.raise_for_status()
 
-        return Deployment(**response.json())
+        return Endpoint(**response.json())
 
     @auth
-    def list(self, model_id: int, version_id: int) -> DeploymentsList:
+    def list(self, model_id: int, version_id: int) -> EndpointsList:
         """
         List deployments.
 
@@ -504,7 +505,7 @@ class DeploymentsClient(ApiClient):
                     str(model_id),
                     self.VERSIONS_ENDPOINT,
                     str(version_id),
-                    self.DEPLOYMENTS_ENDPOINT,
+                    self.ENDPOINTS,
                 ]
             ),
             headers=headers,
@@ -513,13 +514,13 @@ class DeploymentsClient(ApiClient):
 
         response.raise_for_status()
 
-        return DeploymentsList(
-            __root__=[Deployment(**deployment) for deployment in response.json()]
+        return EndpointsList(
+            __root__=[Endpoint(**deployment) for deployment in response.json()]
         )
 
     @auth
     def list_proofs(
-        self, model_id: int, version_id: int, deployment_id: int
+        self, model_id: int, version_id: int, endpoint_id: int
     ) -> ProofList:
         """
         List proofs.
@@ -538,8 +539,8 @@ class DeploymentsClient(ApiClient):
                     str(model_id),
                     self.VERSIONS_ENDPOINT,
                     str(version_id),
-                    self.DEPLOYMENTS_ENDPOINT,
-                    str(deployment_id),
+                    self.ENDPOINTS,
+                    str(endpoint_id),
                     "proofs",
                 ]
             ),
@@ -553,7 +554,7 @@ class DeploymentsClient(ApiClient):
 
     @auth
     def get_proof(
-        self, model_id: int, version_id: int, deployment_id: int, proof_id: int
+        self, model_id: int, version_id: int, endpoint_id: int, proof_id: int
     ) -> Proof:
         """
         Return information about a specific proof.
@@ -573,8 +574,8 @@ class DeploymentsClient(ApiClient):
                     str(model_id),
                     self.VERSIONS_ENDPOINT,
                     str(version_id),
-                    self.DEPLOYMENTS_ENDPOINT,
-                    str(deployment_id),
+                    self.ENDPOINTS,
+                    str(endpoint_id),
                     "proofs",
                     str(proof_id),
                 ]
@@ -589,7 +590,7 @@ class DeploymentsClient(ApiClient):
 
     @auth
     def download_proof(
-        self, model_id: int, version_id: int, deployment_id: int, proof_id: int
+        self, model_id: int, version_id: int, endpoint_id: int, proof_id: int
     ) -> bytes:
         """
         Download a proof.
@@ -611,8 +612,8 @@ class DeploymentsClient(ApiClient):
                     str(model_id),
                     self.VERSIONS_ENDPOINT,
                     str(version_id),
-                    self.DEPLOYMENTS_ENDPOINT,
-                    str(deployment_id),
+                    self.ENDPOINTS,
+                    str(endpoint_id),
                     "proofs",
                     f"{proof_id}:download",
                 ]
@@ -633,12 +634,12 @@ class DeploymentsClient(ApiClient):
         return download_response.content
 
     @auth
-    def get(self, model_id: int, version_id: int, deployment_id: int) -> Deployment:
+    def get(self, model_id: int, version_id: int, endpoint_id: int) -> Endpoint:
         """
         Get a deployment.
 
         Args:
-            deployment_id: Deployment identifier
+            endpoint_id: Endpoint identifier
 
         Returns:
             The deployment information
@@ -654,8 +655,8 @@ class DeploymentsClient(ApiClient):
                     str(model_id),
                     self.VERSIONS_ENDPOINT,
                     str(version_id),
-                    self.DEPLOYMENTS_ENDPOINT,
-                    str(deployment_id),
+                    self.ENDPOINTS,
+                    str(endpoint_id),
                 ]
             ),
             headers=headers,
@@ -664,7 +665,11 @@ class DeploymentsClient(ApiClient):
         self._echo_debug(str(response))
         response.raise_for_status()
 
-        return Deployment(**response.json())
+        return Endpoint(**response.json())
+
+
+# For downstream dependencies until they are updated
+EndpointsClient = EndpointsClient
 
 
 class TranspileClient(ApiClient):

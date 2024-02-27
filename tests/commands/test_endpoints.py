@@ -2,9 +2,9 @@ from unittest.mock import patch
 
 from requests import HTTPError
 
-from giza.commands.endpoints import DeploymentsClient, cairo
+from giza.commands.endpoints import EndpointsClient, cairo
 from giza.frameworks import ezkl
-from giza.schemas.deployments import Deployment, DeploymentsList
+from giza.schemas.deployments import Endpoint, EndpointsList
 from tests.conftest import invoke_cli_runner
 
 
@@ -52,9 +52,9 @@ def test_deploy_with_ezkl_framework():
 
 
 def test_deploy_ezkl_existing_deployment():
-    deploy_list = DeploymentsList(
+    deploy_list = EndpointsList(
         __root__=[
-            Deployment(
+            Endpoint(
                 id=1,
                 status="COMPLETED",
                 uri="https://giza-api.com/deployments/1",
@@ -65,9 +65,7 @@ def test_deploy_ezkl_existing_deployment():
             ),
         ]
     )
-    with patch.object(
-        DeploymentsClient, "list", return_value=deploy_list
-    ) as mock_deploy:
+    with patch.object(EndpointsClient, "list", return_value=deploy_list) as mock_deploy:
         result = invoke_cli_runner(
             [
                 "endpoints",
@@ -109,9 +107,9 @@ def test_deploy_with_unsupported_framework():
 
 
 def test_list_deployments():
-    deployments_list = DeploymentsList(
+    deployments_list = EndpointsList(
         __root__=[
-            Deployment(
+            Endpoint(
                 id=1,
                 status="COMPLETED",
                 uri="https://giza-api.com/deployments/1",
@@ -120,7 +118,7 @@ def test_list_deployments():
                 model_id=1,
                 version_id=1,
             ),
-            Deployment(
+            Endpoint(
                 id=2,
                 status="COMPLETED",
                 uri="https://giza-api.com/deployments/2",
@@ -132,7 +130,7 @@ def test_list_deployments():
         ]
     )
     with patch.object(
-        DeploymentsClient, "list", return_value=deployments_list
+        EndpointsClient, "list", return_value=deployments_list
     ) as mock_list:
         result = invoke_cli_runner(
             ["endpoints", "list", "--model-id", "1", "--version-id", "1"],
@@ -144,7 +142,7 @@ def test_list_deployments():
 
 
 def test_list_deployments_http_error():
-    with patch.object(DeploymentsClient, "list", side_effect=HTTPError):
+    with patch.object(EndpointsClient, "list", side_effect=HTTPError):
         result = invoke_cli_runner(
             ["endpoints", "list", "--model-id", "1", "--version-id", "1"],
             expected_error=True,
@@ -154,7 +152,7 @@ def test_list_deployments_http_error():
 
 
 def test_get_deployment():
-    deployment = Deployment(
+    deployment = Endpoint(
         id=1,
         status="COMPLETED",
         uri="https://giza-api.com/deployments/1",
@@ -164,7 +162,7 @@ def test_get_deployment():
         version_id=1,
     )
     with patch.object(
-        DeploymentsClient, "get", return_value=deployment
+        EndpointsClient, "get", return_value=deployment
     ) as mock_deployment:
         result = invoke_cli_runner(
             [
@@ -184,9 +182,7 @@ def test_get_deployment():
 
 
 def test_get_deployment_http_error():
-    with patch.object(
-        DeploymentsClient, "get", side_effect=HTTPError
-    ) as mock_deployment:
+    with patch.object(EndpointsClient, "get", side_effect=HTTPError) as mock_deployment:
         result = invoke_cli_runner(
             [
                 "endpoints",
