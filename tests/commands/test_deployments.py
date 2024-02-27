@@ -150,7 +150,7 @@ def test_list_deployments_http_error():
             expected_error=True,
         )
     assert result.exit_code == 1
-    assert "Could not list deployments" in result.stdout
+    assert "Could not list endpoints" in result.stdout
 
 
 def test_get_deployment():
@@ -202,4 +202,4 @@ def test_get_deployment_http_error():
         )
     mock_deployment.assert_called_once()
     assert result.exit_code == 1
-    assert "Could not get deployment" in result.stdout
+    assert "Could not get endpoint" in result.stdout

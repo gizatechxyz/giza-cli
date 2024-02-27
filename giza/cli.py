@@ -15,6 +15,7 @@ from giza.commands.version import check_version
 from giza.commands.versions import app as versions_app
 from giza.commands.versions import transpile
 from giza.commands.workspaces import app as workspaces_app
+from giza.utils import echo
 
 install(suppress=[click])
 
@@ -43,8 +44,19 @@ app.add_typer(
 app.add_typer(
     deployments_app,
     name="deployments",
-    short_help="🚀 Utilities for managing deployments",
-    help="""🚀 Utilities for managing deployments""",
+    short_help="🚀 Utilities for managing deployments (deprecated)",
+    help="""🚀 Utilities for managing deployments (deprecated)""",
+    callback=lambda: echo.warning(
+        "The `deployments` command is deprecated and will be removed in the future. Use the `endpoints` command instead."
+    ),
+    deprecated=True,
+)
+
+app.add_typer(
+    deployments_app,
+    name="endpoints",
+    short_help="🚀 Utilities for managing endpoints",
+    help="""🚀 Utilities for managing endpoints""",
 )
 
 app.add_typer(
@@ -95,20 +107,17 @@ app.command(
 )(transpile)
 
 app.command(
-    short_help="🚀 Creates a deployment for the specified model version. Shortcut for `giza deployments deploy`",
-    help="""🚀 Creates a deployment for the specified model version. Shortcut for `giza deployments deploy`.
+    short_help="🚀 Creates an endpoint for the specified model version. Shortcut for `giza endpoints deploy`",
+    help="""🚀 Creates a endpoint for the specified model version. Shortcut for `giza endpoints deploy`.
 
-    This command has different behavior depending on the framework:
-
-        * For Cairo, it will create an inference endpoint of the deployment in Giza.
-        * For EZKL, not implemented yet.
+    This command will create an inference endpoint in Giza for the vailable frameworks.
 
     This command performs several operations:
 
-        * Creates a deployment for the specified version
+        * Creates an endpoint for the specified version
         * Uploads the specified version file
         * Polls the version until the status is either FAILED or COMPLETED
-        * If the status is COMPLETED, sends back the deployment url to make inference requests
+        * If the status is COMPLETED, sends back the endpoint url to make inference requests
 
     Error handling is also incorporated into this process.
     """,
