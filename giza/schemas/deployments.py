@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import ConfigDict, BaseModel, RootModel
+from pydantic import BaseModel, ConfigDict, RootModel
 
 from giza.utils.enums import Framework, ServiceSize
 

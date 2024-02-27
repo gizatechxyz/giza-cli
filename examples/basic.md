@@ -65,9 +65,9 @@ You can also create an API key for the current user. This API key will be stored
 
 ```console
 > giza users create-api-key
-[giza][2024-01-17 15:27:27.936] Creating API Key ✅ 
+[giza][2024-01-17 15:27:27.936] Creating API Key ✅
 [giza][2024-01-17 15:27:53.605] API Key written to: /Users/gizabrain/.giza/.api_key.json
-[giza][2024-01-17 15:27:53.606] Successfully created API Key. It will be used for future requests ✅ 
+[giza][2024-01-17 15:27:53.606] Successfully created API Key. It will be used for future requests ✅
 ```
 
 **NOTE: The usage of API key is less secure than JWT, so use it with caution.**
@@ -81,10 +81,10 @@ But don't worry, `giza` makes this process a breeze with a simple command! Let's
 ```console
 > giza transpile awesome_model.onnx --output-path cairo_model
 
-[giza][2023-09-13 12:56:43.725] No model id provided, checking if model exists ✅ 
+[giza][2023-09-13 12:56:43.725] No model id provided, checking if model exists ✅
 [giza][2023-09-13 12:56:43.726] Model name is: awesome_model
 [giza][2023-09-13 12:56:43.978] Model Created with id -> 25! ✅
-[giza][2023-09-13 12:56:44.568] Sending model for transpilation ✅ 
+[giza][2023-09-13 12:56:44.568] Sending model for transpilation ✅
 [giza][2023-09-13 12:56:55.577] Transpilation recieved! ✅
 [giza][2023-09-13 12:56:55.583] Transpilation saved at: cairo_model
 ```

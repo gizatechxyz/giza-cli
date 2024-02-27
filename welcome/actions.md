@@ -14,7 +14,7 @@ Jumpstarting the creation of actions is made efficient through the use of a temp
 
 ```console
 > giza actions new actions_project
-[giza][2024-01-18 11:38:43.180] Creating a new Action project with name: actions_project ✅ 
+[giza][2024-01-18 11:38:43.180] Creating a new Action project with name: actions_project ✅
 [giza][2024-01-18 11:38:44.173] Action project created successfully at ./actions_project ✅
 ```
 
