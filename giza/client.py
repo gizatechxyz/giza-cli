@@ -476,7 +476,7 @@ class DeploymentsClient(ApiClient):
                 ]
             ),
             headers=headers,
-            params=deployment_create.dict(),
+            params=deployment_create.model_dump(),
             files={"sierra": f} if f is not None else None,
         )
         self._echo_debug(str(response))
@@ -826,7 +826,7 @@ class ModelsClient(ApiClient):
         response = self.session.post(
             f"{self.url}/{self.MODELS_ENDPOINT}",
             headers=headers,
-            json=model_create.dict(),
+            json=model_create.model_dump(),
         )
         self._echo_debug(str(response))
 
@@ -852,7 +852,7 @@ class ModelsClient(ApiClient):
         response = self.session.put(
             f"{self.url}/{self.MODELS_ENDPOINT}/{model_id}",
             headers=headers,
-            json=model_update.dict(),
+            json=model_update.model_dump(),
         )
         self._echo_debug(str(response))
 
@@ -922,7 +922,7 @@ class JobsClient(ApiClient):
         response = self.session.post(
             f"{self.url}/{self.JOBS_ENDPOINT}",
             headers=headers,
-            params=job_create.dict(),
+            params=job_create.model_dump(),
             files=files,
         )
         self._echo_debug(str(response))
@@ -1027,7 +1027,7 @@ class VersionJobsClient(ApiClient):
                 ]
             ),
             headers=headers,
-            params=job_create.dict(),
+            params=job_create.model_dump(),
             files={"file": f},
         )
         self._echo_debug(str(response))
@@ -1279,7 +1279,7 @@ class VersionsClient(ApiClient):
         response = self.session.post(
             f"{self._get_version_url(model_id)}",
             headers=headers,
-            json=version_create.dict(),
+            json=version_create.model_dump(),
             params={"filename": filename} if filename else None,
         )
         self._echo_debug(str(response))
@@ -1442,7 +1442,7 @@ class VersionsClient(ApiClient):
         response = self.session.put(
             f"{self._get_version_url(model_id)}/{version_id}",
             headers=headers,
-            json=version_update.dict(),
+            json=version_update.model_dump(),
         )
         self._echo_debug(str(response))
 

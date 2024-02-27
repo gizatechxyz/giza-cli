@@ -104,7 +104,7 @@ def list(
         if debug:
             raise e
         sys.exit(1)
-    print_json(deployments.json())
+    print_json(deployments.model_dump_json())
 
 
 # giza/commands/deployments.py
@@ -149,7 +149,7 @@ def get(
         if debug:
             raise e
         sys.exit(1)
-    print_json(deployment.json())
+    print_json(deployment.model_dump_json())
 
 
 @app.command(
@@ -194,7 +194,7 @@ def list_proofs(
         if debug:
             raise e
         sys.exit(1)
-    print_json(proofs.json(exclude_unset=True))
+    print_json(proofs.model_dump_json(exclude_unset=True))
 
 
 @app.command(
@@ -242,7 +242,7 @@ def get_proof(
         if debug:
             raise e
         sys.exit(1)
-    print_json(proof.json(exclude_unset=True))
+    print_json(proof.model_dump_json(exclude_unset=True))
 
 
 @app.command(

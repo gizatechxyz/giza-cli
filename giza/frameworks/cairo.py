@@ -144,7 +144,7 @@ def deploy(
         client = DeploymentsClient(API_HOST)
 
         deployments_list: DeploymentsList = client.list(model_id, version_id)
-        deployments: dict = json.loads(deployments_list.json())
+        deployments: dict = json.loads(deployments_list.model_dump_json())
 
         if len(deployments) > 0:
             echo.info(

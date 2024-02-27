@@ -386,7 +386,7 @@ def test_versions_update_successful():
         last_update="2021-08-31T15:00:00.000000",
         framework=Framework.CAIRO,
     )
-    updated_version = version.copy()
+    updated_version = version.model_copy()
     updated_version.status = VersionStatus.COMPLETED
 
     with patch.object(VersionsClient, "get", return_value=version), patch.object(

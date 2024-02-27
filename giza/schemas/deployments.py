@@ -15,6 +15,9 @@ class DeploymentCreate(BaseModel):
     service_name: Optional[str] = None
     framework: Framework = Framework.CAIRO
 
+    model_config = ConfigDict(from_attributes=True)
+    model_config["protected_namespaces"] = ()
+
 
 class Deployment(BaseModel):
     id: int
@@ -24,7 +27,9 @@ class Deployment(BaseModel):
     service_name: Optional[str] = None
     model_id: Optional[int] = None
     version_id: Optional[int] = None
+
     model_config = ConfigDict(from_attributes=True)
+    model_config["protected_namespaces"] = ()
 
 
 class DeploymentsList(RootModel):

@@ -199,7 +199,7 @@ def me(debug: Optional[bool] = DEBUG_OPTION) -> None:
     client = UsersClient(API_HOST, debug=debug)
     user = client.me()
 
-    print_json(user.json())
+    print_json(user.model_dump_json())
 
 
 @app.command(

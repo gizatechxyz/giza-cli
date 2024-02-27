@@ -57,7 +57,7 @@ def get(
         echo.error("⛔️Please delete the workspace and create a new one⛔️")
     else:
         echo.info(f"✅ Workspace URL: {workspace.url} ✅")
-    print_json(workspace.json())
+    print_json(workspace.model_dump_json())
 
 
 @app.command(

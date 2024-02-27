@@ -51,7 +51,7 @@ def get(
     with ExceptionHandler(debug=debug):
         client = VersionsClient(API_HOST)
         version: Version = client.get(model_id, version_id)
-    print_json(version.json())
+    print_json(version.model_dump_json())
 
 
 def transpile(
@@ -180,7 +180,7 @@ def update(
                 zip_path = zip_folder(model_path, tmp_dir)
                 version = client.upload_cairo(model_id, version_id, zip_path)
         echo("Version updated ✅ ")
-    print_json(version.json())
+    print_json(version.model_dump_json())
 
 
 @app.command(
@@ -201,7 +201,7 @@ def list(
     with ExceptionHandler(debug=debug):
         client = VersionsClient(API_HOST)
         versions: VersionList = client.list(model_id)
-    print_json(versions.json())
+    print_json(versions.model_dump_json())
 
 
 @app.command(
