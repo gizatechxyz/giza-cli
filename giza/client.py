@@ -13,7 +13,7 @@ from requests import HTTPError, Response, Session
 from rich import print, print_json
 
 from giza.schemas import users
-from giza.schemas.deployments import Endpoint, EndpointCreate, EndpointsList
+from giza.schemas.endpoints import Endpoint, EndpointCreate, EndpointsList
 from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.message import Msg
 from giza.schemas.models import Model, ModelCreate, ModelList, ModelUpdate

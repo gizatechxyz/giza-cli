@@ -4,7 +4,7 @@ from requests import HTTPError
 
 from giza.commands.endpoints import EndpointsClient, cairo
 from giza.frameworks import ezkl
-from giza.schemas.deployments import Endpoint, EndpointsList
+from giza.schemas.endpoints import Endpoint, EndpointsList
 from tests.conftest import invoke_cli_runner
 
 

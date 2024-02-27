@@ -20,7 +20,7 @@ from giza.client import (
     VersionsClient,
 )
 from giza.options import DEBUG_OPTION
-from giza.schemas.deployments import EndpointCreate, EndpointsList
+from giza.schemas.endpoints import EndpointCreate, EndpointsList
 from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.models import ModelCreate
 from giza.schemas.proofs import Proof

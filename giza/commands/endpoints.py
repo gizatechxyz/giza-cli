@@ -10,7 +10,7 @@ from giza import API_HOST
 from giza.client import EndpointsClient
 from giza.frameworks import cairo, ezkl
 from giza.options import DEBUG_OPTION
-from giza.schemas.deployments import EndpointsList
+from giza.schemas.endpoints import EndpointsList
 from giza.schemas.proofs import Proof, ProofList
 from giza.utils import echo, get_response_info
 from giza.utils.enums import Framework, ServiceSize
