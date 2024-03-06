@@ -172,10 +172,6 @@ def test_get_deployment():
             [
                 "endpoints",
                 "get",
-                "--model-id",
-                "1",
-                "--version-id",
-                "1",
                 "--deployment-id",
                 "1",
             ],
@@ -191,10 +187,6 @@ def test_get_deployment_http_error():
             [
                 "endpoints",
                 "get",
-                "--model-id",
-                "1",
-                "--version-id",
-                "1",
                 "--deployment-id",
                 "1",
             ],
