@@ -24,6 +24,7 @@ class Endpoint(BaseModel):
     service_name: Optional[str] = None
     model_id: Optional[int] = None
     version_id: Optional[int] = None
+    is_active: bool
 
     class Config:
         orm_mode = True

@@ -14,6 +14,7 @@ from giza.schemas.endpoints import EndpointsList
 from giza.schemas.proofs import Proof, ProofList
 from giza.utils import echo, get_response_info
 from giza.utils.enums import Framework, ServiceSize
+from giza.utils.exception_handling import ExceptionHandler
 
 app = typer.Typer()
 
@@ -79,12 +80,22 @@ def list(
     version_id: int = typer.Option(
         None, "--version-id", "-v", help="The ID of the version"
     ),
+    only_active: bool = typer.Option(
+        False, "--only-active", "-a", help="Only list active endpoints"
+    ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     echo("Listing endpoints ✅ ")
+    params = {}
     try:
         client = EndpointsClient(API_HOST)
-        deployments: EndpointsList = client.list(model_id, version_id)
+        if model_id:
+            params["model_id"] = model_id
+        if version_id:
+            params["version_id"] = version_id
+        if only_active:
+            params["is_active"] = True
+        deployments: EndpointsList = client.list(params=params)
     except ValidationError as e:
         echo.error("Endpoint validation error")
         echo.error("Review the provided information")
@@ -134,7 +145,7 @@ def get(
     echo(f"Getting endpoint {endpoint_id} ✅ ")
     try:
         client = EndpointsClient(API_HOST)
-        deployment = client.get(model_id, version_id, endpoint_id)
+        deployment = client.get(endpoint_id)
     except ValidationError as e:
         echo.error("Endpoint validation error")
         echo.error("Review the provided information")
@@ -155,6 +166,34 @@ def get(
             raise e
         sys.exit(1)
     print_json(deployment.json())
+
+
+@app.command(
+    name="delete",
+    short_help="📡 Deletes an endpoint.",
+    help="""📡 Deletes an endpoint and marks it as inactive.
+
+    This command will remove the `endpoint` service but it will mark it as `inactive` so underlying resources are not deleted.
+
+    Information about the inactives endpoint can be retrieved as well as the active ones.
+    """,
+)
+def delete_endpoint(
+    endpoint_id: int = typer.Option(
+        None,
+        "--deployment-id",
+        "-d",
+        "--endpoint-id",
+        "-e",
+        help="The ID of the endpoint",
+    ),
+    debug: Optional[bool] = DEBUG_OPTION,
+) -> None:
+    echo(f"Deleting endpoint {endpoint_id} ✅ ")
+    with ExceptionHandler(debug=debug):
+        client = EndpointsClient(API_HOST)
+        client.delete(endpoint_id)
+    echo(f"Endpoint {endpoint_id} deleted ✅ ")
 
 
 @app.command(
@@ -184,7 +223,7 @@ def list_proofs(
     echo(f"Getting proofs from endpoint {endpoint_id} ✅ ")
     try:
         client = EndpointsClient(API_HOST)
-        proofs: ProofList = client.list_proofs(model_id, version_id, endpoint_id)
+        proofs: ProofList = client.list_proofs(endpoint_id)
     except ValidationError as e:
         echo.error("Could not retrieve proofs from endpoint")
         echo.error("Review the provided information")
@@ -321,3 +360,30 @@ def download_proof(
             raise e
         sys.exit(1)
     echo(f"Proof downloaded to {output_path} ✅ ")
+
+
+@app.command(
+    name="list-jobs",
+    short_help="💼 List jobs from an endpoint.",
+    help="""💼 List jobs from an endpoint.
+    This command retrieves and displays the jobs created by a specific endpoint to generate a proof of a request.
+    The jobs information is printed in a json format for easy readability and further processing.
+    If the endpoint is not available, an error message is printed.
+    """,
+)
+def list_jobs(
+    endpoint_id: int = typer.Option(
+        None,
+        "--deployment-id",
+        "-d",
+        "--endpoint-id",
+        "-e",
+        help="The ID of the endpoint",
+    ),
+    debug: Optional[bool] = DEBUG_OPTION,
+) -> None:
+    echo(f"Getting jobs from endpoint {endpoint_id} ✅ ")
+    with ExceptionHandler(debug=debug):
+        client = EndpointsClient(API_HOST)
+        jobs = client.list_jobs(endpoint_id)
+    print_json(jobs.json(exclude_unset=True))
