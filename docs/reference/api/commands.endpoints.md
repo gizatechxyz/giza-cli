@@ -13,7 +13,7 @@
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L21"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L22"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `deploy`
 
@@ -45,7 +45,7 @@ deploy(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L69"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L70"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `list`
 
@@ -66,16 +66,12 @@ list(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L111"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L122"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `get`
 
 ```python
 get(
-    model_id: int = typer.Option(None, "--model-id", "-m", help="The ID of the model"),
-    version_id: int = typer.Option(
-        None, "--version-id", "-v", help="The ID of the version"
-    ),
     endpoint_id: int = typer.Option(
         None,
         "--deployment-id",
@@ -95,16 +91,37 @@ get(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L160"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L167"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `delete_endpoint`
+
+```python
+delete_endpoint(
+    endpoint_id: int = typer.Option(
+        None,
+        "--deployment-id",
+        "-d",
+        "--endpoint-id",
+        "-e",
+        help="The ID of the endpoint",
+    ),
+    debug: Optional[bool] = DEBUG_OPTION,
+) → None
+```
+
+
+
+
+
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L195"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `list_proofs`
 
 ```python
 list_proofs(
-    model_id: int = typer.Option(None, "--model-id", "-m", help="The ID of the model"),
-    version_id: int = typer.Option(
-        None, "--version-id", "-v", help="The ID of the version"
-    ),
     endpoint_id: int = typer.Option(
         None,
         "--deployment-id",
@@ -124,16 +141,12 @@ list_proofs(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L210"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L245"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `get_proof`
 
 ```python
 get_proof(
-    model_id: int = typer.Option(None, "--model-id", "-m", help="The ID of the model"),
-    version_id: int = typer.Option(
-        None, "--version-id", "-v", help="The ID of the version"
-    ),
     endpoint_id: int = typer.Option(
         None,
         "--deployment-id",
@@ -156,16 +169,12 @@ get_proof(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L263"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L294"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `download_proof`
 
 ```python
 download_proof(
-    model_id: int = typer.Option(None, "--model-id", "-m", help="The ID of the model"),
-    version_id: int = typer.Option(
-        None, "--version-id", "-v", help="The ID of the version"
-    ),
     endpoint_id: int = typer.Option(
         None,
         "--deployment-id",
@@ -182,6 +191,31 @@ download_proof(
         "--output-path",
         "-o",
         help="The path where the proof will be stored",
+    ),
+    debug: Optional[bool] = DEBUG_OPTION,
+) → None
+```
+
+
+
+
+
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L353"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `list_jobs`
+
+```python
+list_jobs(
+    endpoint_id: int = typer.Option(
+        None,
+        "--deployment-id",
+        "-d",
+        "--endpoint-id",
+        "-e",
+        help="The ID of the endpoint",
     ),
     debug: Optional[bool] = DEBUG_OPTION,
 ) → None

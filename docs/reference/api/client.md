@@ -351,7 +351,7 @@ __init__(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L448"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L446"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `create`
 
@@ -379,17 +379,30 @@ Create a new deployment.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L591"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L668"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `delete`
+
+```python
+delete(endpoint_id: int) → None
+```
+
+Delete an endpoint. 
+
+
+
+**Args:**
+ 
+ - <b>`endpoint_id`</b>:  Endpoint identifier 
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L599"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `download_proof`
 
 ```python
-download_proof(
-    model_id: int,
-    version_id: int,
-    endpoint_id: int,
-    proof_id: int
-) → bytes
+download_proof(endpoint_id: int, proof_id: int) → bytes
 ```
 
 Download a proof. 
@@ -407,12 +420,12 @@ Download a proof.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L636"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L638"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get`
 
 ```python
-get(model_id: int, version_id: int, endpoint_id: int) → Endpoint
+get(endpoint_id: int) → Endpoint
 ```
 
 Get a deployment. 
@@ -430,17 +443,12 @@ Get a deployment.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L555"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L569"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get_proof`
 
 ```python
-get_proof(
-    model_id: int,
-    version_id: int,
-    endpoint_id: int,
-    proof_id: int
-) → Proof
+get_proof(endpoint_id: int, proof_id: int) → Proof
 ```
 
 Return information about a specific proof. `proof_if` is the identifier of the proof that can be a integer or the request id. 
@@ -452,29 +460,46 @@ Return information about a specific proof. `proof_if` is the identifier of the p
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L489"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L484"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `list`
 
 ```python
-list(model_id: int, version_id: int) → EndpointsList
+list(params: Optional[Dict[str, str]] = None) → EndpointsList
 ```
 
-List deployments. 
+List endpoints. 
 
 
 
 **Returns:**
-  A list of deployments created by the user 
+  A list of endpoints created by the user 
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L521"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L513"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `list_jobs`
+
+```python
+list_jobs(endpoint_id: int) → JobList
+```
+
+List proofs. 
+
+
+
+**Returns:**
+  A list of proofs created by the user 
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L541"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `list_proofs`
 
 ```python
-list_proofs(model_id: int, version_id: int, endpoint_id: int) → ProofList
+list_proofs(endpoint_id: int) → ProofList
 ```
 
 List proofs. 
@@ -543,7 +568,253 @@ First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L675"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L438"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>class</kbd> `EndpointsClient`
+Client to interact with `endpoints` endpoint. 
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L39"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `__init__`
+
+```python
+__init__(
+    host: str,
+    token: Optional[str] = None,
+    api_key: Optional[str] = None,
+    api_version: str = 'v1',
+    verify: bool = True,
+    debug: Optional[bool] = False
+) → None
+```
+
+
+
+
+
+
+
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L446"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `create`
+
+```python
+create(
+    model_id: int,
+    version_id: int,
+    endpoint_create: EndpointCreate,
+    f: BufferedReader
+) → Endpoint
+```
+
+Create a new deployment. 
+
+
+
+**Args:**
+ 
+ - <b>`endpoint_create`</b>:  Endpoint information to create 
+
+
+
+**Returns:**
+ The recently created deployment information 
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L668"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `delete`
+
+```python
+delete(endpoint_id: int) → None
+```
+
+Delete an endpoint. 
+
+
+
+**Args:**
+ 
+ - <b>`endpoint_id`</b>:  Endpoint identifier 
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L599"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `download_proof`
+
+```python
+download_proof(endpoint_id: int, proof_id: int) → bytes
+```
+
+Download a proof. 
+
+
+
+**Args:**
+ 
+ - <b>`proof_id`</b>:  Proof identifier 
+
+
+
+**Returns:**
+ The proof binary file 
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L638"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `get`
+
+```python
+get(endpoint_id: int) → Endpoint
+```
+
+Get a deployment. 
+
+
+
+**Args:**
+ 
+ - <b>`endpoint_id`</b>:  Endpoint identifier 
+
+
+
+**Returns:**
+ The deployment information 
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L569"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `get_proof`
+
+```python
+get_proof(endpoint_id: int, proof_id: int) → Proof
+```
+
+Return information about a specific proof. `proof_if` is the identifier of the proof that can be a integer or the request id. 
+
+
+
+**Returns:**
+  A proof created by the user 
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L484"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `list`
+
+```python
+list(params: Optional[Dict[str, str]] = None) → EndpointsList
+```
+
+List endpoints. 
+
+
+
+**Returns:**
+  A list of endpoints created by the user 
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L513"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `list_jobs`
+
+```python
+list_jobs(endpoint_id: int) → JobList
+```
+
+List proofs. 
+
+
+
+**Returns:**
+  A list of proofs created by the user 
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L541"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `list_proofs`
+
+```python
+list_proofs(endpoint_id: int) → ProofList
+```
+
+List proofs. 
+
+
+
+**Returns:**
+  A list of proofs created by the user 
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L206"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `retrieve_api_key`
+
+```python
+retrieve_api_key() → None
+```
+
+Retrieve the API key from the `~/.giza/.api_key.json` file. 
+
+
+
+**Raises:**
+ 
+ - <b>`Exception`</b>:  if the file does not exist 
+
+
+
+**Returns:**
+ 
+ - <b>`str`</b>:  the API key 
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L229"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `retrieve_token`
+
+```python
+retrieve_token(
+    user: Optional[str] = None,
+    password: Optional[str] = None,
+    renew: bool = False
+) → None
+```
+
+Get the JWT token. 
+
+First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials.json. And finally it will try to retrieve it from the API login the user in. 
+
+
+
+**Args:**
+ 
+ - <b>`user`</b>:  if provided it will be used to check against current credentials  and if provided with `password` used to retrieve a new token. 
+ - <b>`password`</b>:  if provided with `user` it will be used to retrieve a new token. 
+ - <b>`renew`</b>:  for renewal of the JWT token by user login. 
+
+
+
+**Raises:**
+ 
+ - <b>`Exception`</b>:  if token could not be retrieved in any way 
+
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L698"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `TranspileClient`
 Client to interact with `users` endpoint. 
@@ -628,7 +899,7 @@ First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L684"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L707"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `transpile`
 
@@ -652,7 +923,7 @@ Make a call to the API transpile endpoint with the model as a file.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L707"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L730"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `update_transpilation`
 
@@ -681,7 +952,7 @@ Make a call to the API transpile endpoint with the model as a file.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L742"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L765"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `ModelsClient`
 Client to interact with `models` endpoint. 
@@ -710,7 +981,7 @@ __init__(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L814"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L837"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `create`
 
@@ -740,7 +1011,7 @@ Create a new model.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L749"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L772"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get`
 
@@ -764,7 +1035,7 @@ Make a call to the API to retrieve model information.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L796"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L819"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get_by_name`
 
@@ -788,7 +1059,7 @@ Make a call to the API to retrieve model information by its name.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L774"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L797"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `list`
 
@@ -861,7 +1132,7 @@ First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L842"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L865"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `update`
 
@@ -887,7 +1158,7 @@ Update a model.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L869"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L892"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `JobsClient`
 Client to interact with `jobs` endpoint. 
@@ -916,7 +1187,7 @@ __init__(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L901"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L924"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `create`
 
@@ -951,7 +1222,7 @@ Create a new job.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L876"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L899"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get`
 
@@ -975,7 +1246,7 @@ Make a call to the API to retrieve job information.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L939"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L962"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `list`
 
@@ -1049,7 +1320,7 @@ First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L961"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L984"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `VersionJobsClient`
 Client to interact with `jobs` endpoint. 
@@ -1078,7 +1349,7 @@ __init__(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1004"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1027"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `create`
 
@@ -1114,7 +1385,7 @@ Create a new job.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L970"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L993"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get`
 
@@ -1138,7 +1409,7 @@ Make a call to the API to retrieve job information.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1044"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1067"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `list`
 
@@ -1212,7 +1483,7 @@ First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L1075"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L1098"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `ProofsClient`
 Client to interact with `proofs` endpoint. 
@@ -1241,7 +1512,7 @@ __init__(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1131"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1154"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `download`
 
@@ -1264,7 +1535,7 @@ Download a proof.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1082"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1105"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get`
 
@@ -1288,7 +1559,7 @@ Make a call to the API to retrieve proof information.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1106"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1129"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get_by_job_id`
 
@@ -1312,7 +1583,7 @@ Make a call to the API to retrieve proof information based on the job id.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1162"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1185"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `list`
 
@@ -1386,7 +1657,7 @@ First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L1184"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L1207"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `VersionsClient`
 Client to interact with `versions` endpoint. 
@@ -1415,7 +1686,7 @@ __init__(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1264"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1287"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `create`
 
@@ -1443,7 +1714,7 @@ Create a new version.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1301"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1324"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `download`
 
@@ -1468,7 +1739,7 @@ Download a version.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1351"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1374"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `download_original`
 
@@ -1492,7 +1763,7 @@ Download the original version.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1204"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1227"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get`
 
@@ -1516,7 +1787,7 @@ Get a version.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1405"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1428"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `list`
 
@@ -1595,7 +1866,7 @@ First,  it will try to get it from GIZA_TOKEN. Second, from ~/.giza/.credentials
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1429"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1452"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `update`
 
@@ -1620,7 +1891,7 @@ Update a specific version.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1229"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1252"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `upload_cairo`
 
@@ -1645,7 +1916,7 @@ Get the Cairo model URL.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L1459"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/client.py#L1482"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `WorkspaceClient`
 Client to interact with `workspaces` endpoint. 
@@ -1674,7 +1945,7 @@ __init__(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1487"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1510"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `create`
 
@@ -1692,7 +1963,7 @@ Call the API to create a new workspace. If the workspace already exists it will 
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1510"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1533"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `delete`
 
@@ -1709,7 +1980,7 @@ Call the API to delete the workspace. If the workspace does not exist it will re
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1466"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L1489"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `get`
 

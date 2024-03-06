@@ -128,10 +128,6 @@ def list(
     """,
 )
 def get(
-    model_id: int = typer.Option(None, "--model-id", "-m", help="The ID of the model"),
-    version_id: int = typer.Option(
-        None, "--version-id", "-v", help="The ID of the version"
-    ),
     endpoint_id: int = typer.Option(
         None,
         "--deployment-id",
@@ -206,10 +202,6 @@ def delete_endpoint(
     """,
 )
 def list_proofs(
-    model_id: int = typer.Option(None, "--model-id", "-m", help="The ID of the model"),
-    version_id: int = typer.Option(
-        None, "--version-id", "-v", help="The ID of the version"
-    ),
     endpoint_id: int = typer.Option(
         None,
         "--deployment-id",
@@ -256,10 +248,6 @@ def list_proofs(
     """,
 )
 def get_proof(
-    model_id: int = typer.Option(None, "--model-id", "-m", help="The ID of the model"),
-    version_id: int = typer.Option(
-        None, "--version-id", "-v", help="The ID of the version"
-    ),
     endpoint_id: int = typer.Option(
         None,
         "--deployment-id",
@@ -276,7 +264,7 @@ def get_proof(
     echo(f"Getting proof from endpoint {endpoint_id} ✅ ")
     try:
         client = EndpointsClient(API_HOST)
-        proof: Proof = client.get_proof(model_id, version_id, endpoint_id, proof_id)
+        proof: Proof = client.get_proof(endpoint_id, proof_id)
     except ValidationError as e:
         echo.error("Could not retrieve proof from endpoint")
         echo.error("Review the provided information")
@@ -309,10 +297,6 @@ def get_proof(
     """,
 )
 def download_proof(
-    model_id: int = typer.Option(None, "--model-id", "-m", help="The ID of the model"),
-    version_id: int = typer.Option(
-        None, "--version-id", "-v", help="The ID of the version"
-    ),
     endpoint_id: int = typer.Option(
         None,
         "--deployment-id",
@@ -335,9 +319,7 @@ def download_proof(
     echo(f"Getting proof from endpoint {endpoint_id} ✅ ")
     try:
         client = EndpointsClient(API_HOST)
-        proof: bytes = client.download_proof(
-            model_id, version_id, endpoint_id, proof_id
-        )
+        proof: bytes = client.download_proof(endpoint_id, proof_id)
         with open(output_path, "wb") as f:
             f.write(proof)
     except ValidationError as e:

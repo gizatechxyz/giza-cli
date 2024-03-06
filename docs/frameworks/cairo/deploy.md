@@ -55,6 +55,66 @@ There is an extra args, `job_size`, that can be used in each request to specify 
 
 Available sizes are `S`, `M`, `L,` and `XL`, each with different usage limits.
 
+## List the proving jobs for an endpoint
+
+To list the proving jobs for an endpoint, we can use the `list-jobs` command available for the endpoints. This command will return a list of all the proving jobs for the endpoint with the `request_id` for easier tracking.
+
+```console
+> giza endpoints list-jobs --endpoint-id 1
+[giza][2024-03-06 18:13:50.485] Getting jobs from endpoint 1 ✅ 
+[
+  {
+    "id": 1,
+    "job_name": "proof-20240306-979342e7",
+    "size": "S",
+    "status": "Completed",
+    "elapsed_time": 120.,
+    "created_date": "2024-03-06T16:12:31.295958",
+    "last_update": "2024-03-06T16:14:29.952678",
+    "request_id": "979342e7b94641f0a260c1997d9ccfee"
+  },
+  {
+    "id": 2,
+    "job_name": "proof-20240306-f6559749",
+    "size": "S",
+    "status": "COMPLETED",
+    "elapsed_time": 120.0,
+    "created_date": "2024-03-06T16:43:27.531250",
+    "last_update": "2024-03-06T16:45:17.272684",
+    "request_id": "f655974900d8479c9bb662a060bc1365"
+  }
+]
+```
+
+## List the proofs for an endpoint
+
+To list the proofs for an endpoint, we can use the `list-proofs` command available for the endpoints. This command will return a list of all the proofs for the endpoint with the `request_id` for easier tracking.
+
+```console
+> giza endpoints list-proofs --endpoint-id 1
+[giza][2024-03-06 18:15:23.146] Getting proofs from endpoint 32 ✅ 
+[
+  {
+    "id": 1,
+    "job_id": 1,
+    "metrics": {
+      "proving_time": 0.03023695945739746
+    },
+    "created_date": "2024-03-06T16:44:46.196186",
+    "request_id": "979342e7b94641f0a260c1997d9ccfee"
+  },
+  {
+    "id": 1,
+    "job_id": 2,
+    "metrics": {
+      "proving_time": 0.07637895945739746
+    },
+    "created_date": "2024-03-06T16:44:46.196186",
+    "request_id": "f655974900d8479c9bb662a060bc1365"
+  }
+]
+```
+
 ## Download the proof
 
 We can download the proof using the `download-proof` command available for the endpoints:&#x20;

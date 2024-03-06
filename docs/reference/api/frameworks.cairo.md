@@ -62,7 +62,7 @@ deploy(
 ) → str
 ```
 
-Command to deploy a specific version of a model. This will create a deployment for the specified version and check the status, once it finishes if COMPLETED the deployment is ready to be used. 
+Command to deploy a specific version of a model. This will create an endpoint for the specified version and check the status, once it finishes if COMPLETED the endpoint is ready to be used. 
 
 
 
@@ -84,7 +84,7 @@ Command to deploy a specific version of a model. This will create a deployment f
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/cairo.py#L209"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/cairo.py#L211"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `transpile`
 
@@ -128,7 +128,7 @@ This function is responsible for transpiling a model. The overall objective is t
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/cairo.py#L377"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/cairo.py#L379"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `verify`
 
