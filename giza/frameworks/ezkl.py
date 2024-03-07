@@ -343,7 +343,7 @@ def deploy(
         client = EndpointsClient(API_HOST)
 
         endpoints_list: EndpointsList = client.list(
-            params={"model_id": model_id, "version_id": version_id}
+            params={"model_id": model_id, "version_id": version_id, "is_active": True}
         )
         endpoints: dict = json.loads(endpoints_list.json())
 
