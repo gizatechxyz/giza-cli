@@ -34,6 +34,7 @@
 
 - [`client.ApiClient`](./client.md#class-apiclient): Implementation of the API client to interact with core-services
 - [`client.EndpointsClient`](./client.md#class-endpointsclient): Client to interact with `endpoints` endpoint.
+- [`client.EndpointsClient`](./client.md#class-endpointsclient): Client to interact with `endpoints` endpoint.
 - [`client.JobsClient`](./client.md#class-jobsclient): Client to interact with `jobs` endpoint.
 - [`client.ModelsClient`](./client.md#class-modelsclient): Client to interact with `models` endpoint.
 - [`client.ProofsClient`](./client.md#class-proofsclient): Client to interact with `proofs` endpoint.
@@ -60,11 +61,13 @@
 - [`callbacks.version_callback`](./callbacks.md#function-version_callback): Prints the current version when `--version` flag is added to a call.
 - [`cli.entrypoint`](./cli.md#function-entrypoint)
 - [`actions.new`](./commands.actions.md#function-new): This command will create a new action by generating a Python project.
+- [`endpoints.delete_endpoint`](./commands.endpoints.md#function-delete_endpoint)
 - [`endpoints.deploy`](./commands.endpoints.md#function-deploy)
 - [`endpoints.download_proof`](./commands.endpoints.md#function-download_proof)
 - [`endpoints.get`](./commands.endpoints.md#function-get)
 - [`endpoints.get_proof`](./commands.endpoints.md#function-get_proof)
 - [`endpoints.list`](./commands.endpoints.md#function-list)
+- [`endpoints.list_jobs`](./commands.endpoints.md#function-list_jobs)
 - [`endpoints.list_proofs`](./commands.endpoints.md#function-list_proofs)
 - [`models.create`](./commands.models.md#function-create): Command to create a model. Asks for the new model's information and validates the input,
 - [`models.get`](./commands.models.md#function-get): Command to create a user. Asks for the new users information and validates the input,
@@ -91,11 +94,11 @@
 - [`workspaces.create`](./commands.workspaces.md#function-create): Command to create a Giza Workspace.
 - [`workspaces.delete`](./commands.workspaces.md#function-delete)
 - [`workspaces.get`](./commands.workspaces.md#function-get)
-- [`cairo.deploy`](./frameworks.cairo.md#function-deploy): Command to deploy a specific version of a model. This will create a deployment for the specified version and check the status, once it finishes if COMPLETED the deployment is ready to be used.
+- [`cairo.deploy`](./frameworks.cairo.md#function-deploy): Command to deploy a specific version of a model. This will create an endpoint for the specified version and check the status, once it finishes if COMPLETED the endpoint is ready to be used.
 - [`cairo.prove`](./frameworks.cairo.md#function-prove): Command to prove as spceific cairo program, previously converted to CASM.
 - [`cairo.transpile`](./frameworks.cairo.md#function-transpile): This function is responsible for transpiling a model. The overall objective is to prepare a model for use by converting it into a different format (transpiling).
 - [`cairo.verify`](./frameworks.cairo.md#function-verify): Create a verification job.
-- [`ezkl.deploy`](./frameworks.ezkl.md#function-deploy): Command to deploy a specific version of a model. This will create a deployment for the specified version and check the status, once it finishes if COMPLETED the deployment is ready to be used.
+- [`ezkl.deploy`](./frameworks.ezkl.md#function-deploy): Command to deploy a specific version of a model. This will create a endpoint for the specified version and check the status, once it finishes if COMPLETED the endpoint is ready to be used.
 - [`ezkl.prove`](./frameworks.ezkl.md#function-prove)
 - [`ezkl.setup`](./frameworks.ezkl.md#function-setup): This function executes the setup of the model and creates the outputs, handled by Giza.
 - [`ezkl.verify`](./frameworks.ezkl.md#function-verify): Create a verification job.

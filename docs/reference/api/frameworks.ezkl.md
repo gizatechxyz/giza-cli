@@ -89,7 +89,7 @@ deploy(
 ) → str
 ```
 
-Command to deploy a specific version of a model. This will create a deployment for the specified version and check the status, once it finishes if COMPLETED the deployment is ready to be used. 
+Command to deploy a specific version of a model. This will create a endpoint for the specified version and check the status, once it finishes if COMPLETED the endpoint is ready to be used. 
 
 
 

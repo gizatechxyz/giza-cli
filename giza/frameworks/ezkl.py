@@ -326,7 +326,7 @@ def deploy(
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> str:
     """
-    Command to deploy a specific version of a model. This will create a deployment for the specified version and check the status, once it finishes if COMPLETED the deployment is ready to be used.
+    Command to deploy a specific version of a model. This will create a endpoint for the specified version and check the status, once it finishes if COMPLETED the endpoint is ready to be used.
 
     Args:
         model_id: model id to deploy
@@ -342,21 +342,23 @@ def deploy(
         echo = Echo(debug=debug)
         client = EndpointsClient(API_HOST)
 
-        deployments_list: EndpointsList = client.list(model_id, version_id)
-        deployments: dict = json.loads(deployments_list.json())
+        endpoints_list: EndpointsList = client.list(
+            params={"model_id": model_id, "version_id": version_id, "is_active": True}
+        )
+        endpoints: dict = json.loads(endpoints_list.json())
 
-        if len(deployments) > 0:
+        if len(endpoints) > 0:
             echo.info(
                 f"Endpoint for model id {model_id} and version id {version_id} already exists! ✅"
             )
-            echo.info(f"Endpoint id -> {deployments[0]['id']} ✅")
-            echo.info(f'You can start doing inferences at: {deployments[0]["uri"]} 🚀')
+            echo.info(f"Endpoint id -> {endpoints[0]['id']} ✅")
+            echo.info(f'You can start doing inferences at: {endpoints[0]["uri"]} 🚀')
             sys.exit(1)
 
         spinner = Spinner(name="aesthetic", text="Creating endpoint!")
 
         with Live(renderable=spinner):
-            deployment = client.create(
+            endpoint = client.create(
                 model_id,
                 version_id,
                 EndpointCreate(
@@ -376,7 +378,7 @@ def deploy(
         sys.exit(1)
     except HTTPError as e:
         info = get_response_info(e.response)
-        echo.error("⛔️Could not create the deployment")
+        echo.error("⛔️Could not create the endpoint")
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
@@ -387,6 +389,6 @@ def deploy(
             raise e
         sys.exit(1)
     echo("Endpoint is successful ✅")
-    echo(f"Endpoint created with id -> {deployment.id} ✅")
-    echo(f"Endpoint created with endpoint URL: {deployment.uri} 🎉")
-    return deployment
+    echo(f"Endpoint created with id -> {endpoint.id} ✅")
+    echo(f"Endpoint created with endpoint URL: {endpoint.uri} 🎉")
+    return endpoint

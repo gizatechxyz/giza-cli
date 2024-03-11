@@ -62,6 +62,7 @@ def test_deploy_ezkl_existing_deployment():
                 service_name="giza-deployment-1",
                 model_id=1,
                 version_id=1,
+                is_active=True,
             ),
         ]
     )
@@ -117,6 +118,7 @@ def test_list_deployments():
                 service_name="giza-deployment-1",
                 model_id=1,
                 version_id=1,
+                is_active=True,
             ),
             Endpoint(
                 id=2,
@@ -126,6 +128,7 @@ def test_list_deployments():
                 service_name="giza-deployment-2",
                 model_id=1,
                 version_id=1,
+                is_active=True,
             ),
         ]
     )
@@ -160,6 +163,7 @@ def test_get_deployment():
         service_name="giza-deployment-1",
         model_id=1,
         version_id=1,
+        is_active=True,
     )
     with patch.object(
         EndpointsClient, "get", return_value=deployment
@@ -168,10 +172,6 @@ def test_get_deployment():
             [
                 "endpoints",
                 "get",
-                "--model-id",
-                "1",
-                "--version-id",
-                "1",
                 "--deployment-id",
                 "1",
             ],
@@ -187,10 +187,6 @@ def test_get_deployment_http_error():
             [
                 "endpoints",
                 "get",
-                "--model-id",
-                "1",
-                "--version-id",
-                "1",
                 "--deployment-id",
                 "1",
             ],
