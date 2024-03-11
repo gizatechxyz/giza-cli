@@ -1,11 +1,11 @@
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, RootModel
+from pydantic import BaseModel, ConfigDict
 
 from giza.utils.enums import Framework, ServiceSize
 
 
-class DeploymentCreate(BaseModel):
+class EndpointCreate(BaseModel):
     file: Optional[str] = None
     uri: Optional[str] = None
     model_id: Optional[int] = None
@@ -19,7 +19,7 @@ class DeploymentCreate(BaseModel):
     model_config["protected_namespaces"] = ()
 
 
-class Deployment(BaseModel):
+class Endpoint(BaseModel):
     id: int
     status: Optional[str] = None
     uri: Optional[str] = None
@@ -27,10 +27,11 @@ class Deployment(BaseModel):
     service_name: Optional[str] = None
     model_id: Optional[int] = None
     version_id: Optional[int] = None
+    is_active: bool
 
     model_config = ConfigDict(from_attributes=True)
     model_config["protected_namespaces"] = ()
 
 
-class DeploymentsList(RootModel):
-    root: list[Deployment]
+class EndpointsList(BaseModel):
+    root: list[Endpoint]

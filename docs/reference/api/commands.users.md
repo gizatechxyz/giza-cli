@@ -87,6 +87,7 @@ Create an API key for your user. You need to be logged in to create an API key. 
 **Args:**
  
  - <b>`debug`</b> (Optional[bool]):  Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False) 
+ - <b>`renew`</b> (bool):  Force the retrieval of the token to create a new one. Defaults to False. 
 
 
 

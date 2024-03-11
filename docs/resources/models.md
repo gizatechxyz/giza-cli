@@ -71,7 +71,7 @@ Now we can see that we have a model successfully transpiled! Now if we want we c
 **Note:** This is explained extensively in the transpile documentation ([Orion Cairo](../frameworks/cairo/transpile.md) and [EZKL](../frameworks/ezkl/transpile.md)).
 {% endhint %}
 
-Transpiling a model in Giza is a crucial step in the model deployment process. Transpilation is the process of converting your machine learning model into a format that can be executed on Giza. Depending the ZKML framework chosen, this process involves converting the model into a series of Cairo instructions or performing the setup using EZKL.
+Transpiling a model in Giza is a crucial step in the model deployment process as an endpoint. Transpilation is the process of converting your machine learning model into a format that can be executed on Giza. Depending the ZKML framework chosen, this process involves converting the model into a series of Cairo instructions or performing the setup using EZKL.
 
 When you execute the 'transpile' command, it initially checks for the presence of the model on the Giza platform. If no model is found, it automatically generates one and performs the transpilation. Here is an example of the command:
 

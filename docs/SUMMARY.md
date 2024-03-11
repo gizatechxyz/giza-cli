@@ -14,7 +14,7 @@
 * [Models](resources/models.md)
 * [Versions](resources/versions.md)
 * [Workspaces](resources/workspaces.md)
-* [Deployments](resources/deployments.md)
+* [Endpoints](resources/endpoints.md)
 
 ## 📚 Frameworks
 

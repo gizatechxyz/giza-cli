@@ -1,4 +1,5 @@
 import sys
+from typing import Optional
 
 from pydantic import ValidationError
 from requests import HTTPError
@@ -27,7 +28,7 @@ class ExceptionHandler:
 
     """
 
-    def __init__(self, debug: bool = False) -> None:
+    def __init__(self, debug: Optional[bool] = False) -> None:
         if debug is None:
             debug = False
         self.debug = debug

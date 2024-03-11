@@ -65,7 +65,7 @@ Here's how you can do it:
 **Note:** This is explained extensively in the transpile documentation ([Orion Cairo](../frameworks/cairo/transpile.md) and [EZKL](../frameworks/ezkl/transpile.md)).
 {% endhint %}
 
-Transpiling a model version in Giza is a crucial step in the model deployment process. Transpilation is the process of converting your machine learning model into a format that can be executed on Giza. Depending the ZKML framework chosen, this process involves converting the model into a series of Cairo instructions or performing the setup using EZKL.
+Transpiling a model version in Giza is a crucial step in the model deployment process as an endpoint. Transpilation is the process of converting your machine learning model into a format that can be executed on Giza. Depending the ZKML framework chosen, this process involves converting the model into a series of Cairo instructions or performing the setup using EZKL.
 
 When you transpile a model, you're essentially creating a new version of that model. Each version represents a specific iteration of your machine learning model, allowing you to track and manage the evolution of your models effectively.
 

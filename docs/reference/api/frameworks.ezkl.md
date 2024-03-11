@@ -13,7 +13,7 @@
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/ezkl.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/ezkl.py#L32"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `setup`
 
@@ -34,7 +34,7 @@ This function executes the setup of the model and creates the outputs, handled b
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/ezkl.py#L153"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/ezkl.py#L156"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `prove`
 
@@ -56,7 +56,7 @@ prove(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/ezkl.py#L228"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/ezkl.py#L231"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `verify`
 
@@ -72,5 +72,39 @@ verify(
 ```
 
 Create a verification job. This command will create a verification job with the provided proof id. The job size, model id, and version id can be optionally specified. 
+
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/frameworks/ezkl.py#L322"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `deploy`
+
+```python
+deploy(
+    model_id: int,
+    version_id: int,
+    size: ServiceSize = <ServiceSize.S: 'S'>,
+    debug: Optional[bool] = DEBUG_OPTION,
+) → str
+```
+
+Command to deploy a specific version of a model. This will create a endpoint for the specified version and check the status, once it finishes if COMPLETED the endpoint is ready to be used. 
+
+
+
+**Args:**
+ 
+ - <b>`model_id`</b>:  model id to deploy 
+ - <b>`version_id`</b>:  version id to deploy 
+ - <b>`size`</b>:  Size of the service, allowed values are S, M, L and XL. Defaults to S. 
+ - <b>`debug`</b> (Optional[bool], optional):  Whether to add debug information, will show requests, extra logs and traceback if there is an Exception. Defaults to DEBUG_OPTION (False). 
+
+
+
+**Raises:**
+ 
+ - <b>`ValidationError`</b>:  input fields are validated, if these are not suitable the exception is raised 
+ - <b>`HTTPError`</b>:  request error to the API, 4XX or 5XX 
 
 

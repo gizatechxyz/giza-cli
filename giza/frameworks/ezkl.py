@@ -12,7 +12,7 @@ from rich.progress import Progress, Spinner, SpinnerColumn, TextColumn
 
 from giza import API_HOST
 from giza.client import (
-    DeploymentsClient,
+    EndpointsClient,
     JobsClient,
     ModelsClient,
     ProofsClient,
@@ -20,7 +20,7 @@ from giza.client import (
     VersionsClient,
 )
 from giza.options import DEBUG_OPTION
-from giza.schemas.deployments import DeploymentCreate, DeploymentsList
+from giza.schemas.endpoints import EndpointCreate, EndpointsList
 from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.models import ModelCreate
 from giza.schemas.proofs import Proof
@@ -326,7 +326,7 @@ def deploy(
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> str:
     """
-    Command to deploy a specific version of a model. This will create a deployment for the specified version and check the status, once it finishes if COMPLETED the deployment is ready to be used.
+    Command to deploy a specific version of a model. This will create a endpoint for the specified version and check the status, once it finishes if COMPLETED the endpoint is ready to be used.
 
     Args:
         model_id: model id to deploy
@@ -340,26 +340,28 @@ def deploy(
     """
     try:
         echo = Echo(debug=debug)
-        client = DeploymentsClient(API_HOST)
+        client = EndpointsClient(API_HOST)
 
-        deployments_list: DeploymentsList = client.list(model_id, version_id)
-        deployments: dict = json.loads(deployments_list.model_dump_json())
+        endpoints_list: EndpointsList = client.list(
+            params={"model_id": model_id, "version_id": version_id, "is_active": True}
+        )
+        endpoints: dict = json.loads(endpoints_list.model_dump_json())
 
-        if len(deployments) > 0:
+        if len(endpoints) > 0:
             echo.info(
-                f"Deployment for model id {model_id} and version id {version_id} already exists! ✅"
+                f"Endpoint for model id {model_id} and version id {version_id} already exists! ✅"
             )
-            echo.info(f"Deployment id -> {deployments[0]['id']} ✅")
-            echo.info(f'You can start doing inferences at: {deployments[0]["uri"]} 🚀')
+            echo.info(f"Endpoint id -> {endpoints[0]['id']} ✅")
+            echo.info(f'You can start doing inferences at: {endpoints[0]["uri"]} 🚀')
             sys.exit(1)
 
-        spinner = Spinner(name="aesthetic", text="Creating deployment!")
+        spinner = Spinner(name="aesthetic", text="Creating endpoint!")
 
         with Live(renderable=spinner):
-            deployment = client.create(
+            endpoint = client.create(
                 model_id,
                 version_id,
-                DeploymentCreate(
+                EndpointCreate(
                     size=size,
                     model_id=model_id,
                     version_id=version_id,
@@ -368,7 +370,7 @@ def deploy(
                 None,
             )
     except ValidationError as e:
-        echo.error("Deployment validation error")
+        echo.error("Endpoint validation error")
         echo.error("Review the provided information")
         if debug:
             raise e
@@ -376,7 +378,7 @@ def deploy(
         sys.exit(1)
     except HTTPError as e:
         info = get_response_info(e.response)
-        echo.error("⛔️Could not create the deployment")
+        echo.error("⛔️Could not create the endpoint")
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
@@ -386,7 +388,7 @@ def deploy(
         if debug:
             raise e
         sys.exit(1)
-    echo("Deployment is successful ✅")
-    echo(f"Deployment created with id -> {deployment.id} ✅")
-    echo(f"Deployment created with endpoint URL: {deployment.uri} 🎉")
-    return deployment
+    echo("Endpoint is successful ✅")
+    echo(f"Endpoint created with id -> {endpoint.id} ✅")
+    echo(f"Endpoint created with endpoint URL: {endpoint.uri} 🎉")
+    return endpoint

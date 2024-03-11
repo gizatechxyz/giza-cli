@@ -14,6 +14,7 @@ class Job(BaseModel):
     elapsed_time: Optional[float] = None
     created_date: Optional[datetime.datetime] = None
     last_update: Optional[datetime.datetime] = None
+    request_id: Optional[str] = None
 
 
 class JobCreate(BaseModel):
@@ -26,3 +27,7 @@ class JobCreate(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
     model_config["protected_namespaces"] = ()
+
+
+class JobList(BaseModel):
+    root: list[Job]

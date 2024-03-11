@@ -13,8 +13,8 @@ from requests import HTTPError, Response, Session
 from rich import print, print_json
 
 from giza.schemas import users
-from giza.schemas.deployments import Deployment, DeploymentCreate, DeploymentsList
-from giza.schemas.jobs import Job, JobCreate
+from giza.schemas.endpoints import Endpoint, EndpointCreate, EndpointsList
+from giza.schemas.jobs import Job, JobCreate, JobList
 from giza.schemas.message import Msg
 from giza.schemas.models import Model, ModelCreate, ModelList, ModelUpdate
 from giza.schemas.proofs import Proof, ProofList
@@ -435,28 +435,27 @@ class UsersClient(ApiClient):
         raise Exception("Could not reset the password")
 
 
-class DeploymentsClient(ApiClient):
+class EndpointsClient(ApiClient):
     """
-    Client to interact with `deployments` endpoint.
+    Client to interact with `endpoints` endpoint.
     """
 
-    DEPLOYMENTS_ENDPOINT = "deployments"
-    MODELS_ENDPOINT = "models"
-    VERSIONS_ENDPOINT = "versions"
+    # Change once API is updated
+    ENDPOINTS = "endpoints"
 
     @auth
     def create(
         self,
         model_id: int,
         version_id: int,
-        deployment_create: DeploymentCreate,
+        endpoint_create: EndpointCreate,
         f: BufferedReader,
-    ) -> Deployment:
+    ) -> Endpoint:
         """
         Create a new deployment.
 
         Args:
-            deployment_create: Deployment information to create
+            endpoint_create: Endpoint information to create
 
         Returns:
             The recently created deployment information
@@ -468,30 +467,27 @@ class DeploymentsClient(ApiClient):
             "/".join(
                 [
                     self.url,
-                    self.MODELS_ENDPOINT,
-                    str(model_id),
-                    self.VERSIONS_ENDPOINT,
-                    str(version_id),
-                    self.DEPLOYMENTS_ENDPOINT,
+                    self.ENDPOINTS,
                 ]
             ),
             headers=headers,
-            params=deployment_create.model_dump(),
+            params=endpoint_create.model_dump(),
+            data={"model_id": model_id, "version_id": version_id},
             files={"sierra": f} if f is not None else None,
         )
         self._echo_debug(str(response))
 
         response.raise_for_status()
 
-        return Deployment(**response.json())
+        return Endpoint(**response.json())
 
     @auth
-    def list(self, model_id: int, version_id: int) -> DeploymentsList:
+    def list(self, params: Optional[Dict[str, str]] = None) -> EndpointsList:
         """
-        List deployments.
+        List endpoints.
 
         Returns:
-            A list of deployments created by the user
+            A list of endpoints created by the user
         """
         headers = copy.deepcopy(self.default_headers)
         headers.update(self._get_auth_header())
@@ -500,27 +496,22 @@ class DeploymentsClient(ApiClient):
             "/".join(
                 [
                     self.url,
-                    self.MODELS_ENDPOINT,
-                    str(model_id),
-                    self.VERSIONS_ENDPOINT,
-                    str(version_id),
-                    self.DEPLOYMENTS_ENDPOINT,
+                    self.ENDPOINTS,
                 ]
             ),
             headers=headers,
+            params=params,
         )
         self._echo_debug(str(response))
 
         response.raise_for_status()
 
-        return DeploymentsList(
-            root=[Deployment(**deployment) for deployment in response.json()]
+        return EndpointsList(
+            root=[Endpoint(**endpoint) for endpoint in response.json()]
         )
 
     @auth
-    def list_proofs(
-        self, model_id: int, version_id: int, deployment_id: int
-    ) -> ProofList:
+    def list_jobs(self, endpoint_id: int) -> JobList:
         """
         List proofs.
 
@@ -534,12 +525,36 @@ class DeploymentsClient(ApiClient):
             "/".join(
                 [
                     self.url,
-                    self.MODELS_ENDPOINT,
-                    str(model_id),
-                    self.VERSIONS_ENDPOINT,
-                    str(version_id),
-                    self.DEPLOYMENTS_ENDPOINT,
-                    str(deployment_id),
+                    self.ENDPOINTS,
+                    str(endpoint_id),
+                    "jobs",
+                ]
+            ),
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return JobList(root=[Job(**job) for job in response.json()])
+
+    @auth
+    def list_proofs(self, endpoint_id: int) -> ProofList:
+        """
+        List proofs.
+
+        Returns:
+            A list of proofs created by the user
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            "/".join(
+                [
+                    self.url,
+                    self.ENDPOINTS,
+                    str(endpoint_id),
                     "proofs",
                 ]
             ),
@@ -552,9 +567,7 @@ class DeploymentsClient(ApiClient):
         return ProofList(root=[Proof(**proof) for proof in response.json()])
 
     @auth
-    def get_proof(
-        self, model_id: int, version_id: int, deployment_id: int, proof_id: int
-    ) -> Proof:
+    def get_proof(self, endpoint_id: int, proof_id: int) -> Proof:
         """
         Return information about a specific proof.
         `proof_if` is the identifier of the proof that can be a integer or the request id.
@@ -569,12 +582,8 @@ class DeploymentsClient(ApiClient):
             "/".join(
                 [
                     self.url,
-                    self.MODELS_ENDPOINT,
-                    str(model_id),
-                    self.VERSIONS_ENDPOINT,
-                    str(version_id),
-                    self.DEPLOYMENTS_ENDPOINT,
-                    str(deployment_id),
+                    self.ENDPOINTS,
+                    str(endpoint_id),
                     "proofs",
                     str(proof_id),
                 ]
@@ -588,9 +597,7 @@ class DeploymentsClient(ApiClient):
         return Proof(**response.json())
 
     @auth
-    def download_proof(
-        self, model_id: int, version_id: int, deployment_id: int, proof_id: int
-    ) -> bytes:
+    def download_proof(self, endpoint_id: int, proof_id: int) -> bytes:
         """
         Download a proof.
 
@@ -607,12 +614,8 @@ class DeploymentsClient(ApiClient):
             "/".join(
                 [
                     self.url,
-                    self.MODELS_ENDPOINT,
-                    str(model_id),
-                    self.VERSIONS_ENDPOINT,
-                    str(version_id),
-                    self.DEPLOYMENTS_ENDPOINT,
-                    str(deployment_id),
+                    self.ENDPOINTS,
+                    str(endpoint_id),
                     "proofs",
                     f"{proof_id}:download",
                 ]
@@ -633,12 +636,12 @@ class DeploymentsClient(ApiClient):
         return download_response.content
 
     @auth
-    def get(self, model_id: int, version_id: int, deployment_id: int) -> Deployment:
+    def get(self, endpoint_id: int) -> Endpoint:
         """
         Get a deployment.
 
         Args:
-            deployment_id: Deployment identifier
+            endpoint_id: Endpoint identifier
 
         Returns:
             The deployment information
@@ -650,12 +653,8 @@ class DeploymentsClient(ApiClient):
             "/".join(
                 [
                     self.url,
-                    self.MODELS_ENDPOINT,
-                    str(model_id),
-                    self.VERSIONS_ENDPOINT,
-                    str(version_id),
-                    self.DEPLOYMENTS_ENDPOINT,
-                    str(deployment_id),
+                    self.ENDPOINTS,
+                    str(endpoint_id),
                 ]
             ),
             headers=headers,
@@ -664,7 +663,36 @@ class DeploymentsClient(ApiClient):
         self._echo_debug(str(response))
         response.raise_for_status()
 
-        return Deployment(**response.json())
+        return Endpoint(**response.json())
+
+    @auth
+    def delete(self, endpoint_id: int) -> None:
+        """
+        Delete an endpoint.
+
+        Args:
+            endpoint_id: Endpoint identifier
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.delete(
+            "/".join(
+                [
+                    self.url,
+                    self.ENDPOINTS,
+                    str(endpoint_id),
+                ]
+            ),
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+
+# For downstream dependencies until they are updated
+DeploymentsClient = EndpointsClient
 
 
 class TranspileClient(ApiClient):
