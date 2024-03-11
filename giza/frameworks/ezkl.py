@@ -345,7 +345,7 @@ def deploy(
         endpoints_list: EndpointsList = client.list(
             params={"model_id": model_id, "version_id": version_id, "is_active": True}
         )
-        endpoints: dict = json.loads(endpoints_list.json())
+        endpoints: dict = json.loads(endpoints_list.model_dump_json())
 
         if len(endpoints) > 0:
             echo.info(

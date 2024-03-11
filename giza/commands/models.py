@@ -66,7 +66,7 @@ def get(
         if debug:
             raise e
         sys.exit(1)
-    print_json(model.json())
+    print_json(model.model_dump_json())
 
 
 @app.command(
@@ -116,7 +116,7 @@ def list(
         if debug:
             raise e
         sys.exit(1)
-    print_json(models.json())
+    print_json(models.model_dump_json())
 
 
 @app.command(
@@ -174,4 +174,4 @@ def create(
         if debug:
             raise e
         sys.exit(1)
-    print_json(model.json())
+    print_json(model.model_dump_json())

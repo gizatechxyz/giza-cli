@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr, SecretStr, validator
+from pydantic import BaseModel, EmailStr, SecretStr, field_validator
 
 
 class UserBase(BaseModel):
@@ -13,7 +13,8 @@ class UserCreate(UserBase):
     email: EmailStr
     password: SecretStr
 
-    @validator("username", "email", "password")
+    @field_validator("username", "email", "password")
+    @classmethod
     def str_not_emtpy(cls, s: str):
         """
         Validate that none of the provided information is an empty string
@@ -27,7 +28,7 @@ class UserCreate(UserBase):
         Returns:
             str: return the provided value if not empty
         """
-        if s == "":
+        if s == "" or s is None:
             raise ValueError
         return s
 

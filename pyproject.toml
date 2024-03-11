@@ -16,7 +16,6 @@ tenacity = ">=8.2.2,<=9.0.0"
 click = ">=8.1.0,<9.0.0"
 rich = "^13"
 typer = {version = "*", extras = ["all"]}
-pydantic = ">=1.10.8,<2.0.0"
 cryptography = ">=42.0.0,<43.0.0"
 python-jose = {version = "^3.3.0", extras = ["cryptography"]}
 email-validator = "^2.0.0.post2"
@@ -24,6 +23,7 @@ types-python-jose = "^3.3.4.8"
 types-requests = "^2.31.0.2"
 cookiecutter = "^2.5.0"
 semver = "^3.0.2"
+pydantic = "^2"
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.3.3"

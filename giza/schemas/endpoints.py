@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from giza.utils.enums import Framework, ServiceSize
 
@@ -15,6 +15,9 @@ class EndpointCreate(BaseModel):
     service_name: Optional[str] = None
     framework: Framework = Framework.CAIRO
 
+    model_config = ConfigDict(from_attributes=True)
+    model_config["protected_namespaces"] = ()
+
 
 class Endpoint(BaseModel):
     id: int
@@ -26,9 +29,9 @@ class Endpoint(BaseModel):
     version_id: Optional[int] = None
     is_active: bool
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
+    model_config["protected_namespaces"] = ()
 
 
 class EndpointsList(BaseModel):
-    __root__: list[Endpoint]
+    root: list[Endpoint]

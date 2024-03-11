@@ -215,8 +215,8 @@ def test_models_client_list(tmpdir):
         models = client.list()
 
     mock_request.assert_called_once()
-    assert isinstance(models.__root__[0], Model)
-    assert models.__root__[0].name == model_data["name"]
+    assert isinstance(models.root[0], Model)
+    assert models.root[0].name == model_data["name"]
 
 
 def test_models_client_get_non_existent(tmpdir):
@@ -255,7 +255,7 @@ def test_versions_client_get(tmpdir):
         last_update="2021-08-31T15:00:00.000000",
         framework=Framework.CAIRO,
     )
-    response = ResponseStub(version.dict(), 200)
+    response = ResponseStub(version.model_dump(), 200)
     with patch("pathlib.Path.home", return_value=tmpdir), patch(
         "requests.Session.get", return_value=response
     ) as mock_request, patch("jose.jwt.decode"):
@@ -276,7 +276,7 @@ def test_versions_client_list(tmpdir):
         framework=Framework.CAIRO,
         last_update="2021-08-31T15:00:00.000000",
     )
-    response = ResponseStub([version.dict()], 200)
+    response = ResponseStub([version.model_dump()], 200)
     with patch("pathlib.Path.home", return_value=tmpdir), patch(
         "requests.Session.get", return_value=response
     ) as mock_request, patch("jose.jwt.decode"):
@@ -284,7 +284,7 @@ def test_versions_client_list(tmpdir):
         result = client.list(model_id=1)
 
     mock_request.assert_called()
-    assert version == result.__root__[0]
+    assert version == result.root[0]
     assert isinstance(result, VersionList)
 
 
@@ -299,7 +299,7 @@ def test_versions_client_create(tmpdir):
         framework=Framework.CAIRO,
     )
     response = ResponseStub(
-        version.dict(), 201, headers={MODEL_URL_HEADER.lower(): "url"}
+        version.model_dump(), 201, headers={MODEL_URL_HEADER.lower(): "url"}
     )
     with patch("pathlib.Path.home", return_value=tmpdir), patch(
         "requests.Session.post", return_value=response
@@ -333,7 +333,7 @@ def test_versions_client_get_non_existent(tmpdir):
 def test_jobs_client_get(tmpdir):
     job_id = 1
     job = Job(id=1, job_name="job", size=JobSize.S, status=JobStatus.STARTING)
-    response = ResponseStub(job.dict(), 200)
+    response = ResponseStub(job.model_dump(), 200)
     with patch("pathlib.Path.home", return_value=tmpdir), patch(
         "requests.Session.get", return_value=response
     ) as mock_request, patch("jose.jwt.decode"):
@@ -346,7 +346,7 @@ def test_jobs_client_get(tmpdir):
 
 def test_jobs_client_list(tmpdir):
     job = Job(id=1, job_name="job", size=JobSize.S, status=JobStatus.STARTING)
-    response = ResponseStub([job.dict()], 200)
+    response = ResponseStub([job.model_dump()], 200)
     with patch("pathlib.Path.home", return_value=tmpdir), patch(
         "requests.Session.get", return_value=response
     ) as mock_request, patch("jose.jwt.decode"):
@@ -359,7 +359,7 @@ def test_jobs_client_list(tmpdir):
 
 def test_jobs_client_create(tmpdir):
     job = Job(id=1, job_name="job", size=JobSize.S, status=JobStatus.STARTING)
-    response = ResponseStub(job.dict(), 201)
+    response = ResponseStub(job.model_dump(), 201)
     with patch("pathlib.Path.home", return_value=tmpdir), patch(
         "requests.Session.post", return_value=response
     ) as mock_request, patch("jose.jwt.decode"):
@@ -381,7 +381,7 @@ def test_proof_client_get(tmpdir):
         cairo_execution_time=100,
         created_date=datetime.datetime.now(),
     )
-    response = ResponseStub(proof.dict(), 200)
+    response = ResponseStub(proof.model_dump(), 200)
     with patch("pathlib.Path.home", return_value=tmpdir), patch(
         "requests.Session.get", return_value=response
     ) as mock_request, patch("jose.jwt.decode"):
@@ -401,7 +401,7 @@ def test_proof_client_get_by_job_id(tmpdir):
         cairo_execution_time=100,
         created_date=datetime.datetime.now(),
     )
-    response = ResponseStub([proof.dict()], 200)
+    response = ResponseStub([proof.model_dump()], 200)
     with patch("pathlib.Path.home", return_value=tmpdir), patch(
         "requests.Session.get", return_value=response
     ) as mock_request, patch("jose.jwt.decode"):
@@ -421,7 +421,7 @@ def test_proof_client_list(tmpdir):
         cairo_execution_time=100,
         created_date=datetime.datetime.now(),
     )
-    response = ResponseStub([proof.dict()], 200)
+    response = ResponseStub([proof.model_dump()], 200)
     with patch("pathlib.Path.home", return_value=tmpdir), patch(
         "requests.Session.get", return_value=response
     ) as mock_request, patch("jose.jwt.decode"):

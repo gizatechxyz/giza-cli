@@ -1,7 +1,7 @@
 import datetime
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, RootModel
 
 from giza.utils.enums import Framework, VersionStatus
 
@@ -28,5 +28,5 @@ class Version(BaseModel):
     framework: Framework
 
 
-class VersionList(BaseModel):
-    __root__: list[Version]
+class VersionList(RootModel):
+    root: list[Version]

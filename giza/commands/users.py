@@ -2,7 +2,8 @@ import sys
 from typing import Optional
 
 import typer
-from pydantic import EmailError, EmailStr, SecretStr, ValidationError
+from email_validator import EmailNotValidError, validate_email
+from pydantic import SecretStr, ValidationError
 from requests import HTTPError
 from rich import print_json
 
@@ -59,11 +60,11 @@ def create(debug: Optional[bool] = DEBUG_OPTION) -> None:
     echo("Creating user in Giza ✅ ")
     try:
         user_create = users.UserCreate(
-            username=user, password=SecretStr(password), email=EmailStr(email)
+            username=user, password=SecretStr(password), email=email
         )
         client = UsersClient(API_HOST)
         client.create(user_create)
-    except ValidationError as e:
+    except (ValidationError, EmailNotValidError) as e:
         echo.error("⛔️Could not create the user⛔️")
         echo.error("Review the provided information")
         if debug:
@@ -198,7 +199,7 @@ def me(debug: Optional[bool] = DEBUG_OPTION) -> None:
     client = UsersClient(API_HOST, debug=debug)
     user = client.me()
 
-    print_json(user.json())
+    print_json(user.model_dump_json())
 
 
 @app.command(
@@ -223,8 +224,8 @@ def resend_email(debug: Optional[bool] = DEBUG_OPTION) -> None:
     echo("Resending verification email ✅ ")
     try:
         client = UsersClient(API_HOST)
-        client.resend_email(EmailStr.validate(email))
-    except (ValidationError, EmailError) as e:
+        client.resend_email(validate_email(email).normalized)
+    except (ValidationError, EmailNotValidError) as e:
         echo.error("⛔️Could not resend the email⛔️")
         echo.error("Review the provided information")
         if debug:

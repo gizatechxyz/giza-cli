@@ -1,6 +1,7 @@
 from unittest.mock import patch
 
-from pydantic import EmailError, ValidationError
+from email_validator import EmailNotValidError
+from pydantic import ValidationError
 from requests import HTTPError
 
 from giza.client import UsersClient
@@ -69,7 +70,7 @@ def test_users_create_empty_email():
 
     assert result.exit_code == 1
     assert "Review the provided information" in result.stdout
-    assert "value is not a valid email address" in result.stdout
+    assert "Input should be a valid string" in result.stdout
 
 
 def test_users_create_invalid_email():
@@ -202,7 +203,7 @@ def test_resend_email_invalid_email():
 
     assert result.exit_code == 1
     assert "Could not resend" in result.stdout
-    assert "value is not a valid email address" in result.stdout
+    assert "The email address is not valid." in result.stdout
 
 
 def test_resend_email_invalid_email_debug():
@@ -218,7 +219,7 @@ def test_resend_email_invalid_email_debug():
     assert result.exit_code == 1
     assert "Could not resend" in result.stdout
     assert "Debugging mode is on" in result.stdout
-    assert isinstance(result.exception, EmailError)
+    assert isinstance(result.exception, EmailNotValidError)
 
 
 def test_resend_email_invalid_response():

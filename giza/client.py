@@ -471,7 +471,7 @@ class EndpointsClient(ApiClient):
                 ]
             ),
             headers=headers,
-            params=endpoint_create.dict(),
+            params=endpoint_create.model_dump(),
             data={"model_id": model_id, "version_id": version_id},
             files={"sierra": f} if f is not None else None,
         )
@@ -507,7 +507,7 @@ class EndpointsClient(ApiClient):
         response.raise_for_status()
 
         return EndpointsList(
-            __root__=[Endpoint(**endpoint) for endpoint in response.json()]
+            root=[Endpoint(**endpoint) for endpoint in response.json()]
         )
 
     @auth
@@ -536,7 +536,7 @@ class EndpointsClient(ApiClient):
 
         response.raise_for_status()
 
-        return JobList(__root__=[Job(**job) for job in response.json()])
+        return JobList(root=[Job(**job) for job in response.json()])
 
     @auth
     def list_proofs(self, endpoint_id: int) -> ProofList:
@@ -564,7 +564,7 @@ class EndpointsClient(ApiClient):
 
         response.raise_for_status()
 
-        return ProofList(__root__=[Proof(**proof) for proof in response.json()])
+        return ProofList(root=[Proof(**proof) for proof in response.json()])
 
     @auth
     def get_proof(self, endpoint_id: int, proof_id: int) -> Proof:
@@ -814,7 +814,7 @@ class ModelsClient(ApiClient):
 
         response.raise_for_status()
 
-        return ModelList(__root__=[Model(**model) for model in response.json()])
+        return ModelList(root=[Model(**model) for model in response.json()])
 
     def get_by_name(self, model_name: str, **kwargs) -> Union[Model, None]:
         """
@@ -832,7 +832,7 @@ class ModelsClient(ApiClient):
         except HTTPError as e:
             self._echo_debug(f"Could not retrieve model by name: {str(e)}")
             return None
-        return model.__root__[0]
+        return model.root[0]
 
     @auth
     def create(self, model_create: ModelCreate) -> Model:
@@ -854,7 +854,7 @@ class ModelsClient(ApiClient):
         response = self.session.post(
             f"{self.url}/{self.MODELS_ENDPOINT}",
             headers=headers,
-            json=model_create.dict(),
+            json=model_create.model_dump(),
         )
         self._echo_debug(str(response))
 
@@ -880,7 +880,7 @@ class ModelsClient(ApiClient):
         response = self.session.put(
             f"{self.url}/{self.MODELS_ENDPOINT}/{model_id}",
             headers=headers,
-            json=model_update.dict(),
+            json=model_update.model_dump(),
         )
         self._echo_debug(str(response))
 
@@ -950,7 +950,7 @@ class JobsClient(ApiClient):
         response = self.session.post(
             f"{self.url}/{self.JOBS_ENDPOINT}",
             headers=headers,
-            params=job_create.dict(),
+            params=job_create.model_dump(),
             files=files,
         )
         self._echo_debug(str(response))
@@ -1055,7 +1055,7 @@ class VersionJobsClient(ApiClient):
                 ]
             ),
             headers=headers,
-            params=job_create.dict(),
+            params=job_create.model_dump(),
             files={"file": f},
         )
         self._echo_debug(str(response))
@@ -1307,7 +1307,7 @@ class VersionsClient(ApiClient):
         response = self.session.post(
             f"{self._get_version_url(model_id)}",
             headers=headers,
-            json=version_create.dict(),
+            json=version_create.model_dump(),
             params={"filename": filename} if filename else None,
         )
         self._echo_debug(str(response))
@@ -1447,7 +1447,7 @@ class VersionsClient(ApiClient):
 
         response.raise_for_status()
 
-        return VersionList(__root__=[Version(**version) for version in response.json()])
+        return VersionList(root=[Version(**version) for version in response.json()])
 
     @auth
     def update(
@@ -1470,7 +1470,7 @@ class VersionsClient(ApiClient):
         response = self.session.put(
             f"{self._get_version_url(model_id)}/{version_id}",
             headers=headers,
-            json=version_update.dict(),
+            json=version_update.model_dump(),
         )
         self._echo_debug(str(response))
 

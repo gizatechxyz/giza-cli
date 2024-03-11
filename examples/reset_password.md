@@ -23,7 +23,7 @@ Once you have received your reset token, you can use it to reset your password. 
 > giza reset-password --token your_reset_token
 
 Please enter your new password 🔑: # Your new password goes here
-Please confirm your new password 🔑: 
+Please confirm your new password 🔑:
 [giza][2023-08-30 12:55:32.128] Password updated successfully
 [giza][2023-08-30 12:55:32.132] Password reset was successful 🎉
 ```

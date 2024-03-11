@@ -2,7 +2,8 @@ import zipfile
 from io import BytesIO
 from unittest.mock import patch
 
-from pydantic.error_wrappers import ValidationError
+from pydantic import ValidationError
+from pydantic_core import InitErrorDetails
 from requests.exceptions import HTTPError
 
 from giza.commands.versions import VersionsClient, VersionStatus
@@ -71,7 +72,12 @@ def test_versions_get_http_error():
 # Test version retrieval with invalid version id
 def test_versions_get_invalid_id():
     with patch.object(
-        VersionsClient, "get", side_effect=ValidationError(errors=[], model=Version)
+        VersionsClient,
+        "get",
+        side_effect=ValidationError.from_exception_data(
+            line_errors=[InitErrorDetails(type="missing")],
+            title="Resource validation error",
+        ),
     ), patch("giza.utils.exception_handling.get_response_info", return_value={}):
         result = invoke_cli_runner(
             ["versions", "get", "--model-id", "1", "--version-id", "1"],
@@ -85,7 +91,7 @@ def test_versions_get_invalid_id():
 # Test successful version listing
 def test_versions_list():
     versions = VersionList(
-        __root__=[
+        root=[
             Version(
                 version=1,
                 size=1,
@@ -127,7 +133,7 @@ def test_versions_transpile_successful(tmpdir):
         return {"model": tmp.getvalue()}
 
     models = ModelList(
-        __root__=[
+        root=[
             Model(
                 id=1,
                 name="test_model",
@@ -201,7 +207,7 @@ def test_versions_transpile_file(tmpdir):
         return {"model": b"some bytes"}
 
     models = ModelList(
-        __root__=[
+        root=[
             Model(
                 id=1,
                 name="test_model",
@@ -380,7 +386,7 @@ def test_versions_update_successful():
         last_update="2021-08-31T15:00:00.000000",
         framework=Framework.CAIRO,
     )
-    updated_version = version.copy()
+    updated_version = version.model_copy()
     updated_version.status = VersionStatus.COMPLETED
 
     with patch.object(VersionsClient, "get", return_value=version), patch.object(

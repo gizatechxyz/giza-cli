@@ -1,7 +1,7 @@
 import datetime
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, RootModel
 
 
 class Proof(BaseModel):
@@ -14,5 +14,5 @@ class Proof(BaseModel):
     request_id: Optional[str] = None
 
 
-class ProofList(BaseModel):
-    __root__: list[Proof]
+class ProofList(RootModel):
+    root: list[Proof]
