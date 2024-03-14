@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, RootModel
 
 from giza.utils.enums import Framework, ServiceSize
 
@@ -33,5 +33,5 @@ class Endpoint(BaseModel):
     model_config["protected_namespaces"] = ()
 
 
-class EndpointsList(BaseModel):
+class EndpointsList(RootModel):
     root: list[Endpoint]

@@ -1,7 +1,7 @@
 import datetime
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, RootModel
 
 from giza.utils.enums import Framework, JobKind, JobSize, JobStatus
 
@@ -29,5 +29,5 @@ class JobCreate(BaseModel):
     model_config["protected_namespaces"] = ()
 
 
-class JobList(BaseModel):
+class JobList(RootModel):
     root: list[Job]

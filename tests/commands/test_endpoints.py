@@ -144,6 +144,33 @@ def test_list_deployments():
     assert "giza-deployment-2" in result.stdout
 
 
+def test_create_deployments_empty():
+    deployments_list = EndpointsList(root=[])
+    with patch.object(
+        EndpointsClient, "list", return_value=deployments_list
+    ) as mock_list, patch.object(
+        EndpointsClient,
+        "create",
+        return_value=Endpoint(
+            id=1,
+            status="COMPLETED",
+            uri="https://giza-api.com/deployments/1",
+            size="S",
+            service_name="giza-deployment-1",
+            model_id=1,
+            version_id=1,
+            is_active=True,
+        ),
+    ):
+        result = invoke_cli_runner(
+            ["endpoints", "deploy", "--model-id", "1", "--version-id", "1"],
+        )
+    mock_list.assert_called_once()
+    assert result.exit_code == 0
+    assert "Endpoint is successful" in result.stdout
+    assert "https://giza-api.com/deployments/1" in result.stdout
+
+
 def test_list_deployments_http_error():
     with patch.object(EndpointsClient, "list", side_effect=HTTPError):
         result = invoke_cli_runner(
