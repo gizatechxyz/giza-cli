@@ -36,7 +36,7 @@ my_awesome_model
     │       └── lib.cairo
 ```
 
-When we transpile a model we have two possibilities: a fully compatible model and a partially compatible one.&#x20;
+When we transpile a model we have two possibilities: a fully compatible model and a partially compatible one.
 
 A model is fully compatible when all the operators that the model uses are supported by the Transpiler and Orion, if this happens the model is compiled after transpilation and we save the .sierra file on behalf of the user to use later for deployment ([endpoint docs](../../resources/endpoints.md)). This will be shown in the output of the transpile command:
 
@@ -46,7 +46,7 @@ A model is fully compatible when all the operators that the model uses are suppo
 ```
 {% endcode %}
 
-If a model is partially supported, we will create a warning in the output stating that not all the operators are supported right now. If it is partially supported the Cairo code can still be modified for later compilation and endpoint.&#x20;
+If a model is partially supported, we will create a warning in the output stating that not all the operators are supported right now. If it is partially supported the Cairo code can still be modified for later compilation and endpoint.
 
 {% code overflow="wrap" %}
 ```
@@ -57,25 +57,34 @@ If a model is partially supported, we will create a warning in the output statin
 
 ## Supported Operators
 
-| Operator |      Implemented     |
-| :------: | :------------------: |
-|    Abs   | :white\_check\_mark: |
-|   Acos   | :white\_check\_mark: |
-|   Acosh  | :white\_check\_mark: |
-|    Add   | :white\_check\_mark: |
-|    And   | :white\_check\_mark: |
-|    Div   | :white\_check\_mark: |
-|    Mul   | :white\_check\_mark: |
-|    Sub   | :white\_check\_mark: |
-|  Argmax  | :white\_check\_mark: |
-|  Argmin  | :white\_check\_mark: |
-|   Asin   | :white\_check\_mark: |
-|   Asinh  | :white\_check\_mark: |
-|   Atan   | :white\_check\_mark: |
-|   Relu   | :white\_check\_mark: |
-| Constant | :white\_check\_mark: |
-|  MatMul  | :white\_check\_mark: |
-|   Gemm   | :white\_check\_mark: |
+|        Operator        |      Implemented     |
+| :--------------------: | :------------------: |
+|           Abs          | :white\_check\_mark: |
+|          Acos          | :white\_check\_mark: |
+|          Acosh         | :white\_check\_mark: |
+|           Add          | :white\_check\_mark: |
+|           And          | :white\_check\_mark: |
+|           Div          | :white\_check\_mark: |
+|           Mul          | :white\_check\_mark: |
+|           Sub          | :white\_check\_mark: |
+|         Argmax         | :white\_check\_mark: |
+|         Argmin         | :white\_check\_mark: |
+|          Asin          | :white\_check\_mark: |
+|          Asinh         | :white\_check\_mark: |
+|          Atan          | :white\_check\_mark: |
+|          Relu          | :white\_check\_mark: |
+|        Constant        | :white\_check\_mark: |
+|         MatMul         | :white\_check\_mark: |
+|          Gemm          | :white\_check\_mark: |
+| TreeEnsembleClassifier | :white\_check\_mark: |
+|    LinearClassifier    | :white\_check\_mark: |
+|     LinearRegressor    | :white\_check\_mark: |
+|         Softmax        | :white\_check\_mark: |
+|         Sigmoid        | :white\_check\_mark: |
+|         Concat         | :white\_check\_mark: |
+|         Squeeze        | :white\_check\_mark: |
+|        Unsqueeze       | :white\_check\_mark: |
+|         Reshape        | :white\_check\_mark: |
 
 ## How do we transpile a model?
 
@@ -100,7 +109,7 @@ This is the strategy that we followed in the example before.
 This method gives you more control over the process.
 
 1. First, you create a model manually using the `giza models create` command.
-2. After the model is created, you can transpile it using the `giza transpile --model-id ...`&#x20;
+2. After the model is created, you can transpile it using the `giza transpile --model-id ...`
 
 This method is useful when you want to specify particular options or parameters during the model creation and transpilation process.
 
@@ -184,7 +193,7 @@ let node_8 = // Operator LogSoftmax is not yet supported by the Giza transpiler.
 ```
 {% endcode %}
 
-Let's say that `LogSoftMax` is the unsupported operator, if we check the Orion Documentation, we can see that it [is supported](https://orion.gizatech.xyz/framework/operators/neural-network/nn.logsoftmax). Now we could add the necessary code  to add our operator (including imports):
+Let's say that `LogSoftMax` is the unsupported operator, if we check the Orion Documentation, we can see that it [is supported](https://orion.gizatech.xyz/framework/operators/neural-network/nn.logsoftmax). Now we could add the necessary code to add our operator (including imports):
 
 ```
 let node_8 = NNTrait::logsoftmax(node_7_output_0, 1);
@@ -222,7 +231,7 @@ error: could not compile `inference` due to previous error
 
 Here's what is going on:
 
-* We want to update the first version of the first model with our new code, the code is at `--model-path cairo_model`&#x20;
+* We want to update the first version of the first model with our new code, the code is at `--model-path cairo_model`
 * The CLI checks if `scarb` is available in the system
 * `scarb build` is attempted
 * We still have some errors that we have to fix
@@ -262,7 +271,7 @@ sierra: 1.4.0
 The version has been updated successfully! Now we have a fully compatible model that generated a sierra and can be easily deployed! Now the version will be frozen so it won't allow for any more updates.
 
 {% hint style="info" %}
-When we refer to a version of a model, we refer to the code/artifact of a specific model at a specific point in time. The model is frozen for tracking purposes.&#x20;
+When we refer to a version of a model, we refer to the code/artifact of a specific model at a specific point in time. The model is frozen for tracking purposes.
 {% endhint %}
 
 ## What is happening with the models and versions?
