@@ -9,7 +9,7 @@ To deploy a model, you must first have a version of that model. If you have not 
 To create a new service, users can employ the `deploy` command. This command facilitates the deployment of a machine learning service ready to accept predictions at the `/cairo_run` endpoint, providing a straightforward method for deploying and utilizing machine learning capabilities.
 
 ```console
-> giza endpoints deploy --model-id 1 --version-id 1 model.sierra
+> giza endpoints deploy --model-id 1 --version-id 1 model.sierra.json
 ▰▰▰▰▰▱▱ Creating endpoint!
 [giza][2024-02-07 12:31:02.498] Endpoint is successful ✅
 [giza][2024-02-07 12:31:02.501] Endpoint created with id -> 1 ✅
