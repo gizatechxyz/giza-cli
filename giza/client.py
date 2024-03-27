@@ -1367,7 +1367,7 @@ class VersionsClient(ApiClient):
 
             sierra_response.raise_for_status()
             self._echo_debug(str(sierra_response))
-            downloads["inference.sierra"] = sierra_response.content
+            downloads["inference.sierra.json"] = sierra_response.content
 
         return downloads
 

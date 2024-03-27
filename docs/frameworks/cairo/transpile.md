@@ -38,7 +38,7 @@ my_awesome_model
 
 When we transpile a model we have two possibilities: a fully compatible model and a partially compatible one.
 
-A model is fully compatible when all the operators that the model uses are supported by the Transpiler and Orion, if this happens the model is compiled after transpilation and we save the .sierra file on behalf of the user to use later for deployment ([endpoint docs](../../resources/endpoints.md)). This will be shown in the output of the transpile command:
+A model is fully compatible when all the operators that the model uses are supported by the Transpiler and Orion, if this happens the model is compiled after transpilation and we save the .sierra.json file on behalf of the user to use later for deployment ([endpoint docs](../../resources/endpoints.md)). This will be shown in the output of the transpile command:
 
 {% code overflow="wrap" %}
 ```
