@@ -4,6 +4,7 @@ import typer.rich_utils
 from rich.traceback import install
 
 from giza.commands.actions import app as actions_app
+from giza.commands.agents import app as agents_app
 from giza.commands.endpoints import app as deployments_app
 from giza.commands.endpoints import deploy
 from giza.commands.models import app as models_app
@@ -25,6 +26,13 @@ app.add_typer(
     name="users",
     short_help="💻 Utilities for managing users",
     help="""💻 Utilities for managing users""",
+)
+
+app.add_typer(
+    agents_app,
+    name="agents",
+    short_help="💻 Utilities for managing agents",
+    help="""💻 Utilities for managing agents""",
 )
 
 app.add_typer(
