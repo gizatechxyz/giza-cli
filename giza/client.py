@@ -1703,7 +1703,6 @@ class AgentsClient(ApiClient):
             headers=headers,
             json=agent_update.model_dump(exclude_none=True),
         )
-        print(agent_update.model_dump())
         self._echo_debug(str(response))
         response.raise_for_status()
 
