@@ -68,6 +68,11 @@ def create(
         version_id = endpoint.version_id
     elif model_id and version_id:
         echo.info("Using model id and version id to create agent")
+        endpoints_client = EndpointsClient(API_HOST)
+        endpoint = endpoints_client.list(
+            params={"model_id": model_id, "version_id": version_id}
+        ).root[0]
+        endpoint_id = endpoint.id
     with ExceptionHandler(debug=debug):
         client = AgentsClient(API_HOST)
         available_accounts = get_ape_accounts()

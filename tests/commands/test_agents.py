@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 from giza.commands.agents import AgentsClient, EndpointsClient
 from giza.schemas.agents import Agent, AgentList, AgentUpdate
-from giza.schemas.endpoints import Endpoint
+from giza.schemas.endpoints import Endpoint, EndpointsList
 from tests.conftest import invoke_cli_runner
 
 
@@ -50,7 +50,13 @@ def test_create_agent_with_model_id_and_version_id():
         "typer.prompt", side_effect=["test"]
     ) as mock_prompt, patch(
         "giza.commands.agents.load_json_file", return_value={}
-    ) as mock_load:
+    ) as mock_load, patch.object(
+        EndpointsClient,
+        "list",
+        return_value=EndpointsList(
+            root=[Endpoint(id=1, size="S", model_id=1, version_id=1, is_active=True)]
+        ),
+    ) as mock_endpoints:
         result = invoke_cli_runner(
             [
                 "agents",
@@ -69,6 +75,8 @@ def test_create_agent_with_model_id_and_version_id():
     mock_accounts.assert_called_once()
     mock_prompt.assert_called_once()
     mock_load.assert_called_once()
+    mock_endpoints.assert_called_once()
+
     assert result.exit_code == 0
     assert "Using model id and version id to create agent" in result.output
     assert "test agent" in result.output
