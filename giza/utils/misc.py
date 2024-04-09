@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import subprocess
@@ -135,3 +136,17 @@ def get_parameters_from_str(parameters: List[str]) -> Dict[str, str]:
         Dict[str, str]: parameters
     """
     return dict([param.split("=") for param in parameters])
+
+
+def load_json_file(file_path: str) -> Dict:
+    """
+    Load a json file.
+
+    Args:
+        file_path (str): path to the file
+
+    Returns:
+        Dict: json content
+    """
+    with open(file_path) as file_:
+        return json.load(file_)

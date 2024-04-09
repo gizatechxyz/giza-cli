@@ -1,4 +1,3 @@
-import json
 import sys
 from enum import StrEnum
 from typing import List, Optional
@@ -14,7 +13,7 @@ from giza.options import DEBUG_OPTION
 from giza.schemas.agents import AgentCreate, AgentList, AgentUpdate
 from giza.utils import echo
 from giza.utils.exception_handling import ExceptionHandler
-from giza.utils.misc import get_ape_accounts, get_parameters_from_str
+from giza.utils.misc import get_ape_accounts, get_parameters_from_str, load_json_file
 
 app = typer.Typer()
 
@@ -93,8 +92,7 @@ def create(
         )
         selected_account = typer.prompt("Enter the account name", type=accounts_enum)
 
-        with open(str(available_accounts.get(selected_account))) as f:
-            keyfile = json.load(f)
+        keyfile = load_json_file(str(available_accounts.get(selected_account)))
 
         agent_create = AgentCreate(
             name=name,
@@ -115,6 +113,10 @@ def create(
     short_help="📜 List the available agents.",
     help="""📜 Lists all the available agents in Giza.
     This command retrieves and displays a list of all agents stored in the server.
+
+    To filter by parameters, use the `--parameters` flag. The parameters should be provided in the format `key=value`.
+    Example: `--parameters key1=value1 --parameters key2=value2`
+
     Each agent information is printed in a json format for easy readability and further processing.
     If there are no agents available, an empty list is printed.
     """,
@@ -131,8 +133,10 @@ def list(
         q = get_parameters_from_str(parameters) if parameters else None
         if q:
             echo(f"Filtering agents with parameters: {q}")
-            params = {"q": [f"{k}=={v}" for k, v in q.items()]}
-        agents: AgentList = client.list(params=params)
+            query_params = {"q": [f"{k}=={v}" for k, v in q.items()]}
+        else:
+            query_params = None
+        agents: AgentList = client.list(params=query_params)
     print_json(agents.model_dump_json())
 
 
@@ -190,6 +194,11 @@ def delete_agent(
     help="""🔄 Updates an agent in Giza.
 
     This command will update the agent metadata in Giza. The agent information will be updated with the provided parameters.
+
+    To update the parameters, use the `--parameters` flag. The parameters should be provided in the format `key=value`.
+    Example: `--parameters key1=value1 --parameters key2=value2`
+
+    The updated agent information is printed in a json format for easy readability and further processing.
     """,
 )
 def update(
