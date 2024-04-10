@@ -1,5 +1,9 @@
 # Transpile
 
+{% hint style="danger" %}
+Currently, any related EZKL capabilities are disabled
+{% endhint %}
+
 Transpilation is a crucial process in the deployment of Verifiable Machine Learning models and its powered by is powered by [ezkl](https://github.com/zkonduit/ezkl). It involves the usage of an ONNX model and input data to perform the `setup`. With this `setup` we can generate proofs that can be verified, ensuring the integrity and reliability of the model's predictions.
 
 The transpilation process begins by reading the model and input data from the specified path. The model and data are then sent for transpilation. By default, the output of this process is managed by Giza for later use.
@@ -26,18 +30,18 @@ There are three main methods for transpiling a model:
 
 ### **Method 1: Using the `giza transpile --framework EZKL` command**
 
-- This is the simplest method and is recommended for most users.
-- When you run this command, Giza handles everything for you.
-- It first checks if a model with the specified name already exists. If not, it creates a new model and then transpiles it.
-- The output of this process is managed by Giza.
-- This is the strategy that we followed in the example before.
+* This is the simplest method and is recommended for most users.
+* When you run this command, Giza handles everything for you.
+* It first checks if a model with the specified name already exists. If not, it creates a new model and then transpiles it.
+* The output of this process is managed by Giza.
+* This is the strategy that we followed in the example before.
 
 ### **Method 2: Manually creating a model and then transpiling it**
 
-- This method gives you more control over the process.
-- First, you create a model manually using the `giza models create` command.
-- After the model is created, you can transpile it using the `giza transpile --framework EZKL --model-id ...` or `giza versions transpile --framework EZKL --model-id` command.
-- This method is useful when you want to specify particular options or parameters during the model creation and transpilation process.
+* This method gives you more control over the process.
+* First, you create a model manually using the `giza models create` command.
+* After the model is created, you can transpile it using the `giza transpile --framework EZKL --model-id ...` or `giza versions transpile --framework EZKL --model-id` command.
+* This method is useful when you want to specify particular options or parameters during the model creation and transpilation process.
 
 ```console
 > giza models create --name awesome_model --description "A Model for testing different models"
@@ -59,9 +63,9 @@ There are three main methods for transpiling a model:
 
 ### **Method 3: Using a previous model**
 
-- If you have a previously created model, you can transpile it by indicating the model-id in the `giza transpile --framework EZKL --model-id ...` or `giza versions transpile --framework EZKL --model-id` command.
-- This method is useful when you want to create a new version of an existing model.
-- The output of the transpilation process is saved in the same location as the original model.
+* If you have a previously created model, you can transpile it by indicating the model-id in the `giza transpile --framework EZKL --model-id ...` or `giza versions transpile --framework EZKL --model-id` command.
+* This method is useful when you want to create a new version of an existing model.
+* The output of the transpilation process is saved in the same location as the original model.
 
 ```console
 # Using the previous model (id: 2) we can transpile a new model, which will create version 2 of the model.

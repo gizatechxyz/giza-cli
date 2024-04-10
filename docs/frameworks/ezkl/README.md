@@ -1,5 +1,9 @@
 # EZKL
 
+{% hint style="danger" %}
+Currently, any related EZKL capabilities are disabled
+{% endhint %}
+
 `ezkl` is a library and command-line tool for doing inference for deep learning models and other computational graphs in a zk-snark (ZKML) using `halo2` as a backend. [Official documentation](https://docs.ezkl.xyz/).
 
 `ezkl` represents a pioneering framework in zero-knowledge machine learning (ZKML) trusted by Giza. It is designed with ease of use in mind and efficiency to make easy zero-knowledge inference.
