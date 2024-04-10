@@ -141,7 +141,7 @@ list_proofs(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L245"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L241"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `get_proof`
 
@@ -169,7 +169,7 @@ get_proof(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L294"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L290"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `download_proof`
 
@@ -203,7 +203,7 @@ download_proof(
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L353"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/commands/endpoints.py#L347"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `list_jobs`
 

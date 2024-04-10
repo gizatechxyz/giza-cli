@@ -10,7 +10,7 @@
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/misc.py#L29"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/misc.py#L31"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `download_model_or_sierra`
 
@@ -35,7 +35,7 @@ Download the model or sierra file.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/misc.py#L52"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/misc.py#L54"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `zip_folder`
 
@@ -61,7 +61,7 @@ Zip the folder to a specific location.
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/misc.py#L76"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/misc.py#L78"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `scarb_build`
 
@@ -76,5 +76,74 @@ Build the scarb model.
 **Args:**
  
  - <b>`folder`</b> (str):  path to the folder 
+
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/misc.py#L107"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `get_ape_accounts`
+
+```python
+get_ape_accounts() → Dict[str, Path]
+```
+
+Get the available APE accounts. 
+
+
+
+**Returns:**
+ 
+ - <b>`list`</b>:  list of available APE accounts 
+
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/misc.py#L128"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `get_parameters_from_str`
+
+```python
+get_parameters_from_str(parameters: List[str]) → Dict[str, str]
+```
+
+Get the parameters from a string. 
+
+
+
+**Args:**
+ 
+ - <b>`parameters`</b> (List[str]):  parameters 
+
+
+
+**Returns:**
+ 
+ - <b>`Dict[str, str]`</b>:  parameters 
+
+
+---
+
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/misc.py#L141"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+## <kbd>function</kbd> `load_json_file`
+
+```python
+load_json_file(file_path: str) → Dict
+```
+
+Load a json file. 
+
+
+
+**Args:**
+ 
+ - <b>`file_path`</b> (str):  path to the file 
+
+
+
+**Returns:**
+ 
+ - <b>`Dict`</b>:  json content 
 
 
