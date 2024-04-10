@@ -157,3 +157,7 @@ For deleting an Agent, users can use the `delete` command. This command will era
 [giza][2024-04-10 12:40:33.959] Deleting agent 1 ✅ 
 [giza][2024-04-10 12:40:34.078] Agent 1 deleted ✅ 
 ```
+
+## More Information
+
+For more information about agents, and their usage in AI Actions, please refer to the [Agents](add_final_page) documentation.
