@@ -106,7 +106,7 @@ def create(
                 "model_id": model_id,
                 "version_id": version_id,
                 "endpoint_id": endpoint_id,
-                "alias": selected_account,
+                "account": selected_account,
                 "account_data": keyfile,
             },
         )
