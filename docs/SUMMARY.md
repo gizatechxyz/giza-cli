@@ -15,6 +15,7 @@
 * [Versions](resources/versions.md)
 * [Workspaces](resources/workspaces.md)
 * [Endpoints](resources/endpoints.md)
+* [Agents](resources/agents.md)
 
 ## 📚 Frameworks
 

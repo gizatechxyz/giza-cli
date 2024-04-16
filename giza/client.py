@@ -13,6 +13,7 @@ from requests import HTTPError, Response, Session
 from rich import print, print_json
 
 from giza.schemas import users
+from giza.schemas.agents import Agent, AgentCreate, AgentList, AgentUpdate
 from giza.schemas.endpoints import Endpoint, EndpointCreate, EndpointsList
 from giza.schemas.jobs import Job, JobCreate, JobList
 from giza.schemas.message import Msg
@@ -1550,3 +1551,159 @@ class WorkspaceClient(ApiClient):
         self._echo_debug(str(response))
 
         response.raise_for_status()
+
+
+class AgentsClient(ApiClient):
+    """
+    Client to interact with `agents` endpoint.
+    """
+
+    # Change once API is updated
+    AGENTS_ENDPOINT = "agents"
+
+    @auth
+    def create(
+        self,
+        agent_create: AgentCreate,
+    ) -> Agent:
+        """
+        Create a new agent.
+
+        Args:
+            agent_create: Agent information to create
+
+        Returns:
+            The recently created agent
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.post(
+            "/".join(
+                [
+                    self.url,
+                    self.AGENTS_ENDPOINT,
+                ]
+            ),
+            headers=headers,
+            json=agent_create.model_dump(),
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return Agent(**response.json())
+
+    @auth
+    def list(self, params: Optional[Dict[str, str]] = None) -> AgentList:
+        """
+        List endpoints.
+
+        Returns:
+            A list of endpoints created by the user
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            "/".join(
+                [
+                    self.url,
+                    self.AGENTS_ENDPOINT,
+                ]
+            ),
+            headers=headers,
+            params=params,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return AgentList(root=[Agent(**agent) for agent in response.json()])
+
+    @auth
+    def get(self, agent_id: int, params: Optional[Dict[str, Any]] = None) -> Agent:
+        """
+        Get an agent.
+
+        Args:
+            agent_id: Agent identifier
+
+        Returns:
+            The agent information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            "/".join(
+                [
+                    self.url,
+                    self.AGENTS_ENDPOINT,
+                    str(agent_id),
+                ]
+            ),
+            headers=headers,
+            params=params,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        return Agent(**response.json())
+
+    @auth
+    def delete(self, agent_id: int) -> None:
+        """
+        Delete an agent.
+
+        Args:
+            agent_id: Agent identifier
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.delete(
+            "/".join(
+                [
+                    self.url,
+                    self.AGENTS_ENDPOINT,
+                    str(agent_id),
+                ]
+            ),
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+    @auth
+    def patch(self, agent_id: int, agent_update: AgentUpdate) -> Agent:
+        """
+        Update an agent.
+
+        Args:
+            agent_id: Agent identifier
+            agent_update: Agent information to update
+
+        Returns:
+            The updated agent information
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.patch(
+            "/".join(
+                [
+                    self.url,
+                    self.AGENTS_ENDPOINT,
+                    str(agent_id),
+                ]
+            ),
+            headers=headers,
+            json=agent_update.model_dump(exclude_none=True),
+        )
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        return Agent(**response.json())
