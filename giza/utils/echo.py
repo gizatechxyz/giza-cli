@@ -10,7 +10,7 @@ reconfigure(soft_wrap=True)
 
 class Echo:
     """
-    Helper class to use when printin output of the CLI.
+    Helper class to use when printing output of the CLI.
 
     Provides utilities to print different levels of the messages and provides formatting capabilities to each of the levels.
     """
@@ -97,7 +97,7 @@ class Echo:
 
     def error(self, message: str) -> None:
         """
-        Format and echo a error message
+        Format and echo an error message
 
         Args:
             message (str): error message to format and echo
