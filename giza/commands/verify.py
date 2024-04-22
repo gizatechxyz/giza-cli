@@ -13,6 +13,7 @@ def verify(
     model_id: Optional[int] = typer.Option(None, "--model-id", "-m"),
     version_id: Optional[int] = typer.Option(None, "--version-id", "-v"),
     proof_id: Optional[int] = typer.Option(None, "--proof-id", "-p"),
+    use_job: Optional[bool] = typer.Option(False, "--use-job"),
     proof: Optional[str] = typer.Option(None, "--proof", "-P"),
     size: JobSize = typer.Option(JobSize.S, "--size", "-s"),
     framework: Framework = typer.Option(Framework.CAIRO, "--framework", "-f"),
@@ -26,6 +27,7 @@ def verify(
             size=size,
             debug=debug,
             proof=proof,
+            use_job=use_job,
         )
     elif framework == Framework.EZKL:
         ezkl.verify(

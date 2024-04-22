@@ -383,6 +383,7 @@ def verify(
     proof: Optional[str] = None,
     debug: Optional[bool] = False,
     size: JobSize = JobSize.S,
+    use_job: Optional[bool] = False,
 ):
     """
     Create a verification job.
@@ -390,8 +391,8 @@ def verify(
     The job size, model id, and version id can be optionally specified.
     """
     echo = Echo()
-    if not model_id or not version_id:
-        if proof_id:
+    if use_job and (not model_id or not version_id):
+        if proof_id and use_job:
             echo.error("Model id and version id must be provided along with proof id.")
             sys.exit(1)
         echo.warning(
@@ -403,7 +404,7 @@ def verify(
     try:
         job: Job
         client = JobsClient(API_HOST)
-        if proof_id:
+        if proof_id and use_job:
             job = client.create(
                 JobCreate(
                     size=size,
@@ -415,6 +416,13 @@ def verify(
                 ),
                 None,
             )
+        elif proof_id and not use_job:
+            echo("Verifying proof...")
+            proofs_client = ProofsClient(API_HOST)
+            verification_result = proofs_client.verify_proof(proof_id)
+            echo(f"Verification result: {verification_result.verification}")
+            echo(f"Verification time: {verification_result.verification_time}")
+            sys.exit(0)
         elif proof:
             with open(proof, "rb") as data:
                 job = client.create(

@@ -20,6 +20,7 @@ from giza.schemas.message import Msg
 from giza.schemas.models import Model, ModelCreate, ModelList, ModelUpdate
 from giza.schemas.proofs import Proof, ProofList
 from giza.schemas.token import TokenResponse
+from giza.schemas.verify import VerifyResponse
 from giza.schemas.versions import Version, VersionCreate, VersionList, VersionUpdate
 from giza.schemas.workspaces import Workspace
 from giza.utils import echo
@@ -691,6 +692,41 @@ class EndpointsClient(ApiClient):
         self._echo_debug(str(response))
         response.raise_for_status()
 
+    @auth
+    def verify_proof(
+        self, endpoint_id: int, proof_id: Union[str, int]
+    ) -> VerifyResponse:
+        """
+        Verify a proof.
+
+        Args:
+            endpoint_id: Endpoint identifier
+            proof_id: Proof identifier
+
+        Returns:
+            The verification response
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.post(
+            "/".join(
+                [
+                    self.url,
+                    self.ENDPOINTS,
+                    str(endpoint_id),
+                    "proofs",
+                    f"{proof_id}:verify",
+                ]
+            ),
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        return VerifyResponse(**response.json())
+
 
 # For downstream dependencies until they are updated
 DeploymentsClient = EndpointsClient
@@ -1203,6 +1239,30 @@ class ProofsClient(ApiClient):
         response.raise_for_status()
 
         return [Proof(**proof) for proof in response.json()]
+
+    @auth
+    def verify_proof(self, proof_id: int) -> VerifyResponse:
+        """
+        Verify a proof.
+
+        Args:
+            proof_id: Proof identifier
+
+        Returns:
+            The verification response
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.post(
+            f"{self.url}/{self.PROOFS_ENDPOINT}/{proof_id}:verify",
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        return VerifyResponse(**response.json())
 
 
 class VersionsClient(ApiClient):
