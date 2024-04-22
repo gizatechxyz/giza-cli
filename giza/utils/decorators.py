@@ -1,11 +1,14 @@
 from functools import wraps
-from typing import TYPE_CHECKING, Any, Callable
+from typing import TYPE_CHECKING, Callable, ParamSpec, TypeVar
 
 if TYPE_CHECKING:
     from giza.client import ApiClient
 
+P = ParamSpec("P")
+R = TypeVar("R")
 
-def auth(func: Callable):
+
+def auth(func: Callable[P, R]) -> Callable[P, R]:
     """
     Check that we have the token and it is not expired before executing
 
@@ -19,7 +22,7 @@ def auth(func: Callable):
     """
 
     @wraps(func)
-    def wrapper(*args, **kwargs) -> Any:
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
         """
         Get the API client from the function and retrieve the token, check expiry.
 
@@ -33,7 +36,7 @@ def auth(func: Callable):
         Returns:
             Any: result of the function
         """
-        self_: ApiClient = args[0]
+        self_: ApiClient = args[0]  # type: ignore
 
         self_.retrieve_token()
         self_.retrieve_api_key()

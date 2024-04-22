@@ -398,4 +398,4 @@ def verify(
     with ExceptionHandler(debug=debug):
         client = EndpointsClient(API_HOST)
         verification = client.verify_proof(endpoint_id, proof_id)
-    print_json(verification.json(exclude_unset=True))
+    print_json(verification.model_dump_json(exclude_unset=True))

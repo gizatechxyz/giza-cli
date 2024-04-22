@@ -484,7 +484,7 @@ class EndpointsClient(ApiClient):
         return Endpoint(**response.json())
 
     @auth
-    def list(self, params: Optional[Dict[str, str]] = None) -> EndpointsList:
+    def list(self, params: Optional[Dict[str, Any]] = None) -> EndpointsList:
         """
         List endpoints.
 
@@ -569,7 +569,7 @@ class EndpointsClient(ApiClient):
         return ProofList(root=[Proof(**proof) for proof in response.json()])
 
     @auth
-    def get_proof(self, endpoint_id: int, proof_id: int) -> Proof:
+    def get_proof(self, endpoint_id: int, proof_id: Union[int, str]) -> Proof:
         """
         Return information about a specific proof.
         `proof_if` is the identifier of the proof that can be a integer or the request id.
@@ -599,7 +599,7 @@ class EndpointsClient(ApiClient):
         return Proof(**response.json())
 
     @auth
-    def download_proof(self, endpoint_id: int, proof_id: int) -> bytes:
+    def download_proof(self, endpoint_id: int, proof_id: Union[int, str]) -> bytes:
         """
         Download a proof.
 
@@ -1311,7 +1311,7 @@ class VersionsClient(ApiClient):
         return Version(**response.json())
 
     @auth
-    def upload_cairo(self, model_id: int, version_id: int, file_path: str) -> str:
+    def upload_cairo(self, model_id: int, version_id: int, file_path: str) -> Version:
         """
         Get the Cairo model URL.
 
