@@ -59,7 +59,7 @@ deploy(
     data: Optional[str] = None,
     size: ServiceSize = <ServiceSize.S: 'S'>,
     debug: Optional[bool] = DEBUG_OPTION
-) → str
+) → Endpoint
 ```
 
 Command to deploy a specific version of a model. This will create an endpoint for the specified version and check the status, once it finishes if COMPLETED the endpoint is ready to be used. 
@@ -139,7 +139,8 @@ verify(
     version_id: Optional[int],
     proof: Optional[str] = None,
     debug: Optional[bool] = False,
-    size: JobSize = <JobSize.S: 'S'>
+    size: JobSize = <JobSize.S: 'S'>,
+    use_job: Optional[bool] = False
 )
 ```
 

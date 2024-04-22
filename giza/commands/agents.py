@@ -27,13 +27,13 @@ app = typer.Typer()
     """,
 )
 def create(
-    model_id: int = typer.Option(
+    model_id: Optional[int] = typer.Option(
         None,
         "--model-id",
         "-m",
         help="The ID of the model used to create the agent",
     ),
-    version_id: int = typer.Option(
+    version_id: Optional[int] = typer.Option(
         None,
         "--version-id",
         "-v",

@@ -76,6 +76,7 @@
 - [`endpoints.list`](./commands.endpoints.md#function-list)
 - [`endpoints.list_jobs`](./commands.endpoints.md#function-list_jobs)
 - [`endpoints.list_proofs`](./commands.endpoints.md#function-list_proofs)
+- [`endpoints.verify`](./commands.endpoints.md#function-verify)
 - [`models.create`](./commands.models.md#function-create): Command to create a model. Asks for the new model's information and validates the input,
 - [`models.get`](./commands.models.md#function-get): Command to create a user. Asks for the new users information and validates the input,
 - [`models.list`](./commands.models.md#function-list): Command to list all models.

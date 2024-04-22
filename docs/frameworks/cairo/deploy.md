@@ -115,6 +115,19 @@ To list the proofs for an endpoint, we can use the `list-proofs` command availab
 ]
 ```
 
+## Verify a proof
+
+After successfully creating a proof for your Orion Cairo model, the next step is to verify its validity. Giza offers a verification method using the `verify` command alongside the `endpoint-id` and `proof-id`.
+
+```console
+> giza endpoints verify --endpoint-id 1 --proof-id "b14bfbcf250b404192765d9be0811c9b"
+[giza][2024-02-20 15:40:48.560] Verifying proof...
+[giza][2024-02-20 15:40:49.288] Verification result: True
+[giza][2024-02-20 15:40:49.288] Verification time: 2.363822541
+```
+
+This way we can easily and quickly verify the proof generated for our model.
+
 ## Download the proof
 
 We can download the proof using the `download-proof` command available for the endpoints:&#x20;

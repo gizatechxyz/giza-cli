@@ -13,12 +13,12 @@
 
 ---
 
-<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L8"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/gizatechxyz/giza-cli/blob/main/giza/utils/decorators.py#L11"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>function</kbd> `auth`
 
 ```python
-auth(func: Callable)
+auth(func: Callable[~P, ~R]) → Callable[~P, ~R]
 ```
 
 Check that we have the token and it is not expired before executing 

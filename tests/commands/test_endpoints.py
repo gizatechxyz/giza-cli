@@ -5,6 +5,7 @@ from requests import HTTPError
 from giza.commands.endpoints import EndpointsClient, cairo
 from giza.frameworks import ezkl
 from giza.schemas.endpoints import Endpoint, EndpointsList
+from giza.schemas.verify import VerifyResponse
 from tests.conftest import invoke_cli_runner
 
 
@@ -222,3 +223,24 @@ def test_get_deployment_http_error():
     mock_deployment.assert_called_once()
     assert result.exit_code == 1
     assert "Could not get endpoint" in result.stdout
+
+
+def test_endpoints_verify():
+    with patch.object(
+        EndpointsClient,
+        "verify_proof",
+        return_value=VerifyResponse(verification=True, verification_time=1.2),
+    ) as mock_verify:
+        result = invoke_cli_runner(
+            [
+                "endpoints",
+                "verify",
+                "--deployment-id",
+                "1",
+                "--proof-id",
+                "1",
+            ],
+        )
+    mock_verify.assert_called_once()
+    assert result.exit_code == 0
+    assert ' "verification": true' in result.stdout

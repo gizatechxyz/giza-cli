@@ -324,7 +324,7 @@ def deploy(
     version_id: int,
     size: ServiceSize = ServiceSize.S,
     debug: Optional[bool] = DEBUG_OPTION,
-) -> str:
+) -> None:
     """
     Command to deploy a specific version of a model. This will create a endpoint for the specified version and check the status, once it finishes if COMPLETED the endpoint is ready to be used.
 
@@ -391,4 +391,3 @@ def deploy(
     echo("Endpoint is successful ✅")
     echo(f"Endpoint created with id -> {endpoint.id} ✅")
     echo(f"Endpoint created with endpoint URL: {endpoint.uri} 🎉")
-    return endpoint

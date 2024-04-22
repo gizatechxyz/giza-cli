@@ -1,7 +1,7 @@
 import copy
 import json
 import os
-from io import BufferedReader
+from io import BufferedReader, TextIOWrapper
 from pathlib import Path
 from typing import Any, BinaryIO, Dict, List, Optional, Tuple, Union
 from urllib.parse import urlparse
@@ -20,6 +20,7 @@ from giza.schemas.message import Msg
 from giza.schemas.models import Model, ModelCreate, ModelList, ModelUpdate
 from giza.schemas.proofs import Proof, ProofList
 from giza.schemas.token import TokenResponse
+from giza.schemas.verify import VerifyResponse
 from giza.schemas.versions import Version, VersionCreate, VersionList, VersionUpdate
 from giza.schemas.workspaces import Workspace
 from giza.utils import echo
@@ -450,7 +451,7 @@ class EndpointsClient(ApiClient):
         model_id: int,
         version_id: int,
         endpoint_create: EndpointCreate,
-        f: BufferedReader,
+        f: Optional[BufferedReader] = None,
     ) -> Endpoint:
         """
         Create a new deployment.
@@ -483,7 +484,7 @@ class EndpointsClient(ApiClient):
         return Endpoint(**response.json())
 
     @auth
-    def list(self, params: Optional[Dict[str, str]] = None) -> EndpointsList:
+    def list(self, params: Optional[Dict[str, Any]] = None) -> EndpointsList:
         """
         List endpoints.
 
@@ -568,7 +569,7 @@ class EndpointsClient(ApiClient):
         return ProofList(root=[Proof(**proof) for proof in response.json()])
 
     @auth
-    def get_proof(self, endpoint_id: int, proof_id: int) -> Proof:
+    def get_proof(self, endpoint_id: int, proof_id: Union[int, str]) -> Proof:
         """
         Return information about a specific proof.
         `proof_if` is the identifier of the proof that can be a integer or the request id.
@@ -598,7 +599,7 @@ class EndpointsClient(ApiClient):
         return Proof(**response.json())
 
     @auth
-    def download_proof(self, endpoint_id: int, proof_id: int) -> bytes:
+    def download_proof(self, endpoint_id: int, proof_id: Union[int, str]) -> bytes:
         """
         Download a proof.
 
@@ -690,6 +691,41 @@ class EndpointsClient(ApiClient):
 
         self._echo_debug(str(response))
         response.raise_for_status()
+
+    @auth
+    def verify_proof(
+        self, endpoint_id: int, proof_id: Union[str, int]
+    ) -> VerifyResponse:
+        """
+        Verify a proof.
+
+        Args:
+            endpoint_id: Endpoint identifier
+            proof_id: Proof identifier
+
+        Returns:
+            The verification response
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.post(
+            "/".join(
+                [
+                    self.url,
+                    self.ENDPOINTS,
+                    str(endpoint_id),
+                    "proofs",
+                    f"{proof_id}:verify",
+                ]
+            ),
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        return VerifyResponse(**response.json())
 
 
 # For downstream dependencies until they are updated
@@ -926,8 +962,8 @@ class JobsClient(ApiClient):
     def create(
         self,
         job_create: JobCreate,
-        trace: BufferedReader,
-        memory: Optional[BufferedReader] = None,
+        trace: Optional[Union[BufferedReader, TextIOWrapper]] = None,
+        memory: Optional[Union[BufferedReader, TextIOWrapper]] = None,
     ) -> Job:
         """
         Create a new job.
@@ -945,8 +981,10 @@ class JobsClient(ApiClient):
         headers = copy.deepcopy(self.default_headers)
         headers.update(self._get_auth_header())
 
-        files = {"trace_or_proof": trace} if trace is not None else None
-        if trace is not None and memory is not None:
+        files: Optional[Dict[str, Any]] = (
+            {"trace_or_proof": trace} if trace is not None else None
+        )
+        if trace is not None and memory is not None and files is not None:
             files["memory"] = memory
         response = self.session.post(
             f"{self.url}/{self.JOBS_ENDPOINT}",
@@ -1027,7 +1065,7 @@ class VersionJobsClient(ApiClient):
 
     @auth
     def create(
-        self, model_id: int, version_id: int, job_create: JobCreate, f: BufferedReader
+        self, model_id: int, version_id: int, job_create: JobCreate, f: TextIOWrapper
     ) -> Job:
         """
         Create a new job.
@@ -1204,6 +1242,30 @@ class ProofsClient(ApiClient):
 
         return [Proof(**proof) for proof in response.json()]
 
+    @auth
+    def verify_proof(self, proof_id: int) -> VerifyResponse:
+        """
+        Verify a proof.
+
+        Args:
+            proof_id: Proof identifier
+
+        Returns:
+            The verification response
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.post(
+            f"{self.url}/{self.PROOFS_ENDPOINT}/{proof_id}:verify",
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        return VerifyResponse(**response.json())
+
 
 class VersionsClient(ApiClient):
     """
@@ -1251,7 +1313,7 @@ class VersionsClient(ApiClient):
         return Version(**response.json())
 
     @auth
-    def upload_cairo(self, model_id: int, version_id: int, file_path: str) -> str:
+    def upload_cairo(self, model_id: int, version_id: int, file_path: str) -> Version:
         """
         Get the Cairo model URL.
 
@@ -1595,7 +1657,7 @@ class AgentsClient(ApiClient):
         return Agent(**response.json())
 
     @auth
-    def list(self, params: Optional[Dict[str, str]] = None) -> AgentList:
+    def list(self, params: Optional[Dict[str, Any]] = None) -> AgentList:
         """
         List endpoints.
 
