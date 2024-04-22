@@ -23,7 +23,7 @@ app = typer.Typer()
 
 def update_sierra(model_id: int, version_id: int, model_path: str):
     sierra_path = glob.glob(
-        os.path.join(model_path, "inference", "**/*.sierra"), recursive=True
+        os.path.join(model_path, "inference", "**/*.sierra.json"), recursive=True
     )[0]
     with open(sierra_path, "rb") as f:
         TranspileClient(API_HOST).update_transpilation(model_id, version_id, f)
