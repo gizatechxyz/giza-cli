@@ -1,7 +1,7 @@
 import copy
 import json
 import os
-from io import BufferedReader
+from io import BufferedReader, TextIOWrapper
 from pathlib import Path
 from typing import Any, BinaryIO, Dict, List, Optional, Tuple, Union
 from urllib.parse import urlparse
@@ -451,7 +451,7 @@ class EndpointsClient(ApiClient):
         model_id: int,
         version_id: int,
         endpoint_create: EndpointCreate,
-        f: BufferedReader,
+        f: Optional[BufferedReader] = None,
     ) -> Endpoint:
         """
         Create a new deployment.
@@ -962,8 +962,8 @@ class JobsClient(ApiClient):
     def create(
         self,
         job_create: JobCreate,
-        trace: BufferedReader,
-        memory: Optional[BufferedReader] = None,
+        trace: Optional[Union[BufferedReader, TextIOWrapper]] = None,
+        memory: Optional[Union[BufferedReader, TextIOWrapper]] = None,
     ) -> Job:
         """
         Create a new job.
@@ -981,8 +981,10 @@ class JobsClient(ApiClient):
         headers = copy.deepcopy(self.default_headers)
         headers.update(self._get_auth_header())
 
-        files = {"trace_or_proof": trace} if trace is not None else None
-        if trace is not None and memory is not None:
+        files: Optional[Dict[str, Any]] = (
+            {"trace_or_proof": trace} if trace is not None else None
+        )
+        if trace is not None and memory is not None and files is not None:
             files["memory"] = memory
         response = self.session.post(
             f"{self.url}/{self.JOBS_ENDPOINT}",
@@ -1063,7 +1065,7 @@ class VersionJobsClient(ApiClient):
 
     @auth
     def create(
-        self, model_id: int, version_id: int, job_create: JobCreate, f: BufferedReader
+        self, model_id: int, version_id: int, job_create: JobCreate, f: TextIOWrapper
     ) -> Job:
         """
         Create a new job.
@@ -1655,7 +1657,7 @@ class AgentsClient(ApiClient):
         return Agent(**response.json())
 
     @auth
-    def list(self, params: Optional[Dict[str, str]] = None) -> AgentList:
+    def list(self, params: Optional[Dict[str, Any]] = None) -> AgentList:
         """
         List endpoints.
 

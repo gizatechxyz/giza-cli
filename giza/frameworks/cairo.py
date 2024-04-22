@@ -22,7 +22,7 @@ from giza.client import (
     VersionsClient,
 )
 from giza.options import DEBUG_OPTION
-from giza.schemas.endpoints import EndpointCreate, EndpointsList
+from giza.schemas.endpoints import Endpoint, EndpointCreate, EndpointsList
 from giza.schemas.jobs import Job, JobCreate
 from giza.schemas.models import ModelCreate
 from giza.schemas.proofs import Proof
@@ -125,7 +125,7 @@ def deploy(
     data: Optional[str] = None,
     size: ServiceSize = ServiceSize.S,
     debug: Optional[bool] = DEBUG_OPTION,
-) -> str:
+) -> Endpoint:
     """
     Command to deploy a specific version of a model. This will create an endpoint for the specified version and check the status, once it finishes if COMPLETED the endpoint is ready to be used.
 
