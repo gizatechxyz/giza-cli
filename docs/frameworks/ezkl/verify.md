@@ -1,5 +1,9 @@
 # Verify
 
+{% hint style="danger" %}
+Currently, any related EZKL capabilities are disabled
+{% endhint %}
+
 We have created a Proof of our EZKL version, now it's time to verify it!
 
 As we already have the proof we can use the `verify` command to verify it, using the `--proof-id` option we can specify the proof that we want to verify.

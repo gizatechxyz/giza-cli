@@ -67,6 +67,10 @@ Here's how you can do it:
 
 Transpiling a model version in Giza is a crucial step in the model deployment process as an endpoint. Transpilation is the process of converting your machine learning model into a format that can be executed on Giza. Depending the ZKML framework chosen, this process involves converting the model into a series of Cairo instructions or performing the setup using EZKL.
 
+{% hint style="danger" %}
+Currently, any related EZKL capabilities are disabled
+{% endhint %}
+
 When you transpile a model, you're essentially creating a new version of that model. Each version represents a specific iteration of your machine learning model, allowing you to track and manage the evolution of your models effectively.
 
 Here's how you can transpile a model version:

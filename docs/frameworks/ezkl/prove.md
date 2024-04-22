@@ -1,5 +1,9 @@
 # Prove
 
+{% hint style="danger" %}
+Currently, any related EZKL capabilities are disabled
+{% endhint %}
+
 Time to create a Proof of our EZKL version!
 
 Once we have the input data that we want to use we can use the `prove` command to create our proof!

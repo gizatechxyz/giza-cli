@@ -134,3 +134,5 @@ smart_contracts/
 
 .ruff_cache/
 cairo_model/
+
+.build/

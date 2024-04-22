@@ -1,5 +1,9 @@
 # Deploy
 
+{% hint style="danger" %}
+Currently, any related EZKL capabilities are disabled
+{% endhint %}
+
 To deploy a model, you must first have a version of that model. If you have not yet created a version, please refer to the [versions](../../resources/versions.md) documentation.
 
 To create a new service, users can employ the `deploy` command. This command facilitates the deployment of a machine learning service ready to accept predictions at the `/predict` endpoint, providing a straightforward method for deploying and using machine learning capabilities as an API endpoint. As we are using `EZKL` we need to add `--framework EZKL` (or `-f EZKL` for short) to the command:
@@ -135,7 +139,7 @@ giza endpoints list-proofs --endpoint-id 1
 
 ## Download the proof
 
-We can download the proof using the `download-proof` command available for the endpoints:&#x20;
+We can download the proof using the `download-proof` command available for the endpoints:
 
 <pre class="language-sh"><code class="lang-sh"><strong>❯ giza endpoints download-proof --proof-id "d0564505755944b8bef9292d980f3e27"
 </strong>[giza][2024-02-20 15:40:48.560] Getting proof from endpoint 1 ✅

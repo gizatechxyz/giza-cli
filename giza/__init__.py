@@ -1,5 +1,5 @@
 import os
 
-__version__ = "0.14.1"
+__version__ = "0.15.0"
 # Until DNS is fixed
 API_HOST = os.environ.get("GIZA_API_HOST", "https://api.gizatech.xyz")

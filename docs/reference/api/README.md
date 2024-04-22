@@ -9,6 +9,7 @@
 - [`client`](./client.md#module-client)
 - [`commands`](./commands.md#module-commands)
 - [`commands.actions`](./commands.actions.md#module-commandsactions)
+- [`commands.agents`](./commands.agents.md#module-commandsagents)
 - [`commands.endpoints`](./commands.endpoints.md#module-commandsendpoints)
 - [`commands.models`](./commands.models.md#module-commandsmodels)
 - [`commands.prove`](./commands.prove.md#module-commandsprove)
@@ -32,6 +33,7 @@
 
 ## Classes
 
+- [`client.AgentsClient`](./client.md#class-agentsclient): Client to interact with `agents` endpoint.
 - [`client.ApiClient`](./client.md#class-apiclient): Implementation of the API client to interact with core-services
 - [`client.EndpointsClient`](./client.md#class-endpointsclient): Client to interact with `endpoints` endpoint.
 - [`client.EndpointsClient`](./client.md#class-endpointsclient): Client to interact with `endpoints` endpoint.
@@ -61,6 +63,11 @@
 - [`callbacks.version_callback`](./callbacks.md#function-version_callback): Prints the current version when `--version` flag is added to a call.
 - [`cli.entrypoint`](./cli.md#function-entrypoint)
 - [`actions.new`](./commands.actions.md#function-new): This command will create a new action by generating a Python project.
+- [`agents.create`](./commands.agents.md#function-create)
+- [`agents.delete_agent`](./commands.agents.md#function-delete_agent)
+- [`agents.get`](./commands.agents.md#function-get)
+- [`agents.list`](./commands.agents.md#function-list)
+- [`agents.update`](./commands.agents.md#function-update)
 - [`endpoints.delete_endpoint`](./commands.endpoints.md#function-delete_endpoint)
 - [`endpoints.deploy`](./commands.endpoints.md#function-deploy)
 - [`endpoints.download_proof`](./commands.endpoints.md#function-download_proof)
@@ -105,5 +112,8 @@
 - [`utils.get_response_info`](./utils.md#function-get_response_info): Utility to retrieve information of the client response.
 - [`decorators.auth`](./utils.decorators.md#function-auth): Check that we have the token and it is not expired before executing
 - [`misc.download_model_or_sierra`](./utils.misc.md#function-download_model_or_sierra): Download the model or sierra file.
+- [`misc.get_ape_accounts`](./utils.misc.md#function-get_ape_accounts): Get the available APE accounts.
+- [`misc.get_parameters_from_str`](./utils.misc.md#function-get_parameters_from_str): Get the parameters from a string.
+- [`misc.load_json_file`](./utils.misc.md#function-load_json_file): Load a json file.
 - [`misc.scarb_build`](./utils.misc.md#function-scarb_build): Build the scarb model.
 - [`misc.zip_folder`](./utils.misc.md#function-zip_folder): Zip the folder to a specific location.

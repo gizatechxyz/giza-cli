@@ -1,9 +1,11 @@
+import json
 import os
 import re
 import subprocess
 import zipfile
 from io import BytesIO
-from typing import Optional
+from pathlib import Path
+from typing import Dict, List, Optional
 
 from giza.exceptions import PasswordError, ScarbBuildError, ScarbNotFound
 from giza.utils import echo
@@ -100,3 +102,51 @@ def scarb_build(folder) -> None:
         echo.error("Compilation failed")
         raise ScarbBuildError("Compilation failed") from e
     echo("Compilation successful")
+
+
+def get_ape_accounts() -> Dict[str, Path]:
+    """
+    Get the available APE accounts.
+
+    Returns:
+        list: list of available APE accounts
+    """
+    home = Path.home()
+    ape_home = home / ".ape" / "accounts"
+
+    if not ape_home.exists():
+        return {}
+
+    accounts_paths = list(ape_home.glob("*"))
+    accounts = [
+        account_path.name.removesuffix(".json") for account_path in accounts_paths
+    ]
+
+    return dict(zip(accounts, accounts_paths, strict=False))
+
+
+def get_parameters_from_str(parameters: List[str]) -> Dict[str, str]:
+    """
+    Get the parameters from a string.
+
+    Args:
+        parameters (List[str]): parameters
+
+    Returns:
+        Dict[str, str]: parameters
+    """
+    return dict([param.split("=") for param in parameters])
+
+
+def load_json_file(file_path: str) -> Dict:
+    """
+    Load a json file.
+
+    Args:
+        file_path (str): path to the file
+
+    Returns:
+        Dict: json content
+    """
+    with open(file_path) as file_:
+        return json.load(file_)
