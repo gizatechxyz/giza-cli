@@ -185,10 +185,11 @@ def test_resend_email_success():
     with patch("giza.client.UsersClient.resend_email") as mock_resend, patch(
         "typer.prompt",
         return_value="giza@gizatech.xyz",
-    ):
+    ), patch("giza.commands.users.validate_email") as mock_validate:
         result = invoke_cli_runner(["users", "resend-email"])
 
     mock_resend.assert_called_once()
+    mock_validate.assert_called_once()
     assert result.exit_code == 0
     assert "Verification email resent" in result.stdout
 
@@ -229,11 +230,14 @@ def test_resend_email_invalid_response():
         return_value="giza@gizatech.xyz",
     ), patch.object(
         UsersClient, "resend_email", side_effect=HTTPError
-    ), patch("giza.commands.users.get_response_info", return_value={}):
+    ), patch("giza.commands.users.get_response_info", return_value={}), patch(
+        "giza.commands.users.validate_email"
+    ) as mock_validate:
         result = invoke_cli_runner(
             ["users", "resend-email", "--debug"], expected_error=True
         )
 
+    mock_validate.assert_called_once()
     assert result.exit_code == 1
     assert "Could not resend the email" in result.stdout
     assert "Debugging mode is on" in result.stdout

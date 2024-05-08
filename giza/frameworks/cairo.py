@@ -336,7 +336,21 @@ def transpile(
                 elif version.status == VersionStatus.FAILED:
                     echo.error("⛔️ Transpilation failed! ⛔️")
                     echo.error(f"⛔️ Reason -> {version.message} ⛔️")
+                    if version.logs:
+                        echo.error("##### Printing Transpilation Logs #####")
+                        echo(
+                            "Note: These logs are retrieved from the platform execution environment"
+                        )
+                        print(version.logs)
+                        echo.error("##### End of Logs #####")
                     sys.exit(1)
+                if version.logs:
+                    echo.error("##### Printing Transpilation Logs #####")
+                    echo(
+                        "Note: These logs are retrieved from the platform execution environment"
+                    )
+                    print(version.logs)
+                    echo.error("##### End of Logs #####")
     except ValidationError as e:
         echo.error("Version validation error")
         echo.error("Review the provided information")

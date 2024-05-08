@@ -51,7 +51,7 @@ def get(
     with ExceptionHandler(debug=debug):
         client = VersionsClient(API_HOST)
         version: Version = client.get(model_id, version_id)
-    print_json(version.model_dump_json())
+    print_json(version.model_dump_json(exclude={"logs"}))
 
 
 def transpile(
