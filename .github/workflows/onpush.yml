@@ -28,6 +28,9 @@ jobs:
       - name: Lint with ruff
         run: |
           poetry run ruff giza
+      - name: Pre-commit check
+        run: |
+          poetry run pre-commit run --all-files
       - name: Testing
         run: |
           poetry run pytest --cov=giza --cov-report term-missing --cov-fail-under=60

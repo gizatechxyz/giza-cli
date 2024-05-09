@@ -60,9 +60,13 @@ def get(
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
-        echo.error(
-            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
-        ) if info.get("request_id") else None
+        (
+            echo.error(
+                f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
+            )
+            if info.get("request_id")
+            else None
+        )
         if debug:
             raise e
         sys.exit(1)
@@ -110,9 +114,13 @@ def list(
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
-        echo.error(
-            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
-        ) if info.get("request_id") else None
+        (
+            echo.error(
+                f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
+            )
+            if info.get("request_id")
+            else None
+        )
         if debug:
             raise e
         sys.exit(1)
@@ -168,9 +176,13 @@ def create(
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
-        echo.error(
-            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
-        ) if info.get("request_id") else None
+        (
+            echo.error(
+                f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
+            )
+            if info.get("request_id")
+            else None
+        )
         if debug:
             raise e
         sys.exit(1)
