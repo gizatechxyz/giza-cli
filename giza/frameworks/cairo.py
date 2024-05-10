@@ -352,13 +352,13 @@ def transpile(
                         print(version.logs)
                         echo.error("##### End of Logs #####")
                     sys.exit(1)
-                if version.logs:
-                    echo.error("##### Printing Transpilation Logs #####")
-                    echo(
-                        "Note: These logs are retrieved from the platform execution environment"
-                    )
-                    print(version.logs)
-                    echo.error("##### End of Logs #####")
+            if version.logs:
+                echo("##### Printing Transpilation Logs #####")
+                echo(
+                    "Note: These logs are retrieved from the platform execution environment"
+                )
+                print(version.logs)
+                echo("##### End of Logs #####")
     except ValidationError as e:
         echo.error("Version validation error")
         echo.error("Review the provided information")
