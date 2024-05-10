@@ -60,9 +60,13 @@ class ExceptionHandler:
             echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
             echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
             echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
-            echo.error(
-                f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
-            ) if info.get("request_id") else None
+            (
+                echo.error(
+                    f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
+                )
+                if info.get("request_id")
+                else None
+            )
         elif isinstance(exc_value, Exception):
             error = True
             echo.error(f"⛔️An error occurred: {exc_value}⛔️")

@@ -44,9 +44,13 @@ def handle_http_error(
     echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
     echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
     echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
-    echo.error(
-        f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
-    ) if info.get("request_id") else None
+    (
+        echo.error(
+            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
+        )
+        if info.get("request_id")
+        else None
+    )
     if debug:
         raise e
     sys.exit(1)
@@ -97,7 +101,9 @@ def reset_password(
     if token is None:
         token = prompt_for_input("Please enter your reset token 🎟️")
 
-    new_password = prompt_for_input("Please enter your new password 🔑", hide_input=True)
+    new_password = prompt_for_input(
+        "Please enter your new password 🔑", hide_input=True
+    )
     confirm_password = prompt_for_input(
         "Please confirm your new password 🔑", hide_input=True
     )

@@ -145,9 +145,13 @@ def setup(
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
-        echo.error(
-            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
-        ) if info.get("request_id") else None
+        (
+            echo.error(
+                f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
+            )
+            if info.get("request_id")
+            else None
+        )
         if debug:
             raise e
         sys.exit(1)
@@ -220,9 +224,13 @@ def prove(
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
-        echo.error(
-            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
-        ) if info.get("request_id") else None
+        (
+            echo.error(
+                f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
+            )
+            if info.get("request_id")
+            else None
+        )
         if debug:
             raise e
         sys.exit(1)
@@ -282,7 +290,9 @@ def verify(
             while True:
                 current_job: Job = client.get(job.id, params={"kind": JobKind.VERIFY})
                 if current_job.status == JobStatus.COMPLETED:
-                    live.update(echo.format_message("Verification job is successful ✅"))
+                    live.update(
+                        echo.format_message("Verification job is successful ✅")
+                    )
                     break
                 elif current_job.status == JobStatus.FAILED:
                     live.update(
@@ -311,9 +321,13 @@ def verify(
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
-        echo.error(
-            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
-        ) if info.get("request_id") else None
+        (
+            echo.error(
+                f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
+            )
+            if info.get("request_id")
+            else None
+        )
         if debug:
             raise e
         sys.exit(1)
@@ -382,9 +396,13 @@ def deploy(
         echo.error(f"⛔️Detail -> {info.get('detail')}⛔️")
         echo.error(f"⛔️Status code -> {info.get('status_code')}⛔️")
         echo.error(f"⛔️Error message -> {info.get('content')}⛔️")
-        echo.error(
-            f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
-        ) if info.get("request_id") else None
+        (
+            echo.error(
+                f"⛔️Request ID: Give this to an administrator to trace the error -> {info.get('request_id')}⛔️"
+            )
+            if info.get("request_id")
+            else None
+        )
         if debug:
             raise e
         sys.exit(1)

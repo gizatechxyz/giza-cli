@@ -26,6 +26,7 @@ class Version(BaseModel):
     created_date: datetime.datetime
     last_update: datetime.datetime
     framework: Framework
+    logs: Optional[str] = None
 
 
 class VersionList(RootModel):

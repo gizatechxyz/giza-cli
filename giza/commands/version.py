@@ -5,6 +5,7 @@ from giza import __version__
 from giza.utils.echo import Echo
 
 
+# TODO: Make sure that this works offline, currently it doesn't
 def check_version():
     """
     Check if there is a new version available of the cli in pypi to suggest upgrade
