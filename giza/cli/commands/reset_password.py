@@ -101,9 +101,7 @@ def reset_password(
     if token is None:
         token = prompt_for_input("Please enter your reset token 🎟️")
 
-    new_password = prompt_for_input(
-        "Please enter your new password 🔑", hide_input=True
-    )
+    new_password = prompt_for_input("Please enter your new password 🔑", hide_input=True)
     confirm_password = prompt_for_input(
         "Please confirm your new password 🔑", hide_input=True
     )

@@ -9,7 +9,10 @@ from giza.cli.commands.endpoints import app as deployments_app
 from giza.cli.commands.endpoints import deploy
 from giza.cli.commands.models import app as models_app
 from giza.cli.commands.prove import prove
-from giza.cli.commands.reset_password import request_reset_password_token, reset_password
+from giza.cli.commands.reset_password import (
+    request_reset_password_token,
+    reset_password,
+)
 from giza.cli.commands.users import app as users_app
 from giza.cli.commands.verify import verify
 from giza.cli.commands.version import check_version
