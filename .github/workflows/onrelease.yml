@@ -33,7 +33,7 @@ jobs:
             poetry run ruff giza
       - name: Testing
         run: |
-            poetry run pytest --cov=giza.cli--cov-report term-missing --cov-fail-under=60
+            poetry run pytest --cov=giza.cli --cov-report term-missing --cov-fail-under=60
 
       - name: Build dist
         run: poetry build
