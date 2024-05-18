@@ -468,7 +468,9 @@ def verify(
             while True:
                 current_job: Job = client.get(job.id, params={"kind": JobKind.VERIFY})
                 if current_job.status == JobStatus.COMPLETED:
-                    live.update(echo.format_message("Verification job is successful ✅"))
+                    live.update(
+                        echo.format_message("Verification job is successful ✅")
+                    )
                     break
                 elif current_job.status == JobStatus.FAILED:
                     live.update(
