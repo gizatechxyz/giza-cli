@@ -7,7 +7,7 @@ import pytest
 from jose import ExpiredSignatureError
 from requests import HTTPError
 
-from giza.client import (
+from giza.cli.client import (
     DEFAULT_API_VERSION,
     MODEL_URL_HEADER,
     ApiClient,
@@ -16,11 +16,11 @@ from giza.client import (
     ProofsClient,
     VersionsClient,
 )
-from giza.schemas.jobs import Job, JobCreate
-from giza.schemas.models import Model, ModelCreate, ModelUpdate
-from giza.schemas.proofs import Proof
-from giza.schemas.versions import Version, VersionCreate, VersionList
-from giza.utils.enums import Framework, JobSize, JobStatus, VersionStatus
+from giza.cli.schemas.jobs import Job, JobCreate
+from giza.cli.schemas.models import Model, ModelCreate, ModelUpdate
+from giza.cli.schemas.proofs import Proof
+from giza.cli.schemas.versions import Version, VersionCreate, VersionList
+from giza.cli.utils.enums import Framework, JobSize, JobStatus, VersionStatus
 
 
 class ResponseStub:

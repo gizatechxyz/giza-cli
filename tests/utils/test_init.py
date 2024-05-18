@@ -3,7 +3,7 @@ from unittest.mock import Mock
 
 from requests import Response
 
-from giza.utils import get_response_info
+from giza.cli.utils import get_response_info
 
 
 def test_get_response_info_json():

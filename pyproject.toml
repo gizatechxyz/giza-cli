@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{include = "giza"}]
 
 [tool.poetry.scripts]
-giza = "giza.cli:entrypoint"
+giza = "giza.cli.cli:entrypoint"
 
 [tool.poetry.dependencies]
 python = "^3.11"

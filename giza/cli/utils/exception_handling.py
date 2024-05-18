@@ -4,8 +4,8 @@ from typing import Optional
 from pydantic import ValidationError
 from requests import HTTPError
 
-from giza.exceptions import ScarbBuildError, ScarbNotFound
-from giza.utils import echo, get_response_info
+from giza.cli.exceptions import ScarbBuildError, ScarbNotFound
+from giza.cli.utils import echo, get_response_info
 
 
 class ExceptionHandler:

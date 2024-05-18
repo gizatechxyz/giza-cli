@@ -1,33 +1,42 @@
-from typing import List, Optional
+from typing import Optional
 
 import typer
 
-from giza.frameworks import cairo, ezkl
-from giza.options import DEBUG_OPTION
-from giza.utils.enums import Framework, JobSize
+from giza.cli.frameworks import cairo, ezkl
+from giza.cli.options import DEBUG_OPTION
+from giza.cli.utils.enums import Framework, JobSize
 
 app = typer.Typer()
 
 
-def prove(
-    data: List[str] = typer.Argument(None),
+def verify(
     model_id: Optional[int] = typer.Option(None, "--model-id", "-m"),
     version_id: Optional[int] = typer.Option(None, "--version-id", "-v"),
+    proof_id: Optional[int] = typer.Option(None, "--proof-id", "-p"),
+    use_job: Optional[bool] = typer.Option(False, "--use-job"),
+    proof: Optional[str] = typer.Option(None, "--proof", "-P"),
     size: JobSize = typer.Option(JobSize.S, "--size", "-s"),
     framework: Framework = typer.Option(Framework.CAIRO, "--framework", "-f"),
-    output_path: str = typer.Option("zk.proof", "--output-path", "-o"),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     if framework == Framework.CAIRO:
-        cairo.prove(data=data, size=size, output_path=output_path, debug=debug)
-    elif framework == Framework.EZKL:
-        ezkl.prove(
-            input_data=data[0],
+        cairo.verify(
+            proof_id=proof_id,
             model_id=model_id,
             version_id=version_id,
             size=size,
-            output_path=output_path,
             debug=debug,
+            proof=proof,
+            use_job=use_job,
+        )
+    elif framework == Framework.EZKL:
+        ezkl.verify(
+            proof_id=proof_id,
+            model_id=model_id,
+            version_id=version_id,
+            size=size,
+            debug=debug,
+            proof=proof,
         )
     else:
         raise typer.BadParameter(

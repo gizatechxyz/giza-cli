@@ -6,11 +6,11 @@ from pydantic import ValidationError
 from requests import HTTPError
 from rich import print_json
 
-from giza import API_HOST
-from giza.client import ModelsClient
-from giza.options import DEBUG_OPTION
-from giza.schemas.models import ModelCreate
-from giza.utils import echo, get_response_info
+from giza.cli import API_HOST
+from giza.cli.client import ModelsClient
+from giza.cli.options import DEBUG_OPTION
+from giza.cli.schemas.models import ModelCreate
+from giza.cli.utils import echo, get_response_info
 
 app = typer.Typer()
 

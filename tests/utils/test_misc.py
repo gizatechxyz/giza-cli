@@ -1,7 +1,7 @@
 import pytest
 
-from giza.exceptions import PasswordError
-from giza.utils.misc import _check_password_strength
+from giza.cli.exceptions import PasswordError
+from giza.cli.utils.misc import _check_password_strength
 
 
 # Test check strength password

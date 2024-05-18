@@ -7,13 +7,13 @@ from rich import print_json
 from rich.console import Console
 from rich.table import Table
 
-from giza import API_HOST
-from giza.client import AgentsClient, EndpointsClient
-from giza.options import DEBUG_OPTION
-from giza.schemas.agents import AgentCreate, AgentList, AgentUpdate
-from giza.utils import echo
-from giza.utils.exception_handling import ExceptionHandler
-from giza.utils.misc import get_ape_accounts, get_parameters_from_str, load_json_file
+from giza.cli import API_HOST
+from giza.cli.client import AgentsClient, EndpointsClient
+from giza.cli.options import DEBUG_OPTION
+from giza.cli.schemas.agents import AgentCreate, AgentList, AgentUpdate
+from giza.cli.utils import echo
+from giza.cli.utils.exception_handling import ExceptionHandler
+from giza.cli.utils.misc import get_ape_accounts, get_parameters_from_str, load_json_file
 
 app = typer.Typer()
 

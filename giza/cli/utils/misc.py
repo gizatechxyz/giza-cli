@@ -7,8 +7,8 @@ from io import BytesIO
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from giza.exceptions import PasswordError, ScarbBuildError, ScarbNotFound
-from giza.utils import echo
+from giza.cli.exceptions import PasswordError, ScarbBuildError, ScarbNotFound
+from giza.cli.utils import echo
 
 
 def _check_password_strength(password: str) -> None:

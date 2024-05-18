@@ -3,7 +3,7 @@ from typing import Any, Dict
 
 from requests import Response
 
-from giza.utils.echo import Echo
+from giza.cli.utils.echo import Echo
 
 # Provided an instance for ease of use
 echo = Echo()

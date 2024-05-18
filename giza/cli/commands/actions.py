@@ -2,7 +2,7 @@ import typer
 from cookiecutter.main import cookiecutter  # type: ignore
 from slugify import slugify
 
-from giza.utils import echo
+from giza.cli.utils import echo
 
 app = typer.Typer()
 

@@ -33,4 +33,4 @@ jobs:
           poetry run pre-commit run --all-files
       - name: Testing
         run: |
-          poetry run pytest --cov=giza --cov-report term-missing --cov-fail-under=60
+          poetry run pytest --cov=giza.cli--cov-report term-missing --cov-fail-under=60

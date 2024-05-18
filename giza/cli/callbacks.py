@@ -2,8 +2,8 @@ from http import client
 
 import typer
 
-from giza import __version__
-from giza.utils import echo
+from giza.cli import __version__
+from giza.cli.utils import echo
 
 
 def version_callback(value: bool) -> None:

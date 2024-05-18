@@ -3,8 +3,8 @@ from unittest.mock import patch
 import pytest
 from requests import HTTPError
 
-from giza.commands.workspaces import WorkspaceClient
-from giza.schemas.workspaces import Workspace
+from giza.cli.commands.workspaces import WorkspaceClient
+from giza.cli.schemas.workspaces import Workspace
 from tests.conftest import invoke_cli_runner
 
 
@@ -23,7 +23,7 @@ def test_workspaces_create(debug):
     ) as mock_create, patch.object(
         WorkspaceClient, "get", return_value=workspace_done
     ) as mock_get, patch(
-        "giza.commands.workspaces.time.sleep"
+        "giza.cli.commands.workspaces.time.sleep"
     ):
         args = (
             ["workspaces", "create"] if not debug else ["workspaces", "create", debug]

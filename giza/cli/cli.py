@@ -3,20 +3,20 @@ import typer
 import typer.rich_utils
 from rich.traceback import install
 
-from giza.commands.actions import app as actions_app
-from giza.commands.agents import app as agents_app
-from giza.commands.endpoints import app as deployments_app
-from giza.commands.endpoints import deploy
-from giza.commands.models import app as models_app
-from giza.commands.prove import prove
-from giza.commands.reset_password import request_reset_password_token, reset_password
-from giza.commands.users import app as users_app
-from giza.commands.verify import verify
-from giza.commands.version import check_version
-from giza.commands.versions import app as versions_app
-from giza.commands.versions import transpile
-from giza.commands.workspaces import app as workspaces_app
-from giza.utils import echo
+from giza.cli.commands.actions import app as actions_app
+from giza.cli.commands.agents import app as agents_app
+from giza.cli.commands.endpoints import app as deployments_app
+from giza.cli.commands.endpoints import deploy
+from giza.cli.commands.models import app as models_app
+from giza.cli.commands.prove import prove
+from giza.cli.commands.reset_password import request_reset_password_token, reset_password
+from giza.cli.commands.users import app as users_app
+from giza.cli.commands.verify import verify
+from giza.cli.commands.version import check_version
+from giza.cli.commands.versions import app as versions_app
+from giza.cli.commands.versions import transpile
+from giza.cli.commands.workspaces import app as workspaces_app
+from giza.cli.utils import echo
 
 install(suppress=[click])
 

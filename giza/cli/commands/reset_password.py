@@ -4,12 +4,12 @@ from typing import Optional
 import typer
 from requests import HTTPError
 
-from giza import API_HOST
-from giza.client import UsersClient
-from giza.exceptions import PasswordError
-from giza.options import DEBUG_OPTION
-from giza.utils import echo, get_response_info
-from giza.utils.misc import _check_password_strength
+from giza.cli import API_HOST
+from giza.cli.client import UsersClient
+from giza.cli.exceptions import PasswordError
+from giza.cli.options import DEBUG_OPTION
+from giza.cli.utils import echo, get_response_info
+from giza.cli.utils.misc import _check_password_strength
 
 
 def prompt_for_input(

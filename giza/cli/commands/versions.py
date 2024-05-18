@@ -8,15 +8,15 @@ from typing import Dict, Optional
 import typer
 from rich import print_json
 
-from giza import API_HOST
-from giza.client import TranspileClient, VersionsClient
-from giza.frameworks import cairo, ezkl
-from giza.options import DEBUG_OPTION
-from giza.schemas.versions import Version, VersionList
-from giza.utils import echo
-from giza.utils.enums import Framework, VersionStatus
-from giza.utils.exception_handling import ExceptionHandler
-from giza.utils.misc import download_model_or_sierra, scarb_build, zip_folder
+from giza.cli import API_HOST
+from giza.cli.client import TranspileClient, VersionsClient
+from giza.cli.frameworks import cairo, ezkl
+from giza.cli.options import DEBUG_OPTION
+from giza.cli.schemas.versions import Version, VersionList
+from giza.cli.utils import echo
+from giza.cli.utils.enums import Framework, VersionStatus
+from giza.cli.utils.exception_handling import ExceptionHandler
+from giza.cli.utils.misc import download_model_or_sierra, scarb_build, zip_folder
 
 app = typer.Typer()
 

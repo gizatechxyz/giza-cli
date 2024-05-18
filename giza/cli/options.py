@@ -1,6 +1,6 @@
 import typer
 
-from giza.callbacks import debug_callback
+from giza.cli.callbacks import debug_callback
 
 DEBUG_OPTION = typer.Option(
     False,

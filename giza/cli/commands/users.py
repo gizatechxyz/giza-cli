@@ -7,13 +7,13 @@ from pydantic import SecretStr, ValidationError
 from requests import HTTPError
 from rich import print_json
 
-from giza import API_HOST
-from giza.client import UsersClient
-from giza.exceptions import PasswordError
-from giza.options import DEBUG_OPTION
-from giza.schemas import users
-from giza.utils import echo, get_response_info
-from giza.utils.misc import _check_password_strength
+from giza.cli import API_HOST
+from giza.cli.client import UsersClient
+from giza.cli.exceptions import PasswordError
+from giza.cli.options import DEBUG_OPTION
+from giza.cli.schemas import users
+from giza.cli.utils import echo, get_response_info
+from giza.cli.utils.misc import _check_password_strength
 
 app = typer.Typer()
 

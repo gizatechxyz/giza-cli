@@ -4,8 +4,8 @@ from pydantic import ValidationError
 from pydantic_core import InitErrorDetails
 from requests import HTTPError
 
-from giza.commands.models import ModelsClient
-from giza.schemas.models import Model, ModelList
+from giza.cli.commands.models import ModelsClient
+from giza.cli.schemas.models import Model, ModelList
 from tests.conftest import invoke_cli_runner
 
 
@@ -35,7 +35,7 @@ def test_models_get_invalid_id():
             line_errors=[InitErrorDetails(type="missing")],
             title="Resource validation error",
         ),
-    ), patch("giza.commands.models.get_response_info", return_value={}):
+    ), patch("giza.cli.commands.models.get_response_info", return_value={}):
         result = invoke_cli_runner(
             ["models", "get", "--model-id", "1"], expected_error=True
         )
@@ -68,7 +68,7 @@ def test_models_list():
 # Test model listing with server error
 def test_models_list_server_error():
     with patch.object(ModelsClient, "list", side_effect=HTTPError), patch(
-        "giza.commands.models.get_response_info", return_value={}
+        "giza.cli.commands.models.get_response_info", return_value={}
     ):
         result = invoke_cli_runner(["models", "list"], expected_error=True)
 
@@ -79,7 +79,7 @@ def test_models_list_server_error():
 # Test model retrieval with HTTPError in normal mode
 def test_models_get_httperror():
     with patch.object(ModelsClient, "get", side_effect=HTTPError), patch(
-        "giza.commands.models.get_response_info", return_value={"request_id": 1}
+        "giza.cli.commands.models.get_response_info", return_value={"request_id": 1}
     ):
         result = invoke_cli_runner(
             ["models", "get", "--model-id", "1"], expected_error=True
@@ -96,7 +96,7 @@ def test_models_get_httperror():
 # Test model retrieval with HTTPError in debug mode
 def test_models_get_httperror_debug():
     with patch.object(ModelsClient, "get", side_effect=HTTPError), patch(
-        "giza.commands.models.get_response_info", return_value={"request_id": 1}
+        "giza.cli.commands.models.get_response_info", return_value={"request_id": 1}
     ):
         result = invoke_cli_runner(
             ["models", "get", "--model-id", "1", "--debug"], expected_error=True

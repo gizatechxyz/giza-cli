@@ -4,8 +4,8 @@ from email_validator import EmailNotValidError
 from pydantic import ValidationError
 from requests import HTTPError
 
-from giza.client import UsersClient
-from giza.schemas.users import UserResponse
+from giza.cli.client import UsersClient
+from giza.cli.schemas.users import UserResponse
 from tests.conftest import invoke_cli_runner
 
 
@@ -111,7 +111,7 @@ def test_users_create_invalid_response():
             "giza@gizatech.xyz",
         ],
     ), patch.object(UsersClient, "create", side_effect=HTTPError), patch(
-        "giza.commands.users.get_response_info", return_value={}
+        "giza.cli.commands.users.get_response_info", return_value={}
     ):
         result = invoke_cli_runner(["users", "create", "--debug"], expected_error=True)
 
@@ -122,7 +122,7 @@ def test_users_create_invalid_response():
 
 
 def test_users_login_successfully():
-    with patch("giza.client.UsersClient.retrieve_token") as mock_login, patch(
+    with patch("giza.cli.client.UsersClient.retrieve_token") as mock_login, patch(
         "typer.prompt",
         side_effect=["gizabrain", "gizapassword"],
     ):
@@ -134,12 +134,12 @@ def test_users_login_successfully():
 
 def test_users_login_no_auth():
     with patch(
-        "giza.client.UsersClient.retrieve_token", side_effect=HTTPError
+        "giza.cli.client.UsersClient.retrieve_token", side_effect=HTTPError
     ) as mock_login, patch(
         "typer.prompt",
         side_effect=["gizabrain", "gizapassword"],
     ), patch(
-        "giza.commands.users.get_response_info", return_value={}
+        "giza.cli.commands.users.get_response_info", return_value={}
     ) as mock_info:
         result = invoke_cli_runner(["users", "login"], expected_error=True)
 
@@ -151,12 +151,12 @@ def test_users_login_no_auth():
 
 def test_users_login_no_auth_debug():
     with patch(
-        "giza.client.UsersClient.retrieve_token", side_effect=HTTPError
+        "giza.cli.client.UsersClient.retrieve_token", side_effect=HTTPError
     ) as mock_login, patch(
         "typer.prompt",
         side_effect=["gizabrain", "gizapassword"],
     ), patch(
-        "giza.commands.users.get_response_info", return_value={}
+        "giza.cli.commands.users.get_response_info", return_value={}
     ) as mock_info:
         result = invoke_cli_runner(["users", "login", "--debug"], expected_error=True)
 
@@ -172,7 +172,7 @@ def test_users_me():
     user_response = UserResponse(
         username="giza", email="giza@gizatech.xyz", is_active=True
     )
-    with patch("giza.client.UsersClient.me", return_value=user_response) as mock_me:
+    with patch("giza.cli.client.UsersClient.me", return_value=user_response) as mock_me:
         result = invoke_cli_runner(["users", "me"])
 
     mock_me.assert_called_once()
@@ -182,10 +182,10 @@ def test_users_me():
 
 def test_resend_email_success():
     # Test successful email resend
-    with patch("giza.client.UsersClient.resend_email") as mock_resend, patch(
+    with patch("giza.cli.client.UsersClient.resend_email") as mock_resend, patch(
         "typer.prompt",
         return_value="giza@gizatech.xyz",
-    ), patch("giza.commands.users.validate_email") as mock_validate:
+    ), patch("giza.cli.commands.users.validate_email") as mock_validate:
         result = invoke_cli_runner(["users", "resend-email"])
 
     mock_resend.assert_called_once()
@@ -230,8 +230,8 @@ def test_resend_email_invalid_response():
         return_value="giza@gizatech.xyz",
     ), patch.object(
         UsersClient, "resend_email", side_effect=HTTPError
-    ), patch("giza.commands.users.get_response_info", return_value={}), patch(
-        "giza.commands.users.validate_email"
+    ), patch("giza.cli.commands.users.get_response_info", return_value={}), patch(
+        "giza.cli.commands.users.validate_email"
     ) as mock_validate:
         result = invoke_cli_runner(
             ["users", "resend-email", "--debug"], expected_error=True
