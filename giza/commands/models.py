@@ -8,7 +8,7 @@ from rich import print_json
 
 from giza import API_HOST
 from giza.client import ModelsClient
-from giza.options import DEBUG_OPTION
+from giza.options import DEBUG_OPTION, DESCRIPTION_OPTION, MODEL_OPTION
 from giza.schemas.models import ModelCreate
 from giza.utils import echo, get_response_info
 
@@ -27,9 +27,7 @@ app = typer.Typer()
     """,
 )
 def get(
-    model_id: int = typer.Option(
-        ..., "--model-id", "-m", help="Model id to retrieve information from"
-    ),
+    model_id: int = MODEL_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     """
@@ -140,9 +138,7 @@ def create(
     name: str = typer.Option(
         ..., "--name", "-n", help="Name of the model to be created"
     ),
-    description: str = typer.Option(
-        None, "--description", "-d", help="Description of the model to be created"
-    ),
+    description: str = DESCRIPTION_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     """

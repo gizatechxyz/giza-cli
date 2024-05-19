@@ -3,7 +3,7 @@ from typing import List, Optional
 import typer
 
 from giza.frameworks import cairo, ezkl
-from giza.options import DEBUG_OPTION
+from giza.options import DEBUG_OPTION, FRAMEWORK_OPTION, MODEL_OPTION, VERSION_OPTION
 from giza.utils.enums import Framework, JobSize
 
 app = typer.Typer()
@@ -11,10 +11,10 @@ app = typer.Typer()
 
 def prove(
     data: List[str] = typer.Argument(None),
-    model_id: Optional[int] = typer.Option(None, "--model-id", "-m"),
-    version_id: Optional[int] = typer.Option(None, "--version-id", "-v"),
+    model_id: Optional[int] = MODEL_OPTION,
+    version_id: Optional[int] = VERSION_OPTION,
     size: JobSize = typer.Option(JobSize.S, "--size", "-s"),
-    framework: Framework = typer.Option(Framework.CAIRO, "--framework", "-f"),
+    framework: Framework = FRAMEWORK_OPTION,
     output_path: str = typer.Option("zk.proof", "--output-path", "-o"),
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:

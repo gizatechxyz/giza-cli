@@ -9,7 +9,13 @@ from rich import print_json
 from giza import API_HOST
 from giza.client import EndpointsClient
 from giza.frameworks import cairo, ezkl
-from giza.options import DEBUG_OPTION
+from giza.options import (
+    DEBUG_OPTION,
+    ENDPOINT_OPTION,
+    FRAMEWORK_OPTION,
+    MODEL_OPTION,
+    VERSION_OPTION,
+)
 from giza.schemas.endpoints import EndpointsList
 from giza.schemas.proofs import Proof, ProofList
 from giza.utils import echo, get_response_info
@@ -21,20 +27,10 @@ app = typer.Typer()
 
 def deploy(
     data: str = typer.Argument(None),
-    model_id: int = typer.Option(
-        None,
-        "--model-id",
-        "-m",
-        help="The ID of the model where an endpoint will be created",
-    ),
-    version_id: int = typer.Option(
-        None,
-        "--version-id",
-        "-v",
-        help="The ID of the version that will used in the endpoint",
-    ),
+    model_id: int = MODEL_OPTION,
+    version_id: int = VERSION_OPTION,
     size: ServiceSize = typer.Option(ServiceSize.S, "--size", "-s"),
-    framework: Framework = typer.Option(Framework.CAIRO, "--framework", "-f"),
+    framework: Framework = FRAMEWORK_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     if framework == Framework.CAIRO:
@@ -76,10 +72,8 @@ app.command(
     """,
 )
 def list(
-    model_id: int = typer.Option(None, "--model-id", "-m", help="The ID of the model"),
-    version_id: int = typer.Option(
-        None, "--version-id", "-v", help="The ID of the version"
-    ),
+    model_id: int = MODEL_OPTION,
+    version_id: int = VERSION_OPTION,
     only_active: bool = typer.Option(
         False, "--only-active", "-a", help="Only list active endpoints"
     ),
@@ -132,14 +126,7 @@ def list(
     """,
 )
 def get(
-    endpoint_id: int = typer.Option(
-        None,
-        "--deployment-id",
-        "-d",
-        "--endpoint-id",
-        "-e",
-        help="The ID of the endpoint",
-    ),
+    endpoint_id: int = ENDPOINT_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     echo(f"Getting endpoint {endpoint_id} ✅ ")
@@ -183,14 +170,7 @@ def get(
     """,
 )
 def delete_endpoint(
-    endpoint_id: int = typer.Option(
-        None,
-        "--deployment-id",
-        "-d",
-        "--endpoint-id",
-        "-e",
-        help="The ID of the endpoint",
-    ),
+    endpoint_id: int = ENDPOINT_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     echo(f"Deleting endpoint {endpoint_id} ✅ ")
@@ -210,14 +190,7 @@ def delete_endpoint(
     """,
 )
 def list_proofs(
-    endpoint_id: int = typer.Option(
-        None,
-        "--deployment-id",
-        "-d",
-        "--endpoint-id",
-        "-e",
-        help="The ID of the endpoint",
-    ),
+    endpoint_id: int = ENDPOINT_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     echo(f"Getting proofs from endpoint {endpoint_id} ✅ ")
@@ -260,14 +233,7 @@ def list_proofs(
     """,
 )
 def get_proof(
-    endpoint_id: int = typer.Option(
-        None,
-        "--deployment-id",
-        "-d",
-        "--endpoint-id",
-        "-e",
-        help="The ID of the endpoint",
-    ),
+    endpoint_id: int = ENDPOINT_OPTION,
     proof_id: str = typer.Option(
         None, "--proof-id", "-p", help="The ID or request id of the proof"
     ),
@@ -313,14 +279,7 @@ def get_proof(
     """,
 )
 def download_proof(
-    endpoint_id: int = typer.Option(
-        None,
-        "--deployment-id",
-        "-d",
-        "--endpoint-id",
-        "-e",
-        help="The ID of the endpoint",
-    ),
+    endpoint_id: int = ENDPOINT_OPTION,
     proof_id: str = typer.Option(
         None, "--proof-id", "-p", help="The ID or request id of the proof"
     ),
@@ -374,14 +333,7 @@ def download_proof(
     """,
 )
 def list_jobs(
-    endpoint_id: int = typer.Option(
-        None,
-        "--deployment-id",
-        "-d",
-        "--endpoint-id",
-        "-e",
-        help="The ID of the endpoint",
-    ),
+    endpoint_id: int = ENDPOINT_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     echo(f"Getting jobs from endpoint {endpoint_id} ✅ ")
@@ -401,14 +353,7 @@ def list_jobs(
     """,
 )
 def verify(
-    endpoint_id: int = typer.Option(
-        None,
-        "--deployment-id",
-        "-d",
-        "--endpoint-id",
-        "-e",
-        help="The ID of the endpoint",
-    ),
+    endpoint_id: int = ENDPOINT_OPTION,
     proof_id: str = typer.Option(
         None, "--proof-id", "-p", help="The ID or request id of the proof"
     ),
@@ -419,3 +364,27 @@ def verify(
         client = EndpointsClient(API_HOST)
         verification = client.verify_proof(endpoint_id, proof_id)
     print_json(verification.model_dump_json(exclude_unset=True))
+
+
+@app.command(
+    short_help="📜 Retrieves the logs from a version",
+    help="""📜 Retrieves the logs from a version
+
+    This command will print the latest logs from the endpoint to help debug and understand
+    what its happening under the hood.
+
+    If no logs are available, an empty string is printed.
+    """,
+)
+def logs(
+    endpoint_id: int = ENDPOINT_OPTION,
+    debug: Optional[bool] = DEBUG_OPTION,
+) -> None:
+    echo(f"Getting logs for endpoint {endpoint_id} ✅ ")
+    with ExceptionHandler(debug=debug):
+        client = EndpointsClient(API_HOST)
+        logs = client.get_logs(endpoint_id)
+        if logs.logs == "":
+            echo.warning("No logs available")
+        else:
+            print(logs.logs)
