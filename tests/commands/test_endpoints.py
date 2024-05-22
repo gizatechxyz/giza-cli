@@ -200,7 +200,7 @@ def test_get_deployment():
             [
                 "endpoints",
                 "get",
-                "--deployment-id",
+                "--endpoint-id",
                 "1",
             ],
         )
@@ -215,7 +215,7 @@ def test_get_deployment_http_error():
             [
                 "endpoints",
                 "get",
-                "--deployment-id",
+                "--endpoint-id",
                 "1",
             ],
             expected_error=True,
@@ -235,7 +235,7 @@ def test_endpoints_verify():
             [
                 "endpoints",
                 "verify",
-                "--deployment-id",
+                "--endpoint-id",
                 "1",
                 "--proof-id",
                 "1",
