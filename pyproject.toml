@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "giza-cli"
-version = "0.15.1"
+version = "0.16.0"
 description = "CLI for interacting with Giza"
 authors = ["Gonzalo Mellizo-Soto <gonzalo@gizatech.xyz>"]
 readme = "README.md"
@@ -8,6 +8,9 @@ packages = [{include = "giza"}]
 
 [tool.poetry.scripts]
 giza = "giza.cli.cli:entrypoint"
+
+[tool.setuptools.package-data]
+"giza-cli" = ["py.typed"]
 
 [tool.poetry.dependencies]
 python = "^3.11"

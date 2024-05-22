@@ -9,7 +9,15 @@ from rich.table import Table
 
 from giza.cli import API_HOST
 from giza.cli.client import AgentsClient, EndpointsClient
-from giza.cli.options import DEBUG_OPTION
+from giza.cli.options import (
+    AGENT_OPTION,
+    DEBUG_OPTION,
+    DESCRIPTION_OPTION,
+    ENDPOINT_OPTION,
+    MODEL_OPTION,
+    NAME_OPTION,
+    VERSION_OPTION,
+)
 from giza.cli.schemas.agents import AgentCreate, AgentList, AgentUpdate
 from giza.cli.utils import echo
 from giza.cli.utils.exception_handling import ExceptionHandler
@@ -31,30 +39,11 @@ app = typer.Typer()
     """,
 )
 def create(
-    model_id: Optional[int] = typer.Option(
-        None,
-        "--model-id",
-        "-m",
-        help="The ID of the model used to create the agent",
-    ),
-    version_id: Optional[int] = typer.Option(
-        None,
-        "--version-id",
-        "-v",
-        help="The ID of the version used to create the agent",
-    ),
-    endpoint_id: int = typer.Option(
-        None,
-        "--endpoint-id",
-        "-e",
-        help="The ID of the endpoint used to create the agent",
-    ),
-    name: Optional[str] = typer.Option(
-        None, "--name", "-n", help="The name of the agent"
-    ),
-    description: Optional[str] = typer.Option(
-        None, "--description", "-d", help="The description of the agent"
-    ),
+    model_id: Optional[int] = MODEL_OPTION,
+    version_id: Optional[int] = VERSION_OPTION,
+    endpoint_id: int = ENDPOINT_OPTION,
+    name: Optional[str] = NAME_OPTION,
+    description: Optional[str] = DESCRIPTION_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     echo("Creating agent ✅ ")
@@ -159,12 +148,7 @@ def list(
     """,
 )
 def get(
-    agent_id: int = typer.Option(
-        None,
-        "--agent-id",
-        "-a",
-        help="The ID of the agent",
-    ),
+    agent_id: int = AGENT_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     echo(f"Getting agent {agent_id} ✅ ")
@@ -183,12 +167,7 @@ def get(
     """,
 )
 def delete_agent(
-    agent_id: int = typer.Option(
-        None,
-        "--agent-id",
-        "-a",
-        help="The ID of the agent",
-    ),
+    agent_id: int = AGENT_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     echo(f"Deleting agent {agent_id} ✅ ")
@@ -211,18 +190,9 @@ def delete_agent(
     """,
 )
 def update(
-    agent_id: int = typer.Option(
-        None,
-        "--agent-id",
-        "-a",
-        help="The ID of the agent",
-    ),
-    name: Optional[str] = typer.Option(
-        None, "--name", "-n", help="The name of the agent"
-    ),
-    description: Optional[str] = typer.Option(
-        None, "--description", "-d", help="The description of the agent"
-    ),
+    agent_id: int = AGENT_OPTION,
+    name: Optional[str] = NAME_OPTION,
+    description: Optional[str] = DESCRIPTION_OPTION,
     parameters: Optional[List[str]] = typer.Option(
         None, "--parameters", "-p", help="The parameters of the agent"
     ),

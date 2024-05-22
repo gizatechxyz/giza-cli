@@ -11,7 +11,15 @@ from rich import print_json
 from giza.cli import API_HOST
 from giza.cli.client import TranspileClient, VersionsClient
 from giza.cli.frameworks import cairo, ezkl
-from giza.cli.options import DEBUG_OPTION
+from giza.cli.options import (
+    DEBUG_OPTION,
+    DESCRIPTION_OPTION,
+    FRAMEWORK_OPTION,
+    INPUT_OPTION,
+    MODEL_OPTION,
+    OUTPUT_PATH_OPTION,
+    VERSION_OPTION,
+)
 from giza.cli.schemas.versions import Version, VersionList
 from giza.cli.utils import echo
 from giza.cli.utils.enums import Framework, VersionStatus
@@ -40,8 +48,8 @@ def update_sierra(model_id: int, version_id: int, model_path: str):
     """,
 )
 def get(
-    model_id: int = typer.Option(None, help="The ID of the model"),
-    version_id: int = typer.Option(None, help="The ID of the version"),
+    model_id: int = MODEL_OPTION,
+    version_id: int = VERSION_OPTION,
     debug: bool = DEBUG_OPTION,
 ) -> None:
     if any([model_id is None, version_id is None]):
@@ -56,26 +64,12 @@ def get(
 
 def transpile(
     model_path: str = typer.Argument(None, help="Path of the model to transpile"),
-    model_id: int = typer.Option(
-        None, help="The ID of the model where a new version will be created"
-    ),
+    model_id: int = MODEL_OPTION,
     desc: str = typer.Option(None, help="Description of the version"),
-    model_desc: str = typer.Option(
-        None, help="Description of the Model to create if model_id is not provided"
-    ),
-    framework: Framework = typer.Option(Framework.CAIRO, "--framework", "-f"),
-    output_path: str = typer.Option(
-        "cairo_model",
-        "--output-path",
-        "-o",
-        help="The path where the cairo model will be saved",
-    ),
-    input_data: str = typer.Option(
-        None,
-        "--input-data",
-        "-i",
-        help="The input data to use for the transpilation",
-    ),
+    model_desc: str = DESCRIPTION_OPTION,
+    framework: Framework = FRAMEWORK_OPTION,
+    output_path: str = OUTPUT_PATH_OPTION,
+    input_data: str = INPUT_OPTION,
     download_model: bool = typer.Option(
         True,
         "--download-model",
@@ -147,10 +141,8 @@ app.command(
     """,
 )
 def update(
-    model_id: int = typer.Option(None, "--model-id", "-m", help="The ID of the model"),
-    version_id: int = typer.Option(
-        None, "--version-id", "-v", help="The ID of the version"
-    ),
+    model_id: int = MODEL_OPTION,
+    version_id: int = VERSION_OPTION,
     model_path: str = typer.Option(
         None, "--model-path", "-M", help="Path of the model to update"
     ),
@@ -191,7 +183,7 @@ def update(
     """,
 )
 def list(
-    model_id: int = typer.Option(None, help="The ID of the model"),
+    model_id: int = MODEL_OPTION,
     debug: bool = DEBUG_OPTION,
 ) -> None:
     if model_id is None:
@@ -214,11 +206,9 @@ def list(
     """,
 )
 def download(
-    model_id: int = typer.Option(None, help="The ID of the model"),
-    version_id: int = typer.Option(None, help="The ID of the version"),
-    output_path: str = typer.Option(
-        "cairo_model", "--output-path", "-o", help="Path to output the cairo model"
-    ),
+    model_id: int = MODEL_OPTION,
+    version_id: int = VERSION_OPTION,
+    output_path: str = OUTPUT_PATH_OPTION,
     download_model: bool = typer.Option(
         False,
         "--download-model",
@@ -274,8 +264,8 @@ def download(
     """,
 )
 def download_original(
-    model_id: int = typer.Option(None, help="The ID of the model"),
-    version_id: int = typer.Option(None, help="The ID of the version"),
+    model_id: int = MODEL_OPTION,
+    version_id: int = VERSION_OPTION,
     output_path: str = typer.Option(
         "model.onnx", "--output-path", "-o", help="Path to output the ONNX model"
     ),
@@ -305,3 +295,30 @@ def download_original(
             f.write(onnx_model)
 
         echo(f"ONNX model saved at: {output_path}")
+
+
+@app.command(
+    short_help="📜 Retrieves the logs from a version.",
+    help="""📜 Retrieves the logs from a version.
+
+    This commands needs a model id and version id to retrieve data from the server.
+
+    If no version exists an error will be thrown.
+    """,
+)
+def logs(
+    model_id: int = MODEL_OPTION,
+    version_id: int = VERSION_OPTION,
+    debug: bool = DEBUG_OPTION,
+) -> None:
+    if any([model_id is None, version_id is None]):
+        echo.error("⛔️Model ID and version ID are required⛔️")
+        sys.exit(1)
+    echo("Retrieving logs ✅ ")
+    with ExceptionHandler(debug=debug):
+        client = VersionsClient(API_HOST)
+        logs = client.get_logs(model_id, version_id)
+        if logs.logs == "":
+            echo.warning("No logs available")
+        else:
+            print(logs.logs)

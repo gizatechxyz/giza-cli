@@ -83,6 +83,11 @@ def prove(
                             f"Proving Job with name '{current_job.job_name}' and id {current_job.id} failed"
                         )
                     )
+                    logs = client.get_logs(job.id)
+                    if logs.logs == "":
+                        echo.warning("No logs available")
+                    else:
+                        print(logs.logs)
                     sys.exit(1)
                 else:
                     live.update(
@@ -344,21 +349,17 @@ def transpile(
                 elif version.status == VersionStatus.FAILED:
                     echo.error("⛔️ Transpilation failed! ⛔️")
                     echo.error(f"⛔️ Reason -> {version.message} ⛔️")
-                    if version.logs:
+                    logs = client.get_logs(model.id, version.version)
+                    if logs.logs == "":
+                        echo.warning("No logs available")
+                    else:
                         echo.error("##### Printing Transpilation Logs #####")
                         echo(
                             "Note: These logs are retrieved from the platform execution environment"
                         )
-                        print(version.logs)
+                        print(logs.logs)
                         echo.error("##### End of Logs #####")
                     sys.exit(1)
-            if version.logs:
-                echo("##### Printing Transpilation Logs #####")
-                echo(
-                    "Note: These logs are retrieved from the platform execution environment"
-                )
-                print(version.logs)
-                echo("##### End of Logs #####")
     except ValidationError as e:
         echo.error("Version validation error")
         echo.error("Review the provided information")
@@ -478,6 +479,11 @@ def verify(
                             f"Verification Job with name '{current_job.job_name}' and id {current_job.id} failed"
                         )
                     )
+                    logs = client.get_logs(job.id)
+                    if logs.logs == "":
+                        echo.warning("No logs available")
+                    else:
+                        print(logs.logs)
                     sys.exit(1)
                 else:
                     live.update(

@@ -8,6 +8,7 @@ from giza.cli.exceptions import ScarbBuildError, ScarbNotFound
 from giza.cli.utils import echo, get_response_info
 
 
+# TODO: Implement it as a context manager which accepts a dict of errors and messages
 class ExceptionHandler:
     """
     Context manager to handle exceptions in the CLI.

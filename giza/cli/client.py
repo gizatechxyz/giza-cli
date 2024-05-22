@@ -16,6 +16,7 @@ from giza.cli.schemas import users
 from giza.cli.schemas.agents import Agent, AgentCreate, AgentList, AgentUpdate
 from giza.cli.schemas.endpoints import Endpoint, EndpointCreate, EndpointsList
 from giza.cli.schemas.jobs import Job, JobCreate, JobList
+from giza.cli.schemas.logs import Logs
 from giza.cli.schemas.message import Msg
 from giza.cli.schemas.models import Model, ModelCreate, ModelList, ModelUpdate
 from giza.cli.schemas.proofs import Proof, ProofList
@@ -668,6 +669,37 @@ class EndpointsClient(ApiClient):
         return Endpoint(**response.json())
 
     @auth
+    def get_logs(self, endpoint_id: int) -> Logs:
+        """
+        Get the latest logs of an endpoint.
+
+        Args:
+            endpoint_id: Endpoint identifier
+
+        Returns:
+            Logs: The logs of the specified deployment
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            "/".join(
+                [
+                    self.url,
+                    self.ENDPOINTS,
+                    str(endpoint_id),
+                    "logs",
+                ]
+            ),
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        return Logs(**response.json())
+
+    @auth
     def delete(self, endpoint_id: int) -> None:
         """
         Delete an endpoint.
@@ -957,6 +989,30 @@ class JobsClient(ApiClient):
         response.raise_for_status()
 
         return Job(**response.json())
+
+    @auth
+    def get_logs(self, job_id: int) -> Logs:
+        """
+        Make a call to the API to retrieve job logs.
+
+        Args:
+            job_id: Job identfier to retrieve the logs for
+
+        Returns:
+            Logs: the logs of the specified job
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            f"{self.url}/{self.JOBS_ENDPOINT}/{job_id}/logs",
+            headers=headers,
+        )
+        self._echo_debug(str(response))
+
+        response.raise_for_status()
+
+        return Logs(**response.json())
 
     @auth
     def create(
@@ -1311,6 +1367,31 @@ class VersionsClient(ApiClient):
         response.raise_for_status()
 
         return Version(**response.json())
+
+    @auth
+    def get_logs(self, model_id: int, version_id: int) -> Logs:
+        """
+        Get a version transpilation logs.
+
+        Args:
+            model_id: Model identifier
+            version_id: Version identifier
+
+        Returns:
+            The version transpilation logs
+        """
+        headers = copy.deepcopy(self.default_headers)
+        headers.update(self._get_auth_header())
+
+        response = self.session.get(
+            f"{self._get_version_url(model_id)}/{version_id}/logs",
+            headers=headers,
+        )
+
+        self._echo_debug(str(response))
+        response.raise_for_status()
+
+        return Logs(**response.json())
 
     @auth
     def upload_cairo(self, model_id: int, version_id: int, file_path: str) -> Version:
