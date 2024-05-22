@@ -2,7 +2,7 @@ from functools import wraps
 from typing import TYPE_CHECKING, Callable, ParamSpec, TypeVar
 
 if TYPE_CHECKING:
-    from giza.client import ApiClient
+    from giza.cli.client import ApiClient
 
 P = ParamSpec("P")
 R = TypeVar("R")

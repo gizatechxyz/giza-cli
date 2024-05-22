@@ -6,10 +6,10 @@ from pydantic import ValidationError
 from pydantic_core import InitErrorDetails
 from requests.exceptions import HTTPError
 
-from giza.commands.versions import VersionsClient, VersionStatus
-from giza.schemas.models import Model, ModelList
-from giza.schemas.versions import Version, VersionList
-from giza.utils.enums import Framework
+from giza.cli.commands.versions import VersionsClient, VersionStatus
+from giza.cli.schemas.models import Model, ModelList
+from giza.cli.schemas.versions import Version, VersionList
+from giza.cli.utils.enums import Framework
 from tests.conftest import invoke_cli_runner
 
 
@@ -58,7 +58,7 @@ def test_versions_get():
 # Test version retrieval that throws an HTTPError
 def test_versions_get_http_error():
     with patch.object(VersionsClient, "get", side_effect=HTTPError), patch(
-        "giza.utils.exception_handling.get_response_info", return_value={}
+        "giza.cli.utils.exception_handling.get_response_info", return_value={}
     ):
         result = invoke_cli_runner(
             ["versions", "get", "--model-id", "1", "--version-id", "1"],
@@ -78,7 +78,7 @@ def test_versions_get_invalid_id():
             line_errors=[InitErrorDetails(type="missing")],
             title="Resource validation error",
         ),
-    ), patch("giza.utils.exception_handling.get_response_info", return_value={}):
+    ), patch("giza.cli.utils.exception_handling.get_response_info", return_value={}):
         result = invoke_cli_runner(
             ["versions", "get", "--model-id", "1", "--version-id", "1"],
             expected_error=True,
@@ -114,7 +114,7 @@ def test_versions_list():
 # Test version listing with server error
 def test_versions_list_server_error():
     with patch.object(VersionsClient, "list", side_effect=HTTPError), patch(
-        "giza.utils.exception_handling.get_response_info", return_value={}
+        "giza.cli.utils.exception_handling.get_response_info", return_value={}
     ):
         result = invoke_cli_runner(
             ["versions", "list", "--model-id", "1"], expected_error=True
@@ -155,13 +155,13 @@ def test_versions_transpile_successful(tmpdir):
     )
 
     with patch(
-        "giza.frameworks.cairo.VersionsClient",
+        "giza.cli.frameworks.cairo.VersionsClient",
         return_value=ClientStub(version, return_content()),
     ), patch(
-        "giza.frameworks.cairo.ModelsClient.list",
+        "giza.cli.frameworks.cairo.ModelsClient.list",
         return_value=models,
     ), patch(
-        "giza.frameworks.cairo.Path"
+        "giza.cli.frameworks.cairo.Path"
     ), patch.object(
         VersionsClient, "get", return_value=version
     ), patch(
@@ -169,7 +169,7 @@ def test_versions_transpile_successful(tmpdir):
     ) as mock_open, patch.object(
         VersionsClient, "_load_credentials_file"
     ), patch(
-        "giza.frameworks.cairo.ModelsClient._load_credentials_file"
+        "giza.cli.frameworks.cairo.ModelsClient._load_credentials_file"
     ):
         result = invoke_cli_runner(
             ["versions", "transpile", "model", "--output-path", tmpdir, "--debug"]
@@ -186,9 +186,11 @@ def test_versions_transpile_successful(tmpdir):
 # Test version transpilation with HTTP error
 def test_versions_transpile_http_error(tmpdir):
     with patch(
-        "giza.frameworks.cairo.ModelsClient.get_by_name", side_effect=HTTPError
-    ), patch("giza.utils.exception_handling.get_response_info", return_value={}), patch(
-        "giza.frameworks.cairo.Path"
+        "giza.cli.frameworks.cairo.ModelsClient.get_by_name", side_effect=HTTPError
+    ), patch(
+        "giza.cli.utils.exception_handling.get_response_info", return_value={}
+    ), patch(
+        "giza.cli.frameworks.cairo.Path"
     ), patch.object(
         VersionsClient, "_load_credentials_file"
     ):
@@ -229,13 +231,13 @@ def test_versions_transpile_file(tmpdir):
     )
 
     with patch(
-        "giza.frameworks.cairo.VersionsClient",
+        "giza.cli.frameworks.cairo.VersionsClient",
         return_value=ClientStub(version, return_content()),
     ), patch(
-        "giza.frameworks.cairo.ModelsClient.list",
+        "giza.cli.frameworks.cairo.ModelsClient.list",
         return_value=models,
     ), patch(
-        "giza.frameworks.cairo.Path"
+        "giza.cli.frameworks.cairo.Path"
     ), patch.object(
         VersionsClient, "get", return_value=version
     ), patch(
@@ -243,7 +245,7 @@ def test_versions_transpile_file(tmpdir):
     ) as mock_open, patch.object(
         VersionsClient, "_load_credentials_file"
     ), patch(
-        "giza.frameworks.cairo.ModelsClient._load_credentials_file"
+        "giza.cli.frameworks.cairo.ModelsClient._load_credentials_file"
     ):
         result = invoke_cli_runner(
             ["versions", "transpile", "model", "--output-path", tmpdir],
@@ -278,7 +280,7 @@ def test_versions_download_successful(tmpdir):
     with patch.object(VersionsClient, "get", return_value=version), patch.object(
         VersionsClient, "download", return_value=return_content()
     ), patch("builtins.open") as mock_open, patch(
-        "giza.client.VersionsClient._load_credentials_file"
+        "giza.cli.client.VersionsClient._load_credentials_file"
     ):
         result = invoke_cli_runner(
             [
@@ -301,7 +303,7 @@ def test_versions_download_successful(tmpdir):
 # Test version download with server error
 def test_versions_download_server_error():
     with patch.object(VersionsClient, "get", side_effect=HTTPError), patch(
-        "giza.utils.exception_handling.get_response_info", return_value={}
+        "giza.cli.utils.exception_handling.get_response_info", return_value={}
     ):
         result = invoke_cli_runner(
             [
@@ -360,7 +362,7 @@ def test_versions_download_file(tmpdir):
 # Test version download with missing model_id and version_id
 def test_versions_download_missing_ids():
     with patch.object(VersionsClient, "get", side_effect=HTTPError), patch(
-        "giza.utils.exception_handling.get_response_info", return_value={}
+        "giza.cli.utils.exception_handling.get_response_info", return_value={}
     ):
         result = invoke_cli_runner(
             [
@@ -391,10 +393,10 @@ def test_versions_update_successful():
 
     with patch.object(VersionsClient, "get", return_value=version), patch.object(
         VersionsClient, "upload_cairo", return_value=updated_version
-    ), patch("giza.commands.versions.scarb_build"), patch(
-        "giza.commands.versions.zip_folder"
+    ), patch("giza.cli.commands.versions.scarb_build"), patch(
+        "giza.cli.commands.versions.zip_folder"
     ), patch(
-        "giza.commands.versions.update_sierra"
+        "giza.cli.commands.versions.update_sierra"
     ):
         result = invoke_cli_runner(
             [
@@ -427,13 +429,13 @@ def test_versions_update_server_error():
     with patch.object(
         VersionsClient, "upload_cairo", side_effect=HTTPError
     ), patch.object(VersionsClient, "get", return_value=version), patch(
-        "giza.utils.exception_handling.get_response_info", return_value={}
+        "giza.cli.utils.exception_handling.get_response_info", return_value={}
     ), patch(
-        "giza.commands.versions.scarb_build"
+        "giza.cli.commands.versions.scarb_build"
     ), patch(
-        "giza.commands.versions.zip_folder"
+        "giza.cli.commands.versions.zip_folder"
     ), patch(
-        "giza.commands.versions.update_sierra",
+        "giza.cli.commands.versions.update_sierra",
     ):
         result = invoke_cli_runner(
             [
@@ -455,7 +457,7 @@ def test_versions_update_server_error():
 
 def test_versions_update_missing_ids():
     with patch.object(VersionsClient, "update", side_effect=HTTPError), patch(
-        "giza.utils.exception_handling.get_response_info", return_value={}
+        "giza.cli.utils.exception_handling.get_response_info", return_value={}
     ):
         result = invoke_cli_runner(
             [

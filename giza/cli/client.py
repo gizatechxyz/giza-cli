@@ -12,21 +12,21 @@ from pydantic import SecretStr
 from requests import HTTPError, Response, Session
 from rich import print, print_json
 
-from giza.schemas import users
-from giza.schemas.agents import Agent, AgentCreate, AgentList, AgentUpdate
-from giza.schemas.endpoints import Endpoint, EndpointCreate, EndpointsList
-from giza.schemas.jobs import Job, JobCreate, JobList
-from giza.schemas.logs import Logs
-from giza.schemas.message import Msg
-from giza.schemas.models import Model, ModelCreate, ModelList, ModelUpdate
-from giza.schemas.proofs import Proof, ProofList
-from giza.schemas.token import TokenResponse
-from giza.schemas.verify import VerifyResponse
-from giza.schemas.versions import Version, VersionCreate, VersionList, VersionUpdate
-from giza.schemas.workspaces import Workspace
-from giza.utils import echo
-from giza.utils.decorators import auth
-from giza.utils.enums import VersionStatus
+from giza.cli.schemas import users
+from giza.cli.schemas.agents import Agent, AgentCreate, AgentList, AgentUpdate
+from giza.cli.schemas.endpoints import Endpoint, EndpointCreate, EndpointsList
+from giza.cli.schemas.jobs import Job, JobCreate, JobList
+from giza.cli.schemas.logs import Logs
+from giza.cli.schemas.message import Msg
+from giza.cli.schemas.models import Model, ModelCreate, ModelList, ModelUpdate
+from giza.cli.schemas.proofs import Proof, ProofList
+from giza.cli.schemas.token import TokenResponse
+from giza.cli.schemas.verify import VerifyResponse
+from giza.cli.schemas.versions import Version, VersionCreate, VersionList, VersionUpdate
+from giza.cli.schemas.workspaces import Workspace
+from giza.cli.utils import echo
+from giza.cli.utils.decorators import auth
+from giza.cli.utils.enums import VersionStatus
 
 DEFAULT_API_VERSION = "v1"
 GIZA_TOKEN_VARIABLE = "GIZA_TOKEN"

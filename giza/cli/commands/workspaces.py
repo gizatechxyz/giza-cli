@@ -8,10 +8,10 @@ from requests import HTTPError
 from rich import print_json
 from rich.live import Live
 
-from giza import API_HOST
-from giza.client import WorkspaceClient
-from giza.options import DEBUG_OPTION
-from giza.utils import echo, get_response_info
+from giza.cli import API_HOST
+from giza.cli.client import WorkspaceClient
+from giza.cli.options import DEBUG_OPTION
+from giza.cli.utils import echo, get_response_info
 
 app = typer.Typer()
 

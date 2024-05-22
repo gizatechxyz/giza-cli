@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, RootModel
 
-from giza.utils.enums import Framework, ServiceSize
+from giza.cli.utils.enums import Framework, ServiceSize
 
 
 class EndpointCreate(BaseModel):

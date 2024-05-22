@@ -10,8 +10,8 @@ from rich import print_json
 from rich.live import Live
 from rich.progress import Progress, Spinner, SpinnerColumn, TextColumn
 
-from giza import API_HOST
-from giza.client import (
+from giza.cli import API_HOST
+from giza.cli.client import (
     EndpointsClient,
     JobsClient,
     ModelsClient,
@@ -19,14 +19,14 @@ from giza.client import (
     VersionJobsClient,
     VersionsClient,
 )
-from giza.options import DEBUG_OPTION
-from giza.schemas.endpoints import EndpointCreate, EndpointsList
-from giza.schemas.jobs import Job, JobCreate
-from giza.schemas.models import ModelCreate
-from giza.schemas.proofs import Proof
-from giza.schemas.versions import VersionCreate, VersionStatus, VersionUpdate
-from giza.utils import Echo, get_response_info
-from giza.utils.enums import Framework, JobKind, JobSize, JobStatus, ServiceSize
+from giza.cli.options import DEBUG_OPTION
+from giza.cli.schemas.endpoints import EndpointCreate, EndpointsList
+from giza.cli.schemas.jobs import Job, JobCreate
+from giza.cli.schemas.models import ModelCreate
+from giza.cli.schemas.proofs import Proof
+from giza.cli.schemas.versions import VersionCreate, VersionStatus, VersionUpdate
+from giza.cli.utils import Echo, get_response_info
+from giza.cli.utils.enums import Framework, JobKind, JobSize, JobStatus, ServiceSize
 
 
 def setup(

@@ -1,8 +1,8 @@
 import requests
 import semver
 
-from giza import __version__
-from giza.utils.echo import Echo
+from giza.cli import __version__
+from giza.cli.utils.echo import Echo
 
 
 # TODO: Make sure that this works offline, currently it doesn't

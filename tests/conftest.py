@@ -3,7 +3,7 @@ import logging
 import pytest
 from typer.testing import CliRunner
 
-from giza.cli import app
+from giza.cli.cli import app
 
 
 def invoke_cli_runner(*args, **kwargs):

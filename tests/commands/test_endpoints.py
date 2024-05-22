@@ -2,10 +2,10 @@ from unittest.mock import patch
 
 from requests import HTTPError
 
-from giza.commands.endpoints import EndpointsClient, cairo
-from giza.frameworks import ezkl
-from giza.schemas.endpoints import Endpoint, EndpointsList
-from giza.schemas.verify import VerifyResponse
+from giza.cli.commands.endpoints import EndpointsClient, cairo
+from giza.cli.frameworks import ezkl
+from giza.cli.schemas.endpoints import Endpoint, EndpointsList
+from giza.cli.schemas.verify import VerifyResponse
 from tests.conftest import invoke_cli_runner
 
 

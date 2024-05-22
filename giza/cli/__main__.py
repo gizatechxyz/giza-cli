@@ -1,4 +1,4 @@
-from giza.cli import entrypoint
+from giza.cli.cli import entrypoint
 
 if __name__ == "__main__":
     entrypoint()

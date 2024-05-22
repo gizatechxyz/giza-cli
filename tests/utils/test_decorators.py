@@ -3,8 +3,8 @@ from unittest.mock import patch
 
 import pytest
 
-from giza.client import GIZA_TOKEN_VARIABLE, ApiClient
-from giza.utils.decorators import auth
+from giza.cli.client import GIZA_TOKEN_VARIABLE, ApiClient
+from giza.cli.utils.decorators import auth
 
 
 def get_client():

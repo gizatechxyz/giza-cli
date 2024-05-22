@@ -6,21 +6,21 @@ from pydantic import ValidationError
 from requests import HTTPError
 from rich import print_json
 
-from giza import API_HOST
-from giza.client import EndpointsClient
-from giza.frameworks import cairo, ezkl
-from giza.options import (
+from giza.cli import API_HOST
+from giza.cli.client import EndpointsClient
+from giza.cli.frameworks import cairo, ezkl
+from giza.cli.options import (
     DEBUG_OPTION,
     ENDPOINT_OPTION,
     FRAMEWORK_OPTION,
     MODEL_OPTION,
     VERSION_OPTION,
 )
-from giza.schemas.endpoints import EndpointsList
-from giza.schemas.proofs import Proof, ProofList
-from giza.utils import echo, get_response_info
-from giza.utils.enums import Framework, ServiceSize
-from giza.utils.exception_handling import ExceptionHandler
+from giza.cli.schemas.endpoints import EndpointsList
+from giza.cli.schemas.proofs import Proof, ProofList
+from giza.cli.utils import echo, get_response_info
+from giza.cli.utils.enums import Framework, ServiceSize
+from giza.cli.utils.exception_handling import ExceptionHandler
 
 app = typer.Typer()
 

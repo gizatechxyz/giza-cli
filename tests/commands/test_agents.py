@@ -1,9 +1,9 @@
 from pathlib import Path
 from unittest.mock import patch
 
-from giza.commands.agents import AgentsClient, EndpointsClient
-from giza.schemas.agents import Agent, AgentList, AgentUpdate
-from giza.schemas.endpoints import Endpoint, EndpointsList
+from giza.cli.commands.agents import AgentsClient, EndpointsClient
+from giza.cli.schemas.agents import Agent, AgentList, AgentUpdate
+from giza.cli.schemas.endpoints import Endpoint, EndpointsList
 from tests.conftest import invoke_cli_runner
 
 
@@ -44,12 +44,12 @@ def test_create_agent_with_model_id_and_version_id():
         parameters={},
     )
     with patch.object(AgentsClient, "create", return_value=agent) as mock_create, patch(
-        "giza.commands.agents.get_ape_accounts",
+        "giza.cli.commands.agents.get_ape_accounts",
         return_value={"test": Path("dummy.json")},
     ) as mock_accounts, patch(
         "typer.prompt", side_effect=["test"]
     ) as mock_prompt, patch(
-        "giza.commands.agents.load_json_file", return_value={}
+        "giza.cli.commands.agents.load_json_file", return_value={}
     ) as mock_load, patch.object(
         EndpointsClient,
         "list",
@@ -94,12 +94,12 @@ def test_create_agent_with_endpoint_id():
         parameters={},
     )
     with patch.object(AgentsClient, "create", return_value=agent) as mock_create, patch(
-        "giza.commands.agents.get_ape_accounts",
+        "giza.cli.commands.agents.get_ape_accounts",
         return_value={"test": Path("dummy.json")},
     ) as mock_accounts, patch(
         "typer.prompt", side_effect=["test"]
     ) as mock_prompt, patch(
-        "giza.commands.agents.load_json_file", return_value={}
+        "giza.cli.commands.agents.load_json_file", return_value={}
     ) as mock_load, patch.object(
         EndpointsClient,
         "get",

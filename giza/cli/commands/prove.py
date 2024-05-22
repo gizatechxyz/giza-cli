@@ -2,9 +2,14 @@ from typing import List, Optional
 
 import typer
 
-from giza.frameworks import cairo, ezkl
-from giza.options import DEBUG_OPTION, FRAMEWORK_OPTION, MODEL_OPTION, VERSION_OPTION
-from giza.utils.enums import Framework, JobSize
+from giza.cli.frameworks import cairo, ezkl
+from giza.cli.options import (
+    DEBUG_OPTION,
+    FRAMEWORK_OPTION,
+    MODEL_OPTION,
+    VERSION_OPTION,
+)
+from giza.cli.utils.enums import Framework, JobSize
 
 app = typer.Typer()
 

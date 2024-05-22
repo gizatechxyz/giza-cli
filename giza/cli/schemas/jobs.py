@@ -3,7 +3,7 @@ from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, RootModel
 
-from giza.utils.enums import Framework, JobKind, JobSize, JobStatus
+from giza.cli.utils.enums import Framework, JobKind, JobSize, JobStatus
 
 
 class Job(BaseModel):

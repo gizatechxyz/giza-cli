@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 import pytest
 
-from giza.utils.echo import Echo
+from giza.cli.utils.echo import Echo
 
 
 def test_format_message():
@@ -55,7 +55,7 @@ def test_echo_ok():
     echo = Echo()
     message = "Dummy Message"
     formatted = f"[red]{message}[/red]"
-    with patch("giza.utils.echo.rich_print") as print_mock:
+    with patch("giza.cli.utils.echo.rich_print") as print_mock:
         echo.echo(message, formatted)
         print_mock.assert_called_once_with(formatted)
 
@@ -68,7 +68,7 @@ def test_echo_ok_fallback(capsys):
     echo = Echo()
     message = "Dummy Message"
     formatted = f"[red]{message}[/red]"
-    with patch("giza.utils.echo.rich_print", side_effect=UnicodeError):
+    with patch("giza.cli.utils.echo.rich_print", side_effect=UnicodeError):
         echo.echo(message, formatted)
 
     captured = capsys.readouterr()
@@ -84,7 +84,7 @@ def test_echo_methods(method):
     """
     echo = Echo(debug=True)
     echo_func = getattr(echo, method)
-    with patch("giza.utils.echo.Echo.echo") as mock_echo:
+    with patch("giza.cli.utils.echo.Echo.echo") as mock_echo:
         echo_func("Dummy message")
 
     mock_echo.assert_called_once()
@@ -95,7 +95,7 @@ def test_echo__call():
     Test that the `__call__` soes indeed call the `info` method
     """
     echo = Echo()
-    with patch("giza.utils.echo.Echo.info") as mock_echo:
+    with patch("giza.cli.utils.echo.Echo.info") as mock_echo:
         echo("Message")
 
     mock_echo.assert_called_once_with("Message")

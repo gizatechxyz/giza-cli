@@ -1,13 +1,16 @@
 [tool.poetry]
 name = "giza-cli"
-version = "0.16.0"
+version = "0.17.0"
 description = "CLI for interacting with Giza"
 authors = ["Gonzalo Mellizo-Soto <gonzalo@gizatech.xyz>"]
 readme = "README.md"
 packages = [{include = "giza"}]
 
 [tool.poetry.scripts]
-giza = "giza.cli:entrypoint"
+giza = "giza.cli.cli:entrypoint"
+
+[tool.setuptools.package-data]
+"giza-cli" = ["py.typed"]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -61,8 +64,12 @@ ignore = [
     "C901",  # too complex
 ]
 
+[tool.mypy]
+namespace_packages = true
+explicit_package_bases = true
+
 # Bumpversion configuration
-[tool.poetry_bumpversion.file."giza/__init__.py"]
+[tool.poetry_bumpversion.file."giza/cli/__init__.py"]
 
 [tool.poetry_bumpversion.file."docs/README.md"]
 
