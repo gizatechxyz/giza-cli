@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "giza-cli"
-version = "0.16.0"
+version = "0.17.0"
 description = "CLI for interacting with Giza"
 authors = ["Gonzalo Mellizo-Soto <gonzalo@gizatech.xyz>"]
 readme = "README.md"
@@ -69,7 +69,7 @@ namespace_packages = true
 explicit_package_bases = true
 
 # Bumpversion configuration
-[tool.poetry_bumpversion.file."giza/__init__.py"]
+[tool.poetry_bumpversion.file."giza/cli/__init__.py"]
 
 [tool.poetry_bumpversion.file."docs/README.md"]
 
