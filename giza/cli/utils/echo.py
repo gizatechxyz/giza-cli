@@ -1,10 +1,12 @@
+import atexit
 import datetime as dt
+from io import TextIOWrapper
 from typing import Optional, Union
 
 import typer
 from pydantic import BaseModel, RootModel
 from rich import print as rich_print
-from rich import reconfigure
+from rich import print_json, reconfigure
 from rich.console import Console
 from rich.table import Table
 
@@ -18,8 +20,32 @@ class Echo:
     Provides utilities to print different levels of the messages and provides formatting capabilities to each of the levels.
     """
 
-    def __init__(self, debug: Optional[bool] = False) -> None:
+    LOG_FILE: str = "giza.log"
+
+    def __init__(
+        self, debug: Optional[bool] = False, output_json: bool = False
+    ) -> None:
         self._debug = debug
+        self._json = output_json
+        self._file: TextIOWrapper | None = None
+
+        if self._json:
+            self.set_log_file()
+
+    def set_log_file(self) -> None:
+        """
+        Set the log file to use for the echo class, use manually when needed
+        """
+        self._json = True
+        self._file = open(self.LOG_FILE, "w")
+        atexit.register(self._close)
+
+    def _close(self) -> None:
+        """
+        Close the file if it was opened
+        """
+        if self._json and self._file is not None:
+            self._file.close()
 
     def format_message(
         self, message: str, field: str = "giza", color: str = "orange3"
@@ -91,12 +117,15 @@ class Echo:
             formatted (str): formatted message
         """
         try:
-            rich_print(formatted)
+            rich_print(formatted, file=self._file)
         except (UnicodeDecodeError, UnicodeEncodeError, UnicodeError):
             # fallback to the standard print behaviour
             formatted_time = dt.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
             formatted_message = f"[giza][{formatted_time}] {message}"
-            typer.echo(formatted_message)
+            if self._json and self._file is not None:
+                self._file.write(formatted_message + "\n")
+            else:
+                typer.echo(formatted_message)
 
     def error(self, message: str) -> None:
         """
@@ -176,6 +205,9 @@ class Echo:
             model (Union[BaseModel, RootModel]): The model or list of models to print
             title (str, optional): Title of the table. Defaults to "".
         """
+        if self._json:
+            print_json(model.model_dump_json())
+            return
 
         table = Table(title=title)
         console = Console()

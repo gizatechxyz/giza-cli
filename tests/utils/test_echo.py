@@ -97,7 +97,7 @@ def test_echo_ok():
     formatted = f"[red]{message}[/red]"
     with patch("giza.cli.utils.echo.rich_print") as print_mock:
         echo.echo(message, formatted)
-        print_mock.assert_called_once_with(formatted)
+        print_mock.assert_called_once_with(formatted, file=None)
 
 
 def test_echo_ok_fallback(capsys):
