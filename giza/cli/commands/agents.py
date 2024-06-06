@@ -3,7 +3,6 @@ from enum import StrEnum
 from typing import List, Optional
 
 import typer
-from rich import print_json
 from rich.console import Console
 from rich.table import Table
 
@@ -104,7 +103,7 @@ def create(
             },
         )
         agent = client.create(agent_create)
-    print_json(agent.model_dump_json())
+    echo.print_model(agent)
 
 
 @app.command(
@@ -135,7 +134,7 @@ def list(
         else:
             query_params = None
         agents: AgentList = client.list(params=query_params)
-    print_json(agents.model_dump_json())
+    echo.print_model(agents)
 
 
 # giza/commands/deployments.py
@@ -155,7 +154,7 @@ def get(
     with ExceptionHandler(debug=debug):
         client = AgentsClient(API_HOST)
         deployment = client.get(agent_id)
-    print_json(deployment.model_dump_json())
+    echo.print_model(deployment)
 
 
 @app.command(
@@ -206,4 +205,4 @@ def update(
             name=name, description=description, parameters=update_params
         )
         agent = client.patch(agent_id, agent_update)
-    print_json(agent.model_dump_json())
+    echo.print_model(agent)

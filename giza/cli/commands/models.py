@@ -4,7 +4,6 @@ from typing import Optional
 import typer
 from pydantic import ValidationError
 from requests import HTTPError
-from rich import print_json
 
 from giza.cli import API_HOST
 from giza.cli.client import ModelsClient
@@ -68,7 +67,7 @@ def get(
         if debug:
             raise e
         sys.exit(1)
-    print_json(model.model_dump_json())
+    echo.print_model(model)
 
 
 @app.command(
@@ -122,7 +121,7 @@ def list(
         if debug:
             raise e
         sys.exit(1)
-    print_json(models.model_dump_json())
+    echo.print_model(models)
 
 
 @app.command(
@@ -182,4 +181,4 @@ def create(
         if debug:
             raise e
         sys.exit(1)
-    print_json(model.model_dump_json())
+    echo.print_model(model)

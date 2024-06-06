@@ -4,7 +4,6 @@ from typing import Optional
 import typer
 from pydantic import ValidationError
 from requests import HTTPError
-from rich import print_json
 
 from giza.cli import API_HOST
 from giza.cli.client import EndpointsClient
@@ -113,7 +112,7 @@ def list(
         if debug:
             raise e
         sys.exit(1)
-    print_json(deployments.model_dump_json())
+    echo.print_model(deployments)
 
 
 # giza/commands/deployments.py
@@ -156,7 +155,7 @@ def get(
         if debug:
             raise e
         sys.exit(1)
-    print_json(deployment.model_dump_json())
+    echo.print_model(deployment)
 
 
 @app.command(
@@ -220,7 +219,7 @@ def list_proofs(
         if debug:
             raise e
         sys.exit(1)
-    print_json(proofs.model_dump_json(exclude_unset=True))
+    echo.print_model(proofs)
 
 
 @app.command(
@@ -266,7 +265,7 @@ def get_proof(
         if debug:
             raise e
         sys.exit(1)
-    print_json(proof.model_dump_json(exclude_unset=True))
+    echo.print_model(proof)
 
 
 @app.command(
@@ -340,7 +339,7 @@ def list_jobs(
     with ExceptionHandler(debug=debug):
         client = EndpointsClient(API_HOST)
         jobs = client.list_jobs(endpoint_id)
-    print_json(jobs.json(exclude_unset=True))
+    echo.print_model(jobs)
 
 
 @app.command(
@@ -363,7 +362,7 @@ def verify(
     with ExceptionHandler(debug=debug):
         client = EndpointsClient(API_HOST)
         verification = client.verify_proof(endpoint_id, proof_id)
-    print_json(verification.model_dump_json(exclude_unset=True))
+    echo.print_model(verification)
 
 
 @app.command(

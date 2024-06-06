@@ -5,7 +5,6 @@ import typer
 from email_validator import EmailNotValidError, validate_email
 from pydantic import SecretStr, ValidationError
 from requests import HTTPError
-from rich import print_json
 
 from giza.cli import API_HOST
 from giza.cli.client import UsersClient
@@ -211,7 +210,7 @@ def me(debug: Optional[bool] = DEBUG_OPTION) -> None:
     client = UsersClient(API_HOST, debug=debug)
     user = client.me()
 
-    print_json(user.model_dump_json())
+    echo.print_model(user)
 
 
 @app.command(

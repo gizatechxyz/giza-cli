@@ -6,7 +6,6 @@ from tempfile import TemporaryDirectory
 from typing import Dict, Optional
 
 import typer
-from rich import print_json
 
 from giza.cli import API_HOST
 from giza.cli.client import TranspileClient, VersionsClient
@@ -59,7 +58,7 @@ def get(
     with ExceptionHandler(debug=debug):
         client = VersionsClient(API_HOST)
         version: Version = client.get(model_id, version_id)
-    print_json(version.model_dump_json(exclude={"logs"}))
+    echo.print_model(version)
 
 
 def transpile(
@@ -172,7 +171,7 @@ def update(
                 zip_path = zip_folder(model_path, tmp_dir)
                 version = client.upload_cairo(model_id, version_id, zip_path)
         echo("Version updated ✅ ")
-    print_json(version.model_dump_json())
+    echo.print_model(version)
 
 
 @app.command(
@@ -193,7 +192,7 @@ def list(
     with ExceptionHandler(debug=debug):
         client = VersionsClient(API_HOST)
         versions: VersionList = client.list(model_id)
-    print_json(versions.model_dump_json())
+    echo.print_model(versions)
 
 
 @app.command(

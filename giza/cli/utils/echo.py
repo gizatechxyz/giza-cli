@@ -186,7 +186,7 @@ class Echo:
             # We pick the first model to get the fields
             try:
                 for field in model.root[0].model_fields.keys():
-                    table.add_column(field)
+                    table.add_column(field, overflow="fold")
             except IndexError:
                 return
             for m in model.root:

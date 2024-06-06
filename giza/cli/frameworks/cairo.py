@@ -8,7 +8,6 @@ from typing import Optional
 import typer
 from pydantic import ValidationError
 from requests import HTTPError
-from rich import print_json
 from rich.live import Live
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.spinner import Spinner
@@ -100,7 +99,7 @@ def prove(
             proof_client = ProofsClient(API_HOST)
             proof: Proof = proof_client.get_by_job_id(current_job.id)
             echo("Proof metrics:")
-            print_json(json.dumps(proof.metrics))
+            echo.print_model(proof)
             f.write(proof_client.download(proof.id))
             echo(f"Proof saved at: {output_path}")
     except ValidationError as e:
