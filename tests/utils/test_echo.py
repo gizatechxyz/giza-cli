@@ -2,7 +2,47 @@ from unittest.mock import patch
 
 import pytest
 
+from giza.cli.schemas.models import Model, ModelList
 from giza.cli.utils.echo import Echo
+
+model_one = Model(
+    id=1,
+    name="Model One",
+    description="This is model one",
+)
+
+model_two = Model(
+    id=2,
+    name="Model Two",
+)
+
+models = ModelList(root=[model_one, model_two])
+
+
+def test_print_single_model(capsys):
+    echo = Echo()
+    echo.print_model(model_one)
+    captured = capsys.readouterr()
+    assert "Model One" in captured.out
+    assert "This is model one" in captured.out
+
+
+def test_print_list_model(capsys):
+    echo = Echo()
+    echo.print_model(models)
+    captured = capsys.readouterr()
+    assert "Model One" in captured.out
+    assert "Model Two" in captured.out
+    assert "This is model one" in captured.out
+    assert "" in captured.out
+
+
+def test_extract_row():
+    echo = Echo()
+    row = echo._extract_row(model_one)
+    assert row == ["1", "Model One", "This is model one"]
+    row = echo._extract_row(model_two)
+    assert row == ["2", "Model Two", ""]
 
 
 def test_format_message():
