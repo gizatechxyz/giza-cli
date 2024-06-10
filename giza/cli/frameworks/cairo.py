@@ -228,6 +228,7 @@ def transpile(
     output_path: str,
     download_model: bool,
     download_sierra: bool,
+    json: Optional[bool],
     debug: Optional[bool],
 ) -> None:
     """
@@ -256,7 +257,7 @@ def transpile(
         ValidationError: If there is a validation error with the model or version.
         HTTPError: If there is an HTTP error while communicating with the server.
     """
-    echo = Echo(debug=debug)
+    echo = Echo(debug=debug, output_json=json)
     if model_path is None:
         echo.error("No model name provided, please provide a model path ⛔️")
         sys.exit(1)
@@ -400,6 +401,8 @@ def transpile(
         if debug:
             raise zip_error
         sys.exit(1)
+    echo.print_model(model, title="Model")
+    echo.print_model(version, title="Version")
 
 
 def verify(

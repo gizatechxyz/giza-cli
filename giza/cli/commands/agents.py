@@ -13,6 +13,7 @@ from giza.cli.options import (
     DEBUG_OPTION,
     DESCRIPTION_OPTION,
     ENDPOINT_OPTION,
+    JSON_OPTION,
     MODEL_OPTION,
     NAME_OPTION,
     VERSION_OPTION,
@@ -43,8 +44,13 @@ def create(
     endpoint_id: int = ENDPOINT_OPTION,
     name: Optional[str] = NAME_OPTION,
     description: Optional[str] = DESCRIPTION_OPTION,
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+
+    if json:
+        echo.set_log_file()
+
     echo("Creating agent ✅ ")
 
     if not model_id and not version_id and not endpoint_id:
@@ -122,8 +128,12 @@ def list(
     parameters: Optional[List[str]] = typer.Option(
         None, "--parameters", "-p", help="The parameters of the agent"
     ),
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
+
     echo("Listing agents ✅ ")
     with ExceptionHandler(debug=debug):
         client = AgentsClient(API_HOST)
@@ -148,8 +158,11 @@ def list(
 )
 def get(
     agent_id: int = AGENT_OPTION,
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     echo(f"Getting agent {agent_id} ✅ ")
     with ExceptionHandler(debug=debug):
         client = AgentsClient(API_HOST)
@@ -195,8 +208,11 @@ def update(
     parameters: Optional[List[str]] = typer.Option(
         None, "--parameters", "-p", help="The parameters of the agent"
     ),
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     echo(f"Updating agent {agent_id} ✅ ")
     with ExceptionHandler(debug=debug):
         client = AgentsClient(API_HOST)

@@ -12,6 +12,7 @@ from giza.cli.options import (
     DEBUG_OPTION,
     ENDPOINT_OPTION,
     FRAMEWORK_OPTION,
+    JSON_OPTION,
     MODEL_OPTION,
     VERSION_OPTION,
 )
@@ -76,8 +77,11 @@ def list(
     only_active: bool = typer.Option(
         False, "--only-active", "-a", help="Only list active endpoints"
     ),
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     echo("Listing endpoints ✅ ")
     params = {}
     try:
@@ -126,8 +130,11 @@ def list(
 )
 def get(
     endpoint_id: int = ENDPOINT_OPTION,
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     echo(f"Getting endpoint {endpoint_id} ✅ ")
     try:
         client = EndpointsClient(API_HOST)
@@ -190,8 +197,11 @@ def delete_endpoint(
 )
 def list_proofs(
     endpoint_id: int = ENDPOINT_OPTION,
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     echo(f"Getting proofs from endpoint {endpoint_id} ✅ ")
     try:
         client = EndpointsClient(API_HOST)
@@ -236,8 +246,11 @@ def get_proof(
     proof_id: str = typer.Option(
         None, "--proof-id", "-p", help="The ID or request id of the proof"
     ),
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     echo(f"Getting proof from endpoint {endpoint_id} ✅ ")
     try:
         client = EndpointsClient(API_HOST)
@@ -333,8 +346,11 @@ def download_proof(
 )
 def list_jobs(
     endpoint_id: int = ENDPOINT_OPTION,
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     echo(f"Getting jobs from endpoint {endpoint_id} ✅ ")
     with ExceptionHandler(debug=debug):
         client = EndpointsClient(API_HOST)
@@ -356,8 +372,11 @@ def verify(
     proof_id: str = typer.Option(
         None, "--proof-id", "-p", help="The ID or request id of the proof"
     ),
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     echo(f"Verifying proof from endpoint {endpoint_id} ✅ ")
     with ExceptionHandler(debug=debug):
         client = EndpointsClient(API_HOST)

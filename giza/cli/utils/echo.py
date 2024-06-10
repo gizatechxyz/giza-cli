@@ -23,7 +23,7 @@ class Echo:
     LOG_FILE: str = "giza.log"
 
     def __init__(
-        self, debug: Optional[bool] = False, output_json: bool = False
+        self, debug: Optional[bool] = False, output_json: bool | None = False
     ) -> None:
         self._debug = debug
         self._json = output_json
@@ -205,8 +205,9 @@ class Echo:
             model (Union[BaseModel, RootModel]): The model or list of models to print
             title (str, optional): Title of the table. Defaults to "".
         """
-        if self._json:
+        if self._json and self._file is not None:
             print_json(model.model_dump_json())
+            self._file.write(model.model_dump_json(indent=4))
             return
 
         table = Table(title=title)
