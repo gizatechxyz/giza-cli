@@ -8,7 +8,6 @@ from typing import Optional
 import typer
 from pydantic import ValidationError
 from requests import HTTPError
-from rich import print_json
 from rich.live import Live
 from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.spinner import Spinner
@@ -100,7 +99,7 @@ def prove(
             proof_client = ProofsClient(API_HOST)
             proof: Proof = proof_client.get_by_job_id(current_job.id)
             echo("Proof metrics:")
-            print_json(json.dumps(proof.metrics))
+            echo.print_model(proof)
             f.write(proof_client.download(proof.id))
             echo(f"Proof saved at: {output_path}")
     except ValidationError as e:
@@ -229,6 +228,7 @@ def transpile(
     output_path: str,
     download_model: bool,
     download_sierra: bool,
+    json: Optional[bool],
     debug: Optional[bool],
 ) -> None:
     """
@@ -257,7 +257,7 @@ def transpile(
         ValidationError: If there is a validation error with the model or version.
         HTTPError: If there is an HTTP error while communicating with the server.
     """
-    echo = Echo(debug=debug)
+    echo = Echo(debug=debug, output_json=json)
     if model_path is None:
         echo.error("No model name provided, please provide a model path ⛔️")
         sys.exit(1)
@@ -401,6 +401,8 @@ def transpile(
         if debug:
             raise zip_error
         sys.exit(1)
+    echo.print_model(model, title="Model")
+    echo.print_model(version, title="Version")
 
 
 def verify(

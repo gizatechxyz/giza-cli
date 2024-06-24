@@ -5,7 +5,6 @@ from typing import Optional
 import typer
 from pydantic import ValidationError
 from requests import HTTPError
-from rich import print_json
 from rich.live import Live
 
 from giza.cli import API_HOST
@@ -61,7 +60,7 @@ def get(
         echo.error("⛔️Please delete the workspace and create a new one⛔️")
     else:
         echo.info(f"✅ Workspace URL: {workspace.url} ✅")
-    print_json(workspace.model_dump_json())
+    echo.print_model(workspace)
 
 
 @app.command(

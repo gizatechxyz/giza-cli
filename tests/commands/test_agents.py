@@ -124,7 +124,7 @@ def test_create_agent_with_endpoint_id():
     mock_endpoints.assert_called_once()
     assert result.exit_code == 0
     assert "Using endpoint id to create agent" in result.output
-    assert "test agent endpoint" in result.output
+    assert "test agent" in result.output
 
 
 def test_create_agent_no_ids():

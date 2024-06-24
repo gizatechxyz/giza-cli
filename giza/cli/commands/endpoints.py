@@ -4,7 +4,6 @@ from typing import Optional
 import typer
 from pydantic import ValidationError
 from requests import HTTPError
-from rich import print_json
 
 from giza.cli import API_HOST
 from giza.cli.client import EndpointsClient
@@ -13,6 +12,7 @@ from giza.cli.options import (
     DEBUG_OPTION,
     ENDPOINT_OPTION,
     FRAMEWORK_OPTION,
+    JSON_OPTION,
     MODEL_OPTION,
     VERSION_OPTION,
 )
@@ -77,8 +77,11 @@ def list(
     only_active: bool = typer.Option(
         False, "--only-active", "-a", help="Only list active endpoints"
     ),
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     echo("Listing endpoints ✅ ")
     params = {}
     try:
@@ -113,7 +116,7 @@ def list(
         if debug:
             raise e
         sys.exit(1)
-    print_json(deployments.model_dump_json())
+    echo.print_model(deployments)
 
 
 # giza/commands/deployments.py
@@ -127,8 +130,11 @@ def list(
 )
 def get(
     endpoint_id: int = ENDPOINT_OPTION,
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     echo(f"Getting endpoint {endpoint_id} ✅ ")
     try:
         client = EndpointsClient(API_HOST)
@@ -156,7 +162,7 @@ def get(
         if debug:
             raise e
         sys.exit(1)
-    print_json(deployment.model_dump_json())
+    echo.print_model(deployment)
 
 
 @app.command(
@@ -191,8 +197,11 @@ def delete_endpoint(
 )
 def list_proofs(
     endpoint_id: int = ENDPOINT_OPTION,
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     echo(f"Getting proofs from endpoint {endpoint_id} ✅ ")
     try:
         client = EndpointsClient(API_HOST)
@@ -220,7 +229,7 @@ def list_proofs(
         if debug:
             raise e
         sys.exit(1)
-    print_json(proofs.model_dump_json(exclude_unset=True))
+    echo.print_model(proofs)
 
 
 @app.command(
@@ -237,8 +246,11 @@ def get_proof(
     proof_id: str = typer.Option(
         None, "--proof-id", "-p", help="The ID or request id of the proof"
     ),
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     echo(f"Getting proof from endpoint {endpoint_id} ✅ ")
     try:
         client = EndpointsClient(API_HOST)
@@ -266,7 +278,7 @@ def get_proof(
         if debug:
             raise e
         sys.exit(1)
-    print_json(proof.model_dump_json(exclude_unset=True))
+    echo.print_model(proof)
 
 
 @app.command(
@@ -334,13 +346,16 @@ def download_proof(
 )
 def list_jobs(
     endpoint_id: int = ENDPOINT_OPTION,
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     echo(f"Getting jobs from endpoint {endpoint_id} ✅ ")
     with ExceptionHandler(debug=debug):
         client = EndpointsClient(API_HOST)
         jobs = client.list_jobs(endpoint_id)
-    print_json(jobs.json(exclude_unset=True))
+    echo.print_model(jobs)
 
 
 @app.command(
@@ -357,13 +372,16 @@ def verify(
     proof_id: str = typer.Option(
         None, "--proof-id", "-p", help="The ID or request id of the proof"
     ),
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     echo(f"Verifying proof from endpoint {endpoint_id} ✅ ")
     with ExceptionHandler(debug=debug):
         client = EndpointsClient(API_HOST)
         verification = client.verify_proof(endpoint_id, proof_id)
-    print_json(verification.model_dump_json(exclude_unset=True))
+    echo.print_model(verification)
 
 
 @app.command(

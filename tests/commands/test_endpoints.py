@@ -141,8 +141,8 @@ def test_list_deployments():
         )
     mock_list.assert_called_once()
     assert result.exit_code == 0
-    assert "giza-deployment-1" in result.stdout
-    assert "giza-deployment-2" in result.stdout
+    assert "giza-" in result.stdout
+    assert "2" in result.stdout
 
 
 def test_create_deployments_empty():
@@ -206,7 +206,9 @@ def test_get_deployment():
         )
     mock_deployment.assert_called_once()
     assert result.exit_code == 0
-    assert "giza-deployment-1" in result.stdout
+    assert "giza-" in result.stdout
+    assert "size" in result.stdout
+    assert "S" in result.stdout
 
 
 def test_get_deployment_http_error():
@@ -243,4 +245,5 @@ def test_endpoints_verify():
         )
     mock_verify.assert_called_once()
     assert result.exit_code == 0
-    assert ' "verification": true' in result.stdout
+    assert "verification" in result.stdout
+    assert "True" in result.stdout

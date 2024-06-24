@@ -6,7 +6,6 @@ from tempfile import TemporaryDirectory
 from typing import Dict, Optional
 
 import typer
-from rich import print_json
 
 from giza.cli import API_HOST
 from giza.cli.client import TranspileClient, VersionsClient
@@ -16,6 +15,7 @@ from giza.cli.options import (
     DESCRIPTION_OPTION,
     FRAMEWORK_OPTION,
     INPUT_OPTION,
+    JSON_OPTION,
     MODEL_OPTION,
     OUTPUT_PATH_OPTION,
     VERSION_OPTION,
@@ -50,8 +50,11 @@ def update_sierra(model_id: int, version_id: int, model_path: str):
 def get(
     model_id: int = MODEL_OPTION,
     version_id: int = VERSION_OPTION,
+    json: Optional[bool] = JSON_OPTION,
     debug: bool = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     if any([model_id is None, version_id is None]):
         echo.error("⛔️Model ID and version ID are required⛔️")
         sys.exit(1)
@@ -59,7 +62,7 @@ def get(
     with ExceptionHandler(debug=debug):
         client = VersionsClient(API_HOST)
         version: Version = client.get(model_id, version_id)
-    print_json(version.model_dump_json(exclude={"logs"}))
+    echo.print_model(version)
 
 
 def transpile(
@@ -80,6 +83,7 @@ def transpile(
         "--download-sierra",
         help="Download the siera file is the modle is fully compatible. CAIRO only.",
     ),
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     if framework == Framework.CAIRO:
@@ -91,6 +95,7 @@ def transpile(
             output_path=output_path,
             download_model=download_model,
             download_sierra=download_sierra,
+            json=json,
             debug=debug,
         )
     elif framework == Framework.EZKL:
@@ -146,8 +151,12 @@ def update(
     model_path: str = typer.Option(
         None, "--model-path", "-M", help="Path of the model to update"
     ),
+    json: Optional[bool] = JSON_OPTION,
     debug: bool = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
+
     if any([model_id is None, version_id is None]):
         echo.error("⛔️Model ID and version ID are required to update the version⛔️")
         sys.exit(1)
@@ -172,7 +181,7 @@ def update(
                 zip_path = zip_folder(model_path, tmp_dir)
                 version = client.upload_cairo(model_id, version_id, zip_path)
         echo("Version updated ✅ ")
-    print_json(version.model_dump_json())
+    echo.print_model(version)
 
 
 @app.command(
@@ -184,8 +193,11 @@ def update(
 )
 def list(
     model_id: int = MODEL_OPTION,
+    json: Optional[bool] = JSON_OPTION,
     debug: bool = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     if model_id is None:
         echo.error("⛔️Model ID is required⛔️")
         sys.exit(1)
@@ -193,7 +205,7 @@ def list(
     with ExceptionHandler(debug=debug):
         client = VersionsClient(API_HOST)
         versions: VersionList = client.list(model_id)
-    print_json(versions.model_dump_json())
+    echo.print_model(versions)
 
 
 @app.command(

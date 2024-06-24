@@ -3,7 +3,6 @@ from enum import StrEnum
 from typing import List, Optional
 
 import typer
-from rich import print_json
 from rich.console import Console
 from rich.table import Table
 
@@ -14,6 +13,7 @@ from giza.cli.options import (
     DEBUG_OPTION,
     DESCRIPTION_OPTION,
     ENDPOINT_OPTION,
+    JSON_OPTION,
     MODEL_OPTION,
     NAME_OPTION,
     VERSION_OPTION,
@@ -44,8 +44,13 @@ def create(
     endpoint_id: int = ENDPOINT_OPTION,
     name: Optional[str] = NAME_OPTION,
     description: Optional[str] = DESCRIPTION_OPTION,
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+
+    if json:
+        echo.set_log_file()
+
     echo("Creating agent ✅ ")
 
     if not model_id and not version_id and not endpoint_id:
@@ -104,7 +109,7 @@ def create(
             },
         )
         agent = client.create(agent_create)
-    print_json(agent.model_dump_json())
+    echo.print_model(agent)
 
 
 @app.command(
@@ -123,8 +128,12 @@ def list(
     parameters: Optional[List[str]] = typer.Option(
         None, "--parameters", "-p", help="The parameters of the agent"
     ),
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
+
     echo("Listing agents ✅ ")
     with ExceptionHandler(debug=debug):
         client = AgentsClient(API_HOST)
@@ -135,7 +144,7 @@ def list(
         else:
             query_params = None
         agents: AgentList = client.list(params=query_params)
-    print_json(agents.model_dump_json())
+    echo.print_model(agents)
 
 
 # giza/commands/deployments.py
@@ -149,13 +158,16 @@ def list(
 )
 def get(
     agent_id: int = AGENT_OPTION,
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     echo(f"Getting agent {agent_id} ✅ ")
     with ExceptionHandler(debug=debug):
         client = AgentsClient(API_HOST)
         deployment = client.get(agent_id)
-    print_json(deployment.model_dump_json())
+    echo.print_model(deployment)
 
 
 @app.command(
@@ -196,8 +208,11 @@ def update(
     parameters: Optional[List[str]] = typer.Option(
         None, "--parameters", "-p", help="The parameters of the agent"
     ),
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
+    if json:
+        echo.set_log_file()
     echo(f"Updating agent {agent_id} ✅ ")
     with ExceptionHandler(debug=debug):
         client = AgentsClient(API_HOST)
@@ -206,4 +221,4 @@ def update(
             name=name, description=description, parameters=update_params
         )
         agent = client.patch(agent_id, agent_update)
-    print_json(agent.model_dump_json())
+    echo.print_model(agent)

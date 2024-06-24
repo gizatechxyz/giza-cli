@@ -40,3 +40,9 @@ INPUT_OPTION = typer.Option(
     help="The input data to use",
 )
 NAME_OPTION = typer.Option(None, "--name", "-n", help="The name of the resource")
+JSON_OPTION = typer.Option(
+    False,
+    "--json",
+    "-j",
+    help="Whether to print the output as JSON. This will make that the only ouput is the json and the logs will be saved to `giza.log`",
+)

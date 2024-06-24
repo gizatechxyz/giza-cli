@@ -4,11 +4,10 @@ from typing import Optional
 import typer
 from pydantic import ValidationError
 from requests import HTTPError
-from rich import print_json
 
 from giza.cli import API_HOST
 from giza.cli.client import ModelsClient
-from giza.cli.options import DEBUG_OPTION, DESCRIPTION_OPTION, MODEL_OPTION
+from giza.cli.options import DEBUG_OPTION, DESCRIPTION_OPTION, JSON_OPTION, MODEL_OPTION
 from giza.cli.schemas.models import ModelCreate
 from giza.cli.utils import echo, get_response_info
 
@@ -28,6 +27,7 @@ app = typer.Typer()
 )
 def get(
     model_id: int = MODEL_OPTION,
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     """
@@ -41,6 +41,8 @@ def get(
         ValidationError: input fields are validated, if these are not suitable the exception is raised
         HTTPError: request error to the API, 4XX or 5XX
     """
+    if json:
+        echo.set_log_file()
     echo("Retrieving model information ✅ ")
     try:
         client = ModelsClient(API_HOST)
@@ -68,7 +70,7 @@ def get(
         if debug:
             raise e
         sys.exit(1)
-    print_json(model.model_dump_json())
+    echo.print_model(model)
 
 
 @app.command(
@@ -82,6 +84,7 @@ def get(
     """,
 )
 def list(
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     """
@@ -94,7 +97,8 @@ def list(
         ValidationError: input fields are validated, if these are not suitable the exception is raised
         HTTPError: request error to the API, 4XX or 5XX
     """
-
+    if json:
+        echo.set_log_file()
     echo("Listing models ✅ ")
     try:
         client = ModelsClient(API_HOST)
@@ -122,7 +126,7 @@ def list(
         if debug:
             raise e
         sys.exit(1)
-    print_json(models.model_dump_json())
+    echo.print_model(models)
 
 
 @app.command(
@@ -139,6 +143,7 @@ def create(
         ..., "--name", "-n", help="Name of the model to be created"
     ),
     description: str = DESCRIPTION_OPTION,
+    json: Optional[bool] = JSON_OPTION,
     debug: Optional[bool] = DEBUG_OPTION,
 ) -> None:
     """
@@ -152,6 +157,8 @@ def create(
         ValidationError: input fields are validated, if these are not suitable the exception is raised
         HTTPError: request error to the API, 4XX or 5XX
     """
+    if json:
+        echo.set_log_file()
     if name is None or name == "":
         echo.error("Name is required")
         sys.exit(1)
@@ -182,4 +189,4 @@ def create(
         if debug:
             raise e
         sys.exit(1)
-    print_json(model.model_dump_json())
+    echo.print_model(model)
