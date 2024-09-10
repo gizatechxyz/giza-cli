@@ -204,7 +204,7 @@ def test_resend_email_invalid_email():
 
     assert result.exit_code == 1
     assert "Could not resend" in result.stdout
-    assert "The email address is not valid." in result.stdout
+    assert "An email address must have an" in result.stdout
 
 
 def test_resend_email_invalid_email_debug():
