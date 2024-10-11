@@ -3,8 +3,7 @@
 [![GitHub Workflow Status](https://github.com/gizatechxyz/giza-cli/actions/workflows/onpush.yml/badge.svg)](https://github.com/gizatechxyz/giza-cli/actions/workflows/onpush.yml)
 [![Project license](https://img.shields.io/github/license/gizatechxyz/orion.svg?style=flat-square)](LICENSE)
 [![Pull Requests welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/gizatechxyz/orion/issues?q=is%3Aissue+is%3Aopen)
-[![Join the community](https://dcbadge.vercel.app/api/server/FR3Cd88x6r?style=flat-square)](https://discord.gg/FR3Cd88x6r)
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![Discord](https://img.shields.io/discord/1067165013397213286?label=discord)](https://discord.com/invite/Kt24CsMb5k)<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
